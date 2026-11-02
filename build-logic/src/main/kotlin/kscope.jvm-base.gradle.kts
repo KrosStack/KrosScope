@@ -1,5 +1,6 @@
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.extensions.FailOnSeverity
+import io.github.krosstack.kscope.conventions.DetektSlots
 import io.github.krosstack.kscope.conventions.GitTestEnvironment
 import io.github.krosstack.kscope.conventions.VerifyFileLength
 import io.github.krosstack.kscope.conventions.VerifyModuleDependencies
@@ -61,7 +62,14 @@ val detektJdk = javaToolchains.launcherFor(java.toolchain).map { it.metadata.ins
 val detektReportsDirectory = layout.buildDirectory.dir("reports/detekt")
 val detektKotlinSources = kotlin.sourceSets
 
+// Detekt runs inside the Gradle daemon. Several type-resolving runs at once exhaust its heap, so the build runs at most
+// two at a time.
+val detektSlots = gradle.sharedServices.registerIfAbsent("detektSlots", DetektSlots::class) {
+    maxParallelUsages = 2
+}
+
 tasks.withType<Detekt>().configureEach {
+    usesService(detektSlots)
     detektClasspath.from(detektRuntime)
     pluginClasspath.from(detektPlugins)
     config.from(detektConfig)
