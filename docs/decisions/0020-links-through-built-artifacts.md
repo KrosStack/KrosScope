@@ -144,7 +144,7 @@ a JAR. This is the `mavenLocal` and Gradle-cache row of the table below.
 ## Evidence
 
 Nothing is measured yet, and no figure here is a claim. The public fixture
-[`fixtures/workspace-of-repositories`](../../fixtures/workspace-of-repositories/README.md) carries one producer and
+[`fixtures/workspace-of-repositories`](https://github.com/KrosStack/KrosScope/blob/main/fixtures/workspace-of-repositories/README.md) carries one producer and
 one consumer for each kind. Its gold links are in `benchmark/workspace/gold/relationships.json`:
 
 - a Kotlin library;

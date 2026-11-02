@@ -1,7 +1,7 @@
 # Development guide
 
 How to build, test and run KrosScope and its benchmarks. The rules for a change are in
-[CONTRIBUTING.md](../CONTRIBUTING.md), the module map and dependency rules in
+[CONTRIBUTING.md](https://github.com/KrosStack/KrosScope/blob/main/CONTRIBUTING.md), the module map and dependency rules in
 [architecture.md](architecture.md), and the command-line tool is described in [cli.md](cli.md).
 
 ## Prerequisites
@@ -145,7 +145,7 @@ KrosScope claims to follow:
 - tests at several levels.
 
 It is a standalone Gradle project with its own wrapper; its
-[README](../fixtures/reference-workspace/README.md) lists its modules and requirements.
+[README](https://github.com/KrosStack/KrosScope/blob/main/fixtures/reference-workspace/README.md) lists its modules and requirements.
 
 Its gold data lives outside the scanned tree, in `benchmark/reference/`, and holds the expected build model,
 relationships, closed-world edges and development tasks. Do not change the workspace without updating the gold

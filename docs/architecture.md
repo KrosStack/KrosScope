@@ -293,7 +293,7 @@ working directory and the properties of its terminal, and prints what comes back
   - the socket is bound to `127.0.0.1`;
   - every request carries a random token that the server wrote to `.kscope/serve.json`;
   - a file lock in the index directory admits one server per workspace
-    ([`serve`](cli.md#serve), [security policy](../SECURITY.md)).
+    ([`serve`](cli.md#serve), [security policy](https://github.com/KrosStack/KrosScope/blob/main/SECURITY.md)).
 
 With `--watch` the server also keeps the index up to date.
 

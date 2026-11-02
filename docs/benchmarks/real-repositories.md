@@ -42,7 +42,7 @@ and the test split was scored once. Commands and protocol: [benchmark.md](../ben
 - **Date and machine:** measured on 2026-10-06 on Windows 11, JDK 17, 16 cores, 31 GB, with JTokkit
   `o200k_base`.
 - **Implementation:** commit `cd50e24` plus the working-tree files identified by exact hash in
-  [realrepos-v1](../../benchmark/freezes/realrepos-v1.json).
+  [realrepos-v1](https://github.com/KrosStack/KrosScope/blob/main/benchmark/freezes/realrepos-v1.json).
 - **Freeze manifest SHA-256:** `37e33469d9d191b82f91971ec609db0cf00b3fcd6cb2017f1e56ff210a6983b4`.
 
 </details>
@@ -155,7 +155,7 @@ How it was evaluated:
   may fail, token precision must rise at 2000 and 4000 on both development sets, and recall must
   not drop. All three held.
 - The implementation was then frozen as
-  [realrepos-v2](../../benchmark/freezes/realrepos-v2.json), SHA-256
+  [realrepos-v2](https://github.com/KrosStack/KrosScope/blob/main/benchmark/freezes/realrepos-v2.json), SHA-256
   `573b4d41030b6396999e5108a6e5390fa1d6565bc6246c0ca795dde5c83551ce`, and the test split was
   scored once at 2000 and 4000.
 - Disclosure: the pooled test rows of the first measurement were already on this page while the

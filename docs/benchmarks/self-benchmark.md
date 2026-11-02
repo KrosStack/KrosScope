@@ -25,7 +25,7 @@ the two public repositories, where the gate is not met.
 | Commits left out | 26: 17 change more than eight source files, 8 change no source file that existed before, 1 has no parent |
 | Size of a task | 4.1 changed source files on average, against 2.1 in the two public repositories |
 | Size of the workspace | 78 to 2,416 files, as the repository grew |
-| Freeze | [`selfbench-v1`](../../benchmark/freezes/selfbench-v1.json), SHA-256 `b1699bd3664790982294ecb308ca0968a8c0f8ffb1fa9cc232324f51c5d0b605` |
+| Freeze | [`selfbench-v1`](https://github.com/KrosStack/KrosScope/blob/main/benchmark/freezes/selfbench-v1.json), SHA-256 `b1699bd3664790982294ecb308ca0968a8c0f8ffb1fa9cc232324f51c5d0b605` |
 | Environment | Windows 11, JDK 17, 8 October 2026, one run |
 
 The freeze was written before anything was scored, and no code was changed between the two halves. Neither half
