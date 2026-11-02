@@ -1,0 +1,165 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.jvm"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 35
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.ksp"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 28
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.kotlinx.coroutines.core"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 7,
+                        "endColumn": 49
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.bundles.testing"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 5,
+                        "endLine": 8,
+                        "endColumn": 41
+                    }
+                },
+                {
+                    "name": "testImplementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.junit"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 35
+                    }
+                },
+                {
+                    "name": "ksp",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.room.compiler"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 5,
+                        "endLine": 10,
+                        "endColumn": 28
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.does.not.exist"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 40
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 2
+            }
+        }
+    ]
+}

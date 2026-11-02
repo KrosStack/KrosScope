@@ -1,0 +1,213 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tasktide.android.library",
+                            "expression": "\"tasktide.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 35
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.ksp"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 28
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.room"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 29
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [],
+            "assignments": {
+                "namespace": "\"sample.tasktide.data.settings\""
+            },
+            "range": {
+                "startLine": 7,
+                "startColumn": 1,
+                "endLine": 9,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "room",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "schemaDirectory",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "\"$projectDir/schemas\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 12,
+                        "endColumn": 43
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 11,
+                "startColumn": 1,
+                "endLine": 13,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "api",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":core:model\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 16,
+                        "startColumn": 5,
+                        "endLine": 16,
+                        "endColumn": 32
+                    }
+                },
+                {
+                    "name": "api",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.room.runtime"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 17,
+                        "startColumn": 5,
+                        "endLine": 17,
+                        "endColumn": 27
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.room.ktx"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 18,
+                        "startColumn": 5,
+                        "endLine": 18,
+                        "endColumn": 34
+                    }
+                },
+                {
+                    "name": "ksp",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.room.compiler"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 19,
+                        "startColumn": 5,
+                        "endLine": 19,
+                        "endColumn": 28
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 15,
+                "startColumn": 1,
+                "endLine": 20,
+                "endColumn": 2
+            }
+        }
+    ]
+}

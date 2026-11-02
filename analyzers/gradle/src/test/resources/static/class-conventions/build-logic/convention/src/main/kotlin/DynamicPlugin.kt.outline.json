@@ -1,0 +1,233 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "DynamicPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 21,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "extra",
+                            "expression": "extra"
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "providers.gradleProperty(\"extraPlugin\").get()"
+                        }
+                    ],
+                    "body": [
+                        {
+                            "name": "get",
+                            "receiver": "providers.gradleProperty(\"extraPlugin\")",
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 7,
+                                "startColumn": 13,
+                                "endLine": 7,
+                                "endColumn": 70
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 13,
+                        "endLine": 7,
+                        "endColumn": 70
+                    }
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": "plugin",
+                            "literal": null,
+                            "expression": "extra"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 13,
+                        "endLine": 8,
+                        "endColumn": 34
+                    }
+                },
+                {
+                    "name": "withPlugin",
+                    "receiver": "pluginManager",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.base",
+                            "expression": "\"com.android.base\""
+                        }
+                    ],
+                    "body": [
+                        {
+                            "name": "apply",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": "plugin",
+                                    "literal": "acme.base.extra",
+                                    "expression": "\"acme.base.extra\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 10,
+                                "startColumn": 17,
+                                "endLine": 10,
+                                "endColumn": 50
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 13,
+                        "endLine": 11,
+                        "endColumn": 14
+                    }
+                },
+                {
+                    "name": "forEach",
+                    "receiver": "listOf(\"a\", \"b\")",
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "dependencies",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "implementation",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "project(\":$name\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 13,
+                                        "startColumn": 32,
+                                        "endLine": 13,
+                                        "endColumn": 67
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 17,
+                                "endLine": 13,
+                                "endColumn": 69
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 13,
+                        "endLine": 14,
+                        "endColumn": 14
+                    }
+                },
+                {
+                    "name": "dependencies",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "implementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "project(\":core\")"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 16,
+                                "startColumn": 17,
+                                "endLine": 16,
+                                "endColumn": 51
+                            }
+                        },
+                        {
+                            "name": "implementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "project(path)"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 17,
+                                "startColumn": 17,
+                                "endLine": 17,
+                                "endColumn": 48
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 15,
+                        "startColumn": 13,
+                        "endLine": 18,
+                        "endColumn": 14
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 21,
+                "endColumn": 2
+            }
+        }
+    ]
+}

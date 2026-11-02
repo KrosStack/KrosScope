@@ -1,0 +1,40 @@
+{
+  "id": "W02",
+  "title": "Keep accented letters in the web address form of a task title",
+  "statement": "The short web address that is made from a task title throws accented letters away: Café Menü comes out as caf-men. Keep them as their plain letters instead, so that it comes out as cafe-menu. The text helpers reach the application as a library archive that is copied in as a file, so the application has to take the rebuilt archive and the new archive has to carry a new version number.",
+  "category": "jar_dependency_update",
+  "level": 4,
+  "named": false,
+  "mustEdit": [
+    "tasktide-kit/text/src/main/kotlin/sample/tasktide/text/Slugs.kt",
+    "tasktide-kit/text/build.gradle.kts",
+    "tasktide-app/client/build.gradle.kts"
+  ],
+  "mustRead": [
+    "tasktide-app/client/src/main/kotlin/sample/tasktide/client/TaskSlug.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":text",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.text.Slugs.of",
+      "file": "tasktide-kit/text/src/main/kotlin/sample/tasktide/text/Slugs.kt",
+      "line": 4
+    }
+  ],
+  "relationships": [
+    "jvm_library_file_to_module:001",
+    "jvm_library_reference_to_declaration:001"
+  ],
+  "changeScope": {
+    "modules": [
+      ":text",
+      ":client"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": []
+}

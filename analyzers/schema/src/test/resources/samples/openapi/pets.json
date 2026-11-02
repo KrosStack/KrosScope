@@ -1,0 +1,18 @@
+{
+  "swagger": "2.0",
+  "basePath": "/v1/",
+  "paths": {
+    "/pets/{petId}": {
+      "get": {
+        "operationId": "getPet",
+        "summary": "Returns one pet"
+      },
+      "put": {
+        "summary": "Replaces one pet"
+      }
+    }
+  },
+  "definitions": {
+    "Pet": {"type": "object"}
+  }
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface"
+    android:padding="@dimen/padding"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="?android:attr/textColorPrimary"
+        android:hint="@android:string/search_go"
+        style="@style/Widget.Title"
+        tools:text="@string/greeting" />
+
+    <include
+        layout="@layout/view_badge"
+        android:id="@+id/badge" />
+
+    <com.example.droid.BadgeView
+        android:id="@+id/custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:accent="@color/brand"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:badgeCount="@integer/columns" />
+
+    <Button
+        android:id="@+id/title"
+        android:text="@string/missing_label"
+        android:onClick="onTap" />
+</LinearLayout>

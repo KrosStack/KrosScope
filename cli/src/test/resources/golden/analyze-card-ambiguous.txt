@@ -1,0 +1,18 @@
+Read "Greeter" as a name (use --as task to analyse it as a task).
+"Greeter" names 2 declarations; this card shows other.Greeter, the others are listed below.
+
+  Kind         kotlin.class
+  Declared at  app/src/main/kotlin/Other.kt:3
+  Signature    class Greeter
+  Module       :app
+  Source set   :app@main
+
+Impact
+  A change here can affect 0 nodes (0 files, 1 module) and is covered by 0 tests.
+
+Other declarations with this name (1)
+  symbol         kind          where
+  greet.Greeter  kotlin.class  lib/src/main/kotlin/Greeter.kt:3
+Pass one of these locations to choose it: kscope analyze <where>.
+
+Next: kscope impact app/src/main/kotlin/Other.kt:3 lists everything a change affects, nearest first; kscope related app/src/main/kotlin/Other.kt:3 shows the closest files.

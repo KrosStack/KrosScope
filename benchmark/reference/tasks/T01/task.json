@@ -1,0 +1,56 @@
+{
+  "id": "T01",
+  "title": "Optional reminder time on tasks",
+  "category": "schema_change_sqldelight",
+  "statement": "Users want to be reminded about a task before it is due. Give every task an optional reminder timestamp that is stored locally and comes back unchanged when the task is read again. People who already have the app installed must keep their existing tasks. Name the new property of `Task` `remindAt`: epoch milliseconds, empty when no reminder is set.",
+  "goldFiles": [
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+    "data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt",
+    "data/db/src/commonMain/sqldelight/migrations/2.sqm",
+    "data/db/src/commonMain/sqldelight/sample/tasktide/data/db/Task.sq"
+  ],
+  "mayEditFiles": [
+    "data/db/src/commonTest/kotlin/sample/tasktide/data/db/TaskRowMapperTest.kt",
+    "data/db/src/desktopTest/kotlin/sample/tasktide/data/db/TaskRepositoryTest.kt"
+  ],
+  "verify": {
+    "gradleTasks": [
+      ":data:db:desktopTest",
+      ":core:model:desktopTest"
+    ],
+    "timeoutMinutes": 15
+  },
+  "failToPass": [
+    "sample.tasktide.data.db.TaskMigrationTest#existingTasksSurviveTheUpgrade[desktop]",
+    "sample.tasktide.data.db.TaskMigrationTest#newDatabaseStoresRemindersAcrossRestarts[desktop]",
+    "sample.tasktide.data.db.TaskMigrationTest#upgradedDatabaseStoresReminders[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#changedReminderReplacesTheOldOne[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#observedTasksCarryTheirReminder[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#reminderComesBackUnchanged[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#taskWithoutReminderHasNone[desktop]",
+    "sample.tasktide.data.db.TaskRowMapperTest#reminderSurvivesTheRowRoundTrip[desktop]",
+    "sample.tasktide.data.db.TaskRowMapperTest#taskWithoutReminderStaysWithoutOne[desktop]"
+  ],
+  "passToPass": [
+    "sample.tasktide.core.model.IsoDatesTest#epochIsFormattedAsFirstDayOf1970[desktop]",
+    "sample.tasktide.core.model.IsoDatesTest#knownTimestampIsFormatted[desktop]",
+    "sample.tasktide.core.model.IsoDatesTest#leapDayIsFormatted[desktop]",
+    "sample.tasktide.core.model.PriorityTest#levelRoundTrips[desktop]",
+    "sample.tasktide.core.model.PriorityTest#unknownLevelFallsBackToNormal[desktop]",
+    "sample.tasktide.core.model.TaskBundleTest#bundleSurvivesJsonRoundTrip[desktop]",
+    "sample.tasktide.core.model.TaskTest#blankIdIsRejected[desktop]",
+    "sample.tasktide.core.model.TaskTest#newTaskIsPendingAndOpen[desktop]",
+    "sample.tasktide.core.model.TaskTest#toggledFlipsDoneAndRequeuesForSync[desktop]",
+    "sample.tasktide.core.model.UuidGeneratorTest#desktopPlatformIsNotMobile[desktop]",
+    "sample.tasktide.core.model.UuidGeneratorTest#generatedIdsAreUnique[desktop]",
+    "sample.tasktide.core.model.UuidGeneratorTest#generatedTaskIdWrapsGeneratorOutput[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#deletedTaskIsGone[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#markedTasksLeaveThePendingList[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#observedTasksAreOrderedByPriority[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#openCountsAreGroupedByPriority[desktop]",
+    "sample.tasktide.data.db.TaskRepositoryTest#upsertedTaskIsFoundWithItsTags[desktop]",
+    "sample.tasktide.data.db.TaskRowMapperTest#priorityIsStoredAsLevelAndRestored[desktop]",
+    "sample.tasktide.data.db.TaskRowMapperTest#syncedStateKeepsItsTimestamp[desktop]",
+    "sample.tasktide.data.db.TaskRowMapperTest#tagsAreAttachedByTheCaller[desktop]"
+  ]
+}

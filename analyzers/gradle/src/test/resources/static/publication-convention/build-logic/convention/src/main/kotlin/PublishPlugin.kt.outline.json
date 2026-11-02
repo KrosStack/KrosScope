@@ -1,0 +1,95 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "PublishPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 5,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 6
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": "target.pluginManager",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "maven-publish",
+                            "expression": "\"maven-publish\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 9,
+                        "endLine": 6,
+                        "endColumn": 48
+                    }
+                },
+                {
+                    "name": "=",
+                    "receiver": "target.group",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.example.library",
+                            "expression": "\"org.example.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 9,
+                        "endLine": 7,
+                        "endColumn": 47
+                    }
+                },
+                {
+                    "name": "=",
+                    "receiver": "target.version",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "1.2.0",
+                            "expression": "\"1.2.0\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 9,
+                        "endLine": 8,
+                        "endColumn": 32
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 10,
+                "endColumn": 2
+            }
+        }
+    ]
+}

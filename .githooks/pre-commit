@@ -1,0 +1,28 @@
+#!/bin/sh
+# Runs the gate that CI runs, before a commit is created, so that CI confirms a result instead of
+# discovering one. Enable it once per clone:
+#
+#     git config core.hooksPath .githooks
+#
+# The check sees the working tree, not only what is staged: commit from a tree that matches what
+# you stage. Extra Gradle arguments can be passed through KSCOPE_HOOK_GRADLE_ARGS.
+set -eu
+
+root=$(git rev-parse --show-toplevel)
+common=$(cd "$root" && cd "$(git rev-parse --git-common-dir)" && (pwd -W 2>/dev/null || pwd))
+
+# A clone may add checks of its own in a file that is never committed.
+if [ -x "$common/pre-commit.local" ]; then
+    "$common/pre-commit.local"
+fi
+
+# Git exports its own variables to hooks; they must not reach the build or the tests.
+unset $(git rev-parse --local-env-vars)
+
+# CI runners have no personal Git configuration. Run the gate the same way.
+empty="$common/kscope-empty-gitconfig"
+: > "$empty"
+
+cd "$root"
+echo "pre-commit: ./gradlew check ${KSCOPE_HOOK_GRADLE_ARGS:-}"
+GIT_CONFIG_GLOBAL="$empty" GIT_CONFIG_NOSYSTEM=1 ./gradlew check ${KSCOPE_HOOK_GRADLE_ARGS:-}

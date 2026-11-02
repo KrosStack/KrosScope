@@ -1,0 +1,114 @@
+{
+    "calls": [
+        {
+            "name": "dependencyResolutionManagement",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "versionCatalogs",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "libs",
+                                    "expression": "\"libs\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "from",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "files(\"../gradle/libs.versions.toml\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 3,
+                                        "startColumn": 26,
+                                        "endLine": 3,
+                                        "endColumn": 69
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 3,
+                                "startColumn": 9,
+                                "endLine": 3,
+                                "endColumn": 71
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "build-logic",
+                    "expression": "\"build-logic\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 7,
+                "startColumn": 1,
+                "endLine": 7,
+                "endColumn": 33
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":convention",
+                    "expression": "\":convention\""
+                },
+                {
+                    "name": null,
+                    "literal": ":extras",
+                    "expression": "\":extras\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 8,
+                "startColumn": 1,
+                "endLine": 8,
+                "endColumn": 34
+            }
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    namespace 'sample.app'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'sample.app'
+        buildConfigField 'String', 'SYNC_ENDPOINT', 'https://sync.example/v1'
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField 'boolean', 'VERBOSE_LOGGING', 'true'
+        }
+        release {
+            minifyEnabled false
+        }
+    }
+
+    flavorDimensions 'tier'
+    productFlavors {
+        demo {
+            dimension 'tier'
+        }
+        full {
+            dimension = 'tier'
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.18.0'
+}

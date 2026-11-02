@@ -1,0 +1,108 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tasktide.jvm.library",
+                            "expression": "\"tasktide.jvm.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 31
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "api",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":core:model\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 5,
+                        "endLine": 6,
+                        "endColumn": 32
+                    }
+                },
+                {
+                    "name": "api",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":data:db\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 7,
+                        "endColumn": 29
+                    }
+                },
+                {
+                    "name": "api",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":sync:protocol\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 5,
+                        "endLine": 8,
+                        "endColumn": 35
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 9,
+                "endColumn": 2
+            }
+        }
+    ]
+}

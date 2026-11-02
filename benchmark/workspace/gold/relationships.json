@@ -1,0 +1,369 @@
+{
+  "meta": {
+    "workspaceRoot": "fixtures/workspace-of-repositories",
+    "idFormat": "<class>:<nnn>, stable within this file",
+    "pathFormat": "<repository directory>/<path in the repository>",
+    "evidenceClasses": [
+      "compiler",
+      "build-model",
+      "content",
+      "convention"
+    ],
+    "classDefinitions": {
+      "coordinate_dependency_to_module": "A dependency on Maven coordinates to the workspace module, in another repository, that publishes them.",
+      "coordinate_reference_to_declaration": "A reference in Kotlin source to a declaration of a module that a coordinate dependency resolved to.",
+      "jvm_library_file_to_module": "A file dependency on a JAR to the module, in another repository, whose archive it is.",
+      "jvm_library_reference_to_declaration": "A reference in Kotlin source to a declaration of a module that a file dependency resolved to.",
+      "native_library_load_to_target": "A System.loadLibrary call to the CMake or Cargo library target, in another repository, that builds it.",
+      "jni_external_to_native": "A Kotlin external function to its JNI function in C++ or Rust, in another repository.",
+      "bundle_consumer_to_project": "A Gradle copy of a web build output to the project, in another repository, that builds it.",
+      "bundle_file_to_source": "A file of a built web bundle to a source file it came from, read from its source map. Needs the output.",
+      "spec_input_to_spec": "A code generator input that points into another repository to the spec file it reads.",
+      "generated_surface_to_spec": "A use of a type or operation generated from a spec to its definition in the spec.",
+      "spec_operation_to_implementation": "An operation of an OpenAPI spec to the server route that implements it."
+    },
+    "counts": {
+      "coordinate_dependency_to_module": 1,
+      "coordinate_reference_to_declaration": 1,
+      "jvm_library_file_to_module": 1,
+      "jvm_library_reference_to_declaration": 1,
+      "native_library_load_to_target": 2,
+      "jni_external_to_native": 2,
+      "bundle_consumer_to_project": 1,
+      "bundle_file_to_source": 2,
+      "spec_input_to_spec": 3,
+      "generated_surface_to_spec": 4,
+      "spec_operation_to_implementation": 1
+    }
+  },
+  "relationships": [
+    {
+      "id": "coordinate_dependency_to_module:001",
+      "class": "coordinate_dependency_to_module",
+      "from": {
+        "module": ":client",
+        "kind": "gradle.dependency",
+        "name": "sample.tasktide:format:1.2.0",
+        "file": "tasktide-app/client/build.gradle.kts",
+        "line": 8
+      },
+      "to": {
+        "module": ":format",
+        "kind": "gradle.module",
+        "file": "tasktide-kit/format/build.gradle.kts"
+      },
+      "expectedEvidence": "build-model"
+    },
+    {
+      "id": "coordinate_reference_to_declaration:001",
+      "class": "coordinate_reference_to_declaration",
+      "from": {
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/DueLabel.kt",
+        "lines": [
+          5
+        ]
+      },
+      "to": {
+        "module": ":format",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.format.DueDates.label",
+        "signature": "(Int)",
+        "kind": "kotlin.function",
+        "file": "tasktide-kit/format/src/main/kotlin/sample/tasktide/format/DueDates.kt",
+        "line": 4
+      },
+      "expectedEvidence": "compiler"
+    },
+    {
+      "id": "jvm_library_file_to_module:001",
+      "class": "jvm_library_file_to_module",
+      "from": {
+        "module": ":client",
+        "kind": "gradle.file-dependency",
+        "name": "libs/tasktide-text-1.0.0.jar",
+        "file": "tasktide-app/client/build.gradle.kts",
+        "line": 9
+      },
+      "to": {
+        "module": ":text",
+        "kind": "gradle.module",
+        "name": "tasktide-text",
+        "file": "tasktide-kit/text/build.gradle.kts",
+        "line": 8
+      },
+      "expectedEvidence": "build-model"
+    },
+    {
+      "id": "jvm_library_reference_to_declaration:001",
+      "class": "jvm_library_reference_to_declaration",
+      "from": {
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/TaskSlug.kt",
+        "lines": [
+          5
+        ]
+      },
+      "to": {
+        "module": ":text",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.text.Slugs.of",
+        "signature": "(String)",
+        "kind": "kotlin.function",
+        "file": "tasktide-kit/text/src/main/kotlin/sample/tasktide/text/Slugs.kt",
+        "line": 4
+      },
+      "expectedEvidence": "compiler"
+    },
+    {
+      "id": "native_library_load_to_target:001",
+      "class": "native_library_load_to_target",
+      "from": {
+        "kind": "jvm.load-library",
+        "name": "tasktide_checksum",
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeChecksum.kt",
+        "line": 5
+      },
+      "to": {
+        "kind": "cmake.library",
+        "name": "tasktide_checksum",
+        "file": "tasktide-native-cpp/CMakeLists.txt",
+        "line": 6
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "native_library_load_to_target:002",
+      "class": "native_library_load_to_target",
+      "from": {
+        "kind": "jvm.load-library",
+        "name": "tasktide_hash",
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeHash.kt",
+        "line": 5
+      },
+      "to": {
+        "kind": "cargo.library",
+        "name": "tasktide_hash",
+        "file": "tasktide-native-rust/Cargo.toml",
+        "line": 7
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "jni_external_to_native:001",
+      "class": "jni_external_to_native",
+      "from": {
+        "module": ":client",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.client.NativeChecksum.crc32",
+        "kind": "kotlin.external",
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeChecksum.kt",
+        "line": 8
+      },
+      "to": {
+        "kind": "jni.function",
+        "name": "Java_sample_tasktide_client_NativeChecksum_crc32",
+        "file": "tasktide-native-cpp/src/checksum.cpp",
+        "line": 22
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "jni_external_to_native:002",
+      "class": "jni_external_to_native",
+      "from": {
+        "module": ":client",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.client.NativeHash.fnv1a",
+        "kind": "kotlin.external",
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeHash.kt",
+        "line": 8
+      },
+      "to": {
+        "kind": "jni.function",
+        "name": "Java_sample_tasktide_client_NativeHash_fnv1a",
+        "file": "tasktide-native-rust/src/lib.rs",
+        "line": 15
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "bundle_consumer_to_project:001",
+      "class": "bundle_consumer_to_project",
+      "from": {
+        "module": ":server",
+        "kind": "gradle.copy-source",
+        "name": "../tasktide-web/dist",
+        "file": "tasktide-app/server/build.gradle.kts",
+        "line": 14
+      },
+      "to": {
+        "kind": "npm.package",
+        "name": "@tasktide/web",
+        "file": "tasktide-web/package.json",
+        "line": 2
+      },
+      "expectedEvidence": "build-model"
+    },
+    {
+      "id": "bundle_file_to_source:001",
+      "class": "bundle_file_to_source",
+      "from": {
+        "kind": "bundle.file",
+        "file": "tasktide-web/dist/assets/index.js",
+        "output": true
+      },
+      "to": {
+        "kind": "typescript.file",
+        "file": "tasktide-web/src/main.ts"
+      },
+      "expectedEvidence": "content",
+      "requiresOutput": true
+    },
+    {
+      "id": "bundle_file_to_source:002",
+      "class": "bundle_file_to_source",
+      "from": {
+        "kind": "bundle.file",
+        "file": "tasktide-web/dist/assets/index.js",
+        "output": true
+      },
+      "to": {
+        "kind": "typescript.file",
+        "file": "tasktide-web/src/tasks.ts"
+      },
+      "expectedEvidence": "content",
+      "requiresOutput": true
+    },
+    {
+      "id": "spec_input_to_spec:001",
+      "class": "spec_input_to_spec",
+      "from": {
+        "module": ":client",
+        "kind": "openapi-generator.input",
+        "file": "tasktide-app/client/build.gradle.kts",
+        "line": 14
+      },
+      "to": {
+        "kind": "openapi.document",
+        "file": "tasktide-spec/openapi/tasktide.yaml"
+      },
+      "expectedEvidence": "build-model"
+    },
+    {
+      "id": "spec_input_to_spec:002",
+      "class": "spec_input_to_spec",
+      "from": {
+        "module": ":client",
+        "kind": "wire.source-path",
+        "file": "tasktide-app/client/build.gradle.kts",
+        "line": 20
+      },
+      "to": {
+        "kind": "proto.file",
+        "file": "tasktide-spec/proto/sample/tasktide/sync/v1/sync.proto"
+      },
+      "expectedEvidence": "build-model"
+    },
+    {
+      "id": "spec_input_to_spec:003",
+      "class": "spec_input_to_spec",
+      "from": {
+        "module": ":server",
+        "kind": "wire.source-path",
+        "file": "tasktide-app/server/build.gradle.kts",
+        "line": 8
+      },
+      "to": {
+        "kind": "proto.file",
+        "file": "tasktide-spec/proto/sample/tasktide/sync/v1/sync.proto"
+      },
+      "expectedEvidence": "build-model"
+    },
+    {
+      "id": "generated_surface_to_spec:001",
+      "class": "generated_surface_to_spec",
+      "from": {
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/TaskClient.kt",
+        "lines": [
+          6
+        ]
+      },
+      "to": {
+        "kind": "openapi.operation",
+        "name": "listTasks",
+        "file": "tasktide-spec/openapi/tasktide.yaml",
+        "line": 8
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "generated_surface_to_spec:002",
+      "class": "generated_surface_to_spec",
+      "from": {
+        "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/SyncClient.kt",
+        "lines": [
+          5,
+          6
+        ]
+      },
+      "to": {
+        "kind": "proto.message",
+        "name": "PushRequest",
+        "file": "tasktide-spec/proto/sample/tasktide/sync/v1/sync.proto",
+        "line": 5
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "generated_surface_to_spec:003",
+      "class": "generated_surface_to_spec",
+      "from": {
+        "file": "tasktide-app/server/src/main/kotlin/sample/tasktide/server/SyncHandler.kt",
+        "lines": [
+          6
+        ]
+      },
+      "to": {
+        "kind": "proto.message",
+        "name": "PushRequest",
+        "file": "tasktide-spec/proto/sample/tasktide/sync/v1/sync.proto",
+        "line": 5
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "generated_surface_to_spec:004",
+      "class": "generated_surface_to_spec",
+      "from": {
+        "file": "tasktide-app/server/src/main/kotlin/sample/tasktide/server/SyncHandler.kt",
+        "lines": [
+          6
+        ]
+      },
+      "to": {
+        "kind": "proto.message",
+        "name": "PushReply",
+        "file": "tasktide-spec/proto/sample/tasktide/sync/v1/sync.proto",
+        "line": 10
+      },
+      "expectedEvidence": "convention"
+    },
+    {
+      "id": "spec_operation_to_implementation:001",
+      "class": "spec_operation_to_implementation",
+      "from": {
+        "kind": "openapi.operation",
+        "name": "listTasks",
+        "file": "tasktide-spec/openapi/tasktide.yaml",
+        "line": 8
+      },
+      "to": {
+        "module": ":server",
+        "kind": "ktor.route",
+        "name": "GET /tasks",
+        "file": "tasktide-app/server/src/main/kotlin/sample/tasktide/server/Routes.kt",
+        "line": 9
+      },
+      "expectedEvidence": "convention"
+    }
+  ]
+}

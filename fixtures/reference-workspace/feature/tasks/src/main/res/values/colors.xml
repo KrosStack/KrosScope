@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="priority_low">#FF7CB342</color>
+    <color name="priority_normal">#FF1E88E5</color>
+    <color name="priority_high">#FFFB8C00</color>
+    <color name="priority_urgent">#FFE53935</color>
+    <color name="task_card_background">#FFF4F4F6</color>
+    <color name="task_text_secondary">#FF6B6B76</color>
+</resources>

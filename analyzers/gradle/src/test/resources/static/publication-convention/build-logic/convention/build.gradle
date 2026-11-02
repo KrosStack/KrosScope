@@ -1,0 +1,12 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        register('publish') {
+            id = 'example.publish'
+            implementationClass = 'PublishPlugin'
+        }
+    }
+}

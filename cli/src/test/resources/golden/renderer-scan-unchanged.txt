@@ -1,0 +1,7 @@
+The index is up to date: 154 files, nothing changed (120 ms).
+
+  Level       resolved
+  Files       154
+  Work units  0 redone, 103 reused, 0 removed
+  Problems    0 errors, 0 warnings, 5 notes
+  Index       .kscope

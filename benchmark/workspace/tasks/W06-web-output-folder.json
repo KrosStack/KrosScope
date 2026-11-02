@@ -1,0 +1,38 @@
+{
+  "id": "W06",
+  "title": "Move the folder that the compiled web page is written to",
+  "statement": "The compiled web page is written to a folder with the generic name of a build result. Write it to a folder named tasktide-site instead, make sure that the version control of the web project still ignores it, and make the server take that folder into its static files.",
+  "category": "web_bundle_output_change",
+  "level": 4,
+  "named": false,
+  "mustEdit": [
+    "tasktide-web/vite.config.ts",
+    "tasktide-web/.gitignore",
+    "tasktide-app/server/build.gradle.kts"
+  ],
+  "mustRead": [
+    "tasktide-web/package.json"
+  ],
+  "symbols": [
+    {
+      "module": ":server",
+      "kind": "gradle.copy-source",
+      "name": "../tasktide-web/dist",
+      "file": "tasktide-app/server/build.gradle.kts",
+      "line": 14
+    }
+  ],
+  "relationships": [
+    "bundle_consumer_to_project:001"
+  ],
+  "changeScope": {
+    "modules": [
+      ":server"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": []
+}

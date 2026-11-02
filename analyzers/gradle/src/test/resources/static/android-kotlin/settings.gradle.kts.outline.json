@@ -1,0 +1,57 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "android",
+                    "expression": "\"android\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 29
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":app",
+                    "expression": "\":app\""
+                },
+                {
+                    "name": null,
+                    "literal": ":multi",
+                    "expression": "\":multi\""
+                },
+                {
+                    "name": null,
+                    "literal": ":lib",
+                    "expression": "\":lib\""
+                },
+                {
+                    "name": null,
+                    "literal": ":odd",
+                    "expression": "\":odd\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 42
+            }
+        }
+    ]
+}

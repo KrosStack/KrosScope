@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = 'org.example.shared'
+                artifactId = 'literal'
+                version = project.findProperty('literal.version')
+            }
+        }
+    }
+}

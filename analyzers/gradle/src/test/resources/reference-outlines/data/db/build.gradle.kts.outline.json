@@ -1,0 +1,323 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tasktide.kmp.library",
+                            "expression": "\"tasktide.kmp.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.sqldelight"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 35
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "kotlin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "android",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "namespace": "\"sample.tasktide.data.db\""
+                    },
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "sourceSets",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "dependencies",
+                            "receiver": "commonMain",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "project(\":core:model\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 13,
+                                        "startColumn": 13,
+                                        "endLine": 13,
+                                        "endColumn": 40
+                                    }
+                                },
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.sqldelight.runtime"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 14,
+                                        "startColumn": 13,
+                                        "endLine": 14,
+                                        "endColumn": 41
+                                    }
+                                },
+                                {
+                                    "name": "implementation",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.sqldelight.coroutines"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 15,
+                                        "startColumn": 13,
+                                        "endLine": 15,
+                                        "endColumn": 55
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 12,
+                                "startColumn": 9,
+                                "endLine": 16,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "dependencies",
+                            "receiver": "androidMain",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "implementation",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.sqldelight.android.driver"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 18,
+                                        "startColumn": 13,
+                                        "endLine": 18,
+                                        "endColumn": 59
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 17,
+                                "startColumn": 9,
+                                "endLine": 19,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "named",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "desktopMain",
+                                    "expression": "\"desktopMain\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "dependencies",
+                                    "receiver": null,
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "implementation",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": null,
+                                                    "expression": "libs.sqldelight.sqlite.driver"
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 22,
+                                                "startColumn": 17,
+                                                "endLine": 22,
+                                                "endColumn": 62
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 21,
+                                        "startColumn": 13,
+                                        "endLine": 23,
+                                        "endColumn": 14
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 20,
+                                "startColumn": 9,
+                                "endLine": 24,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 25,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 26,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "sqldelight",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "databases",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "TaskDatabase",
+                                    "expression": "\"TaskDatabase\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "set",
+                                    "receiver": "packageName",
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "sample.tasktide.data.db",
+                                            "expression": "\"sample.tasktide.data.db\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 31,
+                                        "startColumn": 13,
+                                        "endLine": 31,
+                                        "endColumn": 55
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 30,
+                                "startColumn": 9,
+                                "endLine": 32,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 29,
+                        "startColumn": 5,
+                        "endLine": 33,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 28,
+                "startColumn": 1,
+                "endLine": 34,
+                "endColumn": 2
+            }
+        }
+    ]
+}

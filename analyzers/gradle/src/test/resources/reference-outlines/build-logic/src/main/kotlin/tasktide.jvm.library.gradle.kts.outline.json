@@ -1,0 +1,196 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.jvm",
+                            "expression": "\"org.jetbrains.kotlin.jvm\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 35
+                    }
+                },
+                {
+                    "name": "java-library",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 5,
+                        "startColumn": 5,
+                        "endLine": 5,
+                        "endColumn": 19
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 6,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "configure",
+            "receiver": "extensions",
+            "arguments": [],
+            "body": [
+                {
+                    "name": "jvmToolchain",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "17",
+                            "expression": "17"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 21
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 10,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "add",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "testImplementation",
+                            "expression": "\"testImplementation\""
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "catalog.findLibrary(\"junit\").get()"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 15,
+                        "startColumn": 5,
+                        "endLine": 15,
+                        "endColumn": 66
+                    }
+                },
+                {
+                    "name": "add",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "testImplementation",
+                            "expression": "\"testImplementation\""
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "catalog.findLibrary(\"kotlin-test\").get()"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 16,
+                        "startColumn": 5,
+                        "endLine": 16,
+                        "endColumn": 72
+                    }
+                },
+                {
+                    "name": "add",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "testImplementation",
+                            "expression": "\"testImplementation\""
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "catalog.findLibrary(\"kotlinx-coroutines-test\").get()"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 17,
+                        "startColumn": 5,
+                        "endLine": 17,
+                        "endColumn": 84
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 14,
+                "startColumn": 1,
+                "endLine": 18,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "configureEach",
+            "receiver": "tasks.withType<Test>()",
+            "arguments": [],
+            "body": [
+                {
+                    "name": "useJUnit",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 21,
+                        "startColumn": 5,
+                        "endLine": 21,
+                        "endColumn": 15
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 20,
+                "startColumn": 1,
+                "endLine": 22,
+                "endColumn": 2
+            }
+        }
+    ]
+}

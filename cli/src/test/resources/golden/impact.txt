@@ -1,0 +1,19 @@
+A change here can affect 4 nodes (1 file, 2 modules) and is covered by 1 test.
+
+  Changed  lib/src/main/kotlin/Greeter.kt
+
+Affected, nearest first
+  distance  certainty  node
+         1  exact      app/src/main/kotlin/Main.kt
+         1  exact      app.Main.greeter
+         1  exact      app.Main.run()
+         1  exact      greet.GreeterTest.greetsByName()
+
+Modules
+  :app
+  :lib
+
+Tests (1)
+  lib/src/test/kotlin/GreeterTest.kt
+
+  Unresolved nearby  0

@@ -1,0 +1,16 @@
+3 files and 4 symbols are closest to lib/src/main/kotlin/Greeter.kt; 3 files and 7 symbols scored.
+
+Closest files (3)
+   score  file
+  0.7420  lib/src/main/kotlin/Greeter.kt
+  0.1499  app/src/main/kotlin/Main.kt
+  0.1081  lib/src/test/kotlin/GreeterTest.kt
+
+Closest symbols (4)
+   score  kind             symbol
+  0.1841  kotlin.class     greet.Greeter
+  0.1822  kotlin.function  greet.Greeter.greet
+  0.0915  kotlin.function  greet.GreeterTest.greetsByName
+  0.0577  kotlin.function  app.Main.run
+
+Supported by 6 relationships.

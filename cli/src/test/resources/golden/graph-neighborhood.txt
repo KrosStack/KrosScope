@@ -1,0 +1,4 @@
+Neighborhood graph: 1 node, 0 relationships.
+  No relationships within this scope.
+
+Use --format dot for Graphviz, or --format json for evidence and unresolved references.

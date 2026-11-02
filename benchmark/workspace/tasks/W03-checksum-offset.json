@@ -1,0 +1,45 @@
+{
+  "id": "W03",
+  "title": "Checksum a buffer from a start offset",
+  "statement": "NativeChecksum.crc32 can only checksum a whole byte array. Add an offset parameter to the external function crc32 and make the JNI function Java_sample_tasktide_client_NativeChecksum_crc32 in the C++ library skip that many bytes before it computes the checksum.",
+  "category": "jni_signature_change",
+  "level": 4,
+  "named": true,
+  "mustEdit": [
+    "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeChecksum.kt",
+    "tasktide-native-cpp/src/checksum.cpp"
+  ],
+  "mustRead": [
+    "tasktide-native-cpp/CMakeLists.txt"
+  ],
+  "symbols": [
+    {
+      "module": ":client",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.client.NativeChecksum.crc32",
+      "kind": "kotlin.function",
+      "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeChecksum.kt",
+      "line": 8
+    },
+    {
+      "kind": "jni.native-function",
+      "name": "Java_sample_tasktide_client_NativeChecksum_crc32",
+      "file": "tasktide-native-cpp/src/checksum.cpp",
+      "line": 22
+    }
+  ],
+  "relationships": [
+    "jni_external_to_native:001",
+    "native_library_load_to_target:001"
+  ],
+  "changeScope": {
+    "modules": [
+      ":client"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": []
+}

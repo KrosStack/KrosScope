@@ -1,0 +1,103 @@
+{
+  "id": "T13",
+  "title": "Rename the highest priority from Urgent to Critical",
+  "statement": "The product team renamed the highest task priority from Urgent to Critical. Rename it in the domain model and everywhere it is shown, exported or exchanged (labels on every screen, the colour resource, exports and sync), without breaking data that was already stored or synced.",
+  "category": "cross_module_refactor",
+  "mustEdit": [
+    "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt",
+    "core/legacy/src/test/java/sample/tasktide/core/legacy/LegacyTaskFormatterTest.java",
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+    "data/db/src/commonTest/kotlin/sample/tasktide/data/db/TaskRowMapperTest.kt",
+    "feature/settings/src/test/kotlin/sample/tasktide/feature/settings/SettingsViewModelTest.kt",
+    "feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/PriorityDotView.kt",
+    "feature/tasks/src/main/res/values/colors.xml",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/TaskDtoMapper.kt",
+    "sync/protocol/src/main/proto/sync.proto",
+    "ui/shared/src/commonMain/composeResources/values/strings.xml",
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/PriorityBadge.kt"
+  ],
+  "mustRead": [
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+    "sync/protocol/src/main/proto/sync.proto",
+    "data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt",
+    "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":core:model",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.core.model.Priority.URGENT",
+      "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+      "line": 10
+    },
+    {
+      "module": ":core:legacy",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.core.legacy.PriorityLabels.labelFor",
+      "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt",
+      "line": 8
+    },
+    {
+      "module": ":sync:engine",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.sync.engine.TaskDtoMapper.toDto",
+      "signature": "(sample.tasktide.core.model.Priority)",
+      "file": "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/TaskDtoMapper.kt",
+      "line": 32
+    }
+  ],
+  "relationships": [
+    "java_calls_kotlin:011",
+    "compose_resource_to_consumer:004",
+    "resource_to_consumer:051",
+    "proto_message_to_consumer:014",
+    "proto_message_to_consumer:015",
+    "proto_message_to_consumer:016"
+  ],
+  "changeScope": {
+    "modules": [
+      ":core:model",
+      ":core:legacy",
+      ":data:db",
+      ":sync:protocol",
+      ":sync:engine",
+      ":ui:shared",
+      ":feature:tasks",
+      ":feature:settings"
+    ],
+    "sourceSets": [
+      "commonMain",
+      "main",
+      "test",
+      "commonTest"
+    ],
+    "variants": []
+  },
+  "relevantTests": [
+    {
+      "module": ":core:legacy",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest",
+      "file": "core/legacy/src/test/java/sample/tasktide/core/legacy/LegacyTaskFormatterTest.java"
+    },
+    {
+      "module": ":sync:engine",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.sync.engine.TaskDtoMapperTest",
+      "file": "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/TaskDtoMapperTest.kt"
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "commonTest",
+      "fqName": "sample.tasktide.core.model.PriorityTest",
+      "file": "core/model/src/commonTest/kotlin/sample/tasktide/core/model/PriorityTest.kt"
+    },
+    {
+      "module": ":data:db",
+      "sourceSet": "commonTest",
+      "fqName": "sample.tasktide.data.db.TaskRowMapperTest",
+      "file": "data/db/src/commonTest/kotlin/sample/tasktide/data/db/TaskRowMapperTest.kt"
+    }
+  ],
+  "notes": "mustEdit lists every file that mentions the old name textually; the stored integer level and the wire enum value should keep working for existing data."
+}

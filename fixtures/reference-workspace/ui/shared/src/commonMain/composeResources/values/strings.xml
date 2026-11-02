@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="priority_low">Low</string>
+    <string name="priority_normal">Normal</string>
+    <string name="priority_high">High</string>
+    <string name="priority_urgent">Urgent</string>
+    <string name="task_due_label">Due %1$s</string>
+    <string name="task_done_label">Completed</string>
+</resources>

@@ -1,0 +1,15 @@
+Read as a task (use --as symbol to look it up as a name).
+2 files to edit and 11 to read, touching 2 modules; 36 files scored; several close candidates.
+
+Best candidates
+  score  role  file
+  0.129  edit  data/settings/src/main/kotlin/sample/tasktide/data/settings/UserPreference.kt
+  0.123  edit  data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt
+  0.101  read  data/settings/src/main/kotlin/sample/tasktide/data/settings/PreferenceDao.kt
+  0.094  read  data/settings/src/main/kotlin/sample/tasktide/data/settings/RoomPreferenceRepository.kt
+  0.092  read  data/settings/src/main/kotlin/sample/tasktide/data/settings/PreferenceRepository.kt
+  8 more relevant (use --detail full to list them)
+
+  Tests to run: 2
+
+Next: kscope context "<task>" --budget 4000 --format markdown compiles the source of these files.

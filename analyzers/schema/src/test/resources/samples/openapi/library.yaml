@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: Library API
+  version: 2.1.0
+servers:
+  - url: /api/v2/
+  - url: https://library.example.com/v2
+paths:
+  /books:
+    get:
+      operationId: listBooks
+      summary: Lists the books. The newest come first.
+      responses:
+        "200":
+          description: The books.
+    post:
+      summary: Adds a book.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+  /books/{bookId}:
+    parameters:
+      - name: bookId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getBook
+      description: |
+        Returns one book.
+        delete: this is text, not an operation
+      responses:
+        "200":
+          description: The book.
+    delete:
+      operationId: deleteBook
+  /shelves:
+    $ref: "shelves.yaml#/paths/~1shelves"
+x-vendor:
+  paths: ignored
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        title: {type: string}
+        tags: [a, b]
+    Shelf:
+      type: array

@@ -1,0 +1,71 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "acme.android.library",
+                            "expression": "\"acme.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "acme.flavors",
+                            "expression": "\"acme.flavors\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 23
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [],
+            "assignments": {
+                "namespace": "\"acme.flavored\""
+            },
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 8,
+                "endColumn": 2
+            }
+        }
+    ]
+}

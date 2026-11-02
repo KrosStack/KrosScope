@@ -1,0 +1,79 @@
+{
+  "id": "T05",
+  "title": "Format due dates in the device time zone",
+  "statement": "Due dates are always shown as the UTC calendar day, so people in other regions see the wrong day around midnight. Make the shared code aware of the device's current offset from UTC on every platform and use it when a due date is turned into text.",
+  "category": "new_expect_actual",
+  "mustEdit": [
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt",
+    "core/model/src/androidMain/kotlin/sample/tasktide/core/model/Platform.android.kt",
+    "core/model/src/desktopMain/kotlin/sample/tasktide/core/model/Platform.desktop.kt",
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/IsoDates.kt"
+  ],
+  "mustRead": [
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/TaskCard.kt",
+    "feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListViewModel.kt",
+    "core/model/src/commonTest/kotlin/sample/tasktide/core/model/IsoDatesTest.kt",
+    "core/legacy/src/main/java/sample/tasktide/core/legacy/DateUtils.java"
+  ],
+  "symbols": [
+    {
+      "module": ":core:model",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.core.model.currentTimeMillis",
+      "signature": "()",
+      "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt",
+      "line": 3
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.core.model.toIsoDate",
+      "signature": "(long)",
+      "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/IsoDates.kt",
+      "line": 7
+    }
+  ],
+  "relationships": [
+    "expect_actual:001",
+    "expect_actual:002",
+    "expect_actual:003",
+    "expect_actual:004",
+    "expect_actual:005",
+    "expect_actual:006",
+    "test_to_subject:003"
+  ],
+  "changeScope": {
+    "modules": [
+      ":core:model",
+      ":ui:shared",
+      ":feature:tasks"
+    ],
+    "sourceSets": [
+      "commonMain",
+      "androidMain",
+      "desktopMain",
+      "commonTest"
+    ],
+    "variants": []
+  },
+  "relevantTests": [
+    {
+      "module": ":core:model",
+      "sourceSet": "commonTest",
+      "fqName": "sample.tasktide.core.model.IsoDatesTest",
+      "file": "core/model/src/commonTest/kotlin/sample/tasktide/core/model/IsoDatesTest.kt"
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "desktopTest",
+      "fqName": "sample.tasktide.core.model.UuidGeneratorTest",
+      "file": "core/model/src/desktopTest/kotlin/sample/tasktide/core/model/UuidGeneratorTest.kt"
+    },
+    {
+      "module": ":feature:tasks",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.feature.tasks.TaskListViewModelTest",
+      "file": "feature/tasks/src/test/kotlin/sample/tasktide/feature/tasks/TaskListViewModelTest.kt"
+    }
+  ]
+}

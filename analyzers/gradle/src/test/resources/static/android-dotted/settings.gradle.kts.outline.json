@@ -1,0 +1,42 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "dotted",
+                    "expression": "\"dotted\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 29
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":app",
+                    "expression": "\":app\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 16
+            }
+        }
+    ]
+}

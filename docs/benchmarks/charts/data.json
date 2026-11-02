@@ -1,0 +1,118 @@
+{
+  "context": {
+    "source": "docs/benchmarks/real-repositories.md: pooled test half, freeze realrepos-v2 at 2,000 and 4,000 tokens, realrepos-v1 at 8,000 and 16,000",
+    "tasks": "60 tasks of the pooled test half",
+    "budgets": [2000, 4000, 8000, 16000],
+    "recall": {
+      "kscope": [0.3893, 0.4002, 0.5297, 0.6758],
+      "bm25en": [0.1474, 0.2432, 0.3599, 0.4043],
+      "bm25raw": [0.1377, 0.2432, 0.321, 0.3752]
+    },
+    "precision": {
+      "kscope": [0.1642, 0.1017, 0.0434, 0.0362],
+      "bm25en": [0.0945, 0.0834, 0.0722, 0.0452],
+      "bm25raw": [0.0849, 0.0724, 0.07, 0.0431]
+    }
+  },
+  "localization": {
+    "source": "docs/benchmarks/real-repositories.md: pooled test half, freeze realrepos-v1",
+    "tasks": "60 tasks of the pooled test half",
+    "recall5": {"kscope": 0.3744, "lexical": 0.3802, "bm25en": 0.3377, "bm25raw": 0.3043},
+    "recall10": {"kscope": 0.465, "lexical": 0.4627, "bm25en": 0.4335, "bm25raw": 0.3918},
+    "ndcg10": {"kscope": 0.3476, "lexical": 0.3553, "bm25en": 0.2785, "bm25raw": 0.2567}
+  },
+  "levels": {
+    "source": "docs/benchmarks/task-levels.md: all 120 tasks, development and test halves pooled",
+    "levels": [
+      {
+        "name": "Level 1",
+        "reach": "one module",
+        "tasks": "93 tasks",
+        "recall10": {"kscope": 0.6109, "bm25en": 0.5356, "bm25raw": 0.4684},
+        "recall4000": {"kscope": 0.4758, "bm25en": 0.3358, "bm25raw": 0.3008}
+      },
+      {
+        "name": "Level 2",
+        "reach": "several modules",
+        "tasks": "21 tasks",
+        "recall10": {"kscope": 0.3582, "bm25en": 0.3831, "bm25raw": 0.3644},
+        "recall4000": {"kscope": 0.3842, "bm25en": 0.2255, "bm25raw": 0.179}
+      },
+      {
+        "name": "Level 3",
+        "reach": "several builds",
+        "tasks": "6 tasks",
+        "recall10": {"kscope": 0.3968, "bm25en": 0.4484, "bm25raw": 0.3651},
+        "recall4000": {"kscope": 0.1071, "bm25en": 0.3413, "bm25raw": 0.3135}
+      },
+      {"name": "Level 4", "reach": "two repositories", "tasks": "no tasks"},
+      {"name": "Level 5", "reach": "many repositories", "tasks": "no tasks"}
+    ]
+  },
+  "speed": {
+    "source": "docs/benchmarks/performance.md: single runs on one shared machine",
+    "workspaces": [
+      {
+        "name": "Clone of Now in Android, 715 files",
+        "top": 24,
+        "operations": [
+          {"name": "Fresh scan", "now": 21.6},
+          {"name": "Update after an edit inside a function body", "before": 15.3, "now": 8.6},
+          {"name": "analyze", "before": 2.8, "now": 1.6},
+          {"name": "context at 8,000 tokens", "before": 2.7, "now": 1.2}
+        ]
+      },
+      {
+        "name": "Private codebase, about twelve times larger",
+        "top": 240,
+        "operations": [
+          {"name": "Fresh scan", "now": 137},
+          {"name": "Update after an edit inside a function body", "before": 212, "now": 20},
+          {"name": "analyze", "before": 21.1, "now": 5.3},
+          {"name": "context at 8,000 tokens", "before": 15.2, "now": 8.3}
+        ]
+      }
+    ]
+  },
+  "agent": {
+    "source": "docs/benchmarks/agent-pilot.md: means over the 18 runs of each arm",
+    "measures": [
+      {"name": "Tasks solved", "note": "of 18 runs", "values": [17, 17, 17], "shown": ["17", "17", "17"]},
+      {"name": "Turns", "note": "per run", "values": [20.3, 19.3, 14.3], "shown": ["20.3", "19.3", "14.3"]},
+      {"name": "Files read", "note": "per run", "values": [8.5, 7.4, 4.9], "shown": ["8.5", "7.4", "4.9"]},
+      {
+        "name": "Tokens",
+        "note": "per run, cached included",
+        "values": [287682, 328623, 235880],
+        "shown": ["288k", "329k", "236k"]
+      },
+      {"name": "Time", "note": "seconds per run", "values": [67, 71, 56], "shown": ["67", "71", "56"]}
+    ]
+  },
+  "self": {
+    "source": "docs/benchmarks/self-benchmark.md: all 19 tasks, freeze selfbench-v1",
+    "tasks": "19 tasks from the history of this repository",
+    "context": {
+      "budgets": [2000, 4000, 8000, 16000],
+      "recallTop": 0.6,
+      "precisionTop": 0.16,
+      "recall": {
+        "kscope": [0.1456, 0.2198, 0.3485, 0.4125],
+        "bm25en": [0.0, 0.0, 0.0, 0.0482],
+        "bm25raw": [0.0, 0.0, 0.0, 0.0351]
+      },
+      "precision": {
+        "kscope": [0.0812, 0.1097, 0.0438, 0.041],
+        "bm25en": [0.0, 0.0, 0.0, 0.008],
+        "bm25raw": [0.0, 0.0, 0.0, 0.0036]
+      }
+    },
+    "localization": {
+      "top": 0.4,
+      "ticks": 4,
+      "recall5": {"kscope": 0.2119, "lexical": 0.1794, "bm25en": 0.05, "bm25raw": 0.05},
+      "recall10": {"kscope": 0.2716, "lexical": 0.261, "bm25en": 0.0588, "bm25raw": 0.05},
+      "ndcg10": {"kscope": 0.2012, "lexical": 0.2033, "bm25en": 0.0416, "bm25raw": 0.0297}
+    }
+  }
+}

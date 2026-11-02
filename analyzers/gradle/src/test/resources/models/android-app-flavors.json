@@ -1,0 +1,1595 @@
+[
+ {
+  "schema": 1,
+  "path": ":",
+  "name": "tasktide",
+  "dir": "/work/tasktide",
+  "buildDir": "/work/tasktide/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1",
+   "includedBuilds": [
+    {
+     "name": "build-logic",
+     "dir": "/work/tasktide/build-logic"
+    }
+   ]
+  },
+  "plugins": [],
+  "kotlin": null,
+  "android": null,
+  "java": null,
+  "dependencies": {
+   "projects": [],
+   "external": []
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [],
+   "entries": []
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":app",
+  "name": "app",
+  "dir": "/work/tasktide/app",
+  "buildDir": "/work/tasktide/app/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "com.android.application",
+   "org.jetbrains.kotlin.plugin.compose"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [],
+   "targets": [
+    {
+     "name": "",
+     "platformType": "androidJvm",
+     "compilations": [
+      {
+       "name": "demoDebug",
+       "defaultSourceSet": "demoDebug",
+       "allSourceSets": [
+        "demoDebug"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "demoDebugAndroidTest",
+       "defaultSourceSet": "demoDebugAndroidTest",
+       "allSourceSets": [
+        "demoDebugAndroidTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "demoDebugUnitTest",
+       "defaultSourceSet": "demoDebugUnitTest",
+       "allSourceSets": [
+        "demoDebugUnitTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "demoRelease",
+       "defaultSourceSet": "demoRelease",
+       "allSourceSets": [
+        "demoRelease"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "fullDebug",
+       "defaultSourceSet": "fullDebug",
+       "allSourceSets": [
+        "fullDebug"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "fullDebugAndroidTest",
+       "defaultSourceSet": "fullDebugAndroidTest",
+       "allSourceSets": [
+        "fullDebugAndroidTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "fullDebugUnitTest",
+       "defaultSourceSet": "fullDebugUnitTest",
+       "allSourceSets": [
+        "fullDebugUnitTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "fullRelease",
+       "defaultSourceSet": "fullRelease",
+       "allSourceSets": [
+        "fullRelease"
+       ],
+       "associatedWith": []
+      }
+     ]
+    }
+   ]
+  },
+  "android": {
+   "kind": "dsl",
+   "agpVersion": "Android Gradle Plugin version 9.3.3",
+   "namespace": "sample.tasktide.app",
+   "compileSdk": "36",
+   "minSdk": "24",
+   "targetSdk": "36",
+   "applicationId": "sample.tasktide",
+   "buildTypes": [
+    "debug",
+    "release"
+   ],
+   "flavorDimensions": [
+    "tier"
+   ],
+   "productFlavors": [
+    {
+     "name": "demo",
+     "dimension": "tier"
+    },
+    {
+     "name": "full",
+     "dimension": "tier"
+    }
+   ],
+   "buildFeatures": [
+    "buildConfig",
+    "compose",
+    "viewBinding"
+   ],
+   "sourceSets": [
+    {
+     "name": "androidTest",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/app/src/androidTest/kotlin"
+      ]
+     },
+     "manifest": null
+    },
+    {
+     "name": "androidTestDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestDemo",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestDemoDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestFull",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestFullDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "debug",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/app/src/debug/kotlin"
+      ],
+      "res": [
+       "/work/tasktide/app/src/debug/res"
+      ]
+     },
+     "manifest": "/work/tasktide/app/src/debug/AndroidManifest.xml"
+    },
+    {
+     "name": "demo",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/app/src/demo/kotlin"
+      ]
+     },
+     "manifest": null
+    },
+    {
+     "name": "demoDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "demoRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "full",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/app/src/full/kotlin"
+      ]
+     },
+     "manifest": null
+    },
+    {
+     "name": "fullDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "fullRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "main",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/app/src/main/kotlin"
+      ],
+      "res": [
+       "/work/tasktide/app/src/main/res"
+      ]
+     },
+     "manifest": "/work/tasktide/app/src/main/AndroidManifest.xml"
+    },
+    {
+     "name": "release",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "test",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/app/src/test/kotlin"
+      ]
+     },
+     "manifest": null
+    },
+    {
+     "name": "testDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testDemo",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testDemoDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixtures",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesDemo",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesFull",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFull",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFullDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testRelease",
+     "dirs": {},
+     "manifest": null
+    }
+   ],
+   "variants": [
+    {
+     "name": "demoDebug",
+     "buildType": "debug",
+     "flavors": [
+      "demo"
+     ],
+     "namespace": "sample.tasktide.app",
+     "sourceSets": {
+      "main": [
+       "main",
+       "debug",
+       "demo",
+       "demoDebug"
+      ],
+      "unitTest": [
+       "test",
+       "testDebug",
+       "testDemo",
+       "testDemoDebug"
+      ],
+      "androidTest": [
+       "androidTest",
+       "androidTestDebug",
+       "androidTestDemo",
+       "androidTestDemoDebug"
+      ]
+     },
+     "buildConfigFields": {
+      "MAX_TASKS": "int",
+      "SYNC_ENDPOINT": "String",
+      "VERBOSE_LOGGING": "boolean"
+     }
+    },
+    {
+     "name": "demoRelease",
+     "buildType": "release",
+     "flavors": [
+      "demo"
+     ],
+     "namespace": "sample.tasktide.app",
+     "sourceSets": {
+      "main": [
+       "main",
+       "release",
+       "demo",
+       "demoRelease"
+      ]
+     },
+     "buildConfigFields": {
+      "MAX_TASKS": "int",
+      "SYNC_ENDPOINT": "String",
+      "VERBOSE_LOGGING": "boolean"
+     }
+    },
+    {
+     "name": "fullDebug",
+     "buildType": "debug",
+     "flavors": [
+      "full"
+     ],
+     "namespace": "sample.tasktide.app",
+     "sourceSets": {
+      "main": [
+       "main",
+       "debug",
+       "full",
+       "fullDebug"
+      ],
+      "unitTest": [
+       "test",
+       "testDebug",
+       "testFull",
+       "testFullDebug"
+      ],
+      "androidTest": [
+       "androidTest",
+       "androidTestDebug",
+       "androidTestFull",
+       "androidTestFullDebug"
+      ]
+     },
+     "buildConfigFields": {
+      "MAX_TASKS": "int",
+      "SYNC_ENDPOINT": "String",
+      "VERBOSE_LOGGING": "boolean"
+     }
+    },
+    {
+     "name": "fullRelease",
+     "buildType": "release",
+     "flavors": [
+      "full"
+     ],
+     "namespace": "sample.tasktide.app",
+     "sourceSets": {
+      "main": [
+       "main",
+       "release",
+       "full",
+       "fullRelease"
+      ]
+     },
+     "buildConfigFields": {
+      "MAX_TASKS": "int",
+      "SYNC_ENDPOINT": "String",
+      "VERBOSE_LOGGING": "boolean"
+     }
+    }
+   ]
+  },
+  "java": [],
+  "dependencies": {
+   "projects": [
+    {
+     "configuration": "implementation",
+     "path": ":core:legacy"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":core:model"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":data:db"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":data:settings"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":feature:settings"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":feature:tasks"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":native:bridge"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":sync:engine"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":sync:service"
+    },
+    {
+     "configuration": "implementation",
+     "path": ":ui:shared"
+    }
+   ],
+   "external": [
+    {
+     "configuration": "androidTestImplementation",
+     "coordinates": "androidx.test.ext:junit",
+     "version": "1.3.0"
+    },
+    {
+     "configuration": "androidTestImplementation",
+     "coordinates": "androidx.test:runner",
+     "version": "1.7.0"
+    },
+    {
+     "configuration": "api",
+     "coordinates": "androidx.databinding:viewbinding",
+     "version": "9.3.3"
+    },
+    {
+     "configuration": "api",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.appcompat:appcompat",
+     "version": "1.8.0"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.compose.ui:ui",
+     "version": null
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.compose:compose-bom",
+     "version": "2026.06.01"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.core:core-ktx",
+     "version": "1.18.0"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.fragment:fragment-ktx",
+     "version": "1.9.1"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.lifecycle:lifecycle-runtime",
+     "version": "2.10.0"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.navigation:navigation-fragment",
+     "version": "2.9.7"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.navigation:navigation-ui",
+     "version": "2.9.7"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.recyclerview:recyclerview",
+     "version": "1.4.0"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "junit:junit",
+     "version": "4.13.2"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/android-sdk/platforms/android-36/android.jar",
+    "/android-sdk/build-tools/36.0.0/core-lambda-stubs.jar",
+    "/work/tasktide/feature/tasks/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar",
+    "/gradle-home/caches/9.5.1/transforms/4bed0daf0635f7416ac6fe1a58dac15b/transformed/viewbinding-9.3.3-api.jar",
+    "/work/tasktide/app/build/intermediates/compile_app_classes_jar/demoDebug/bundleDemoDebugClassesToCompileJar/classes.jar",
+    "/gradle-home/caches/9.5.1/transforms/f54b5e0451d4ae97d85a073227fac896/transformed/junit-1.3.0-api.jar",
+    "/work/tasktide/core/legacy/build/libs/legacy.jar",
+    "/work/tasktide/app/build/intermediates/compile_app_classes_jar/fullDebug/bundleFullDebugClassesToCompileJar/classes.jar"
+   ],
+   "entries": [
+    {
+     "kind": "android-variant",
+     "name": "demoDebug/main",
+     "sourceSets": [
+      "main",
+      "debug",
+      "demo",
+      "demoDebug"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "demoDebug/unitTest",
+     "sourceSets": [
+      "test",
+      "testDebug",
+      "testDemo",
+      "testDemoDebug"
+     ],
+     "files": [
+      0,
+      1,
+      4,
+      2
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "demoDebug/androidTest",
+     "sourceSets": [
+      "androidTest",
+      "androidTestDebug",
+      "androidTestDemo",
+      "androidTestDemoDebug"
+     ],
+     "files": [
+      0,
+      1,
+      4,
+      5
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "demoRelease/main",
+     "sourceSets": [
+      "main",
+      "release",
+      "demo",
+      "demoRelease"
+     ],
+     "files": [
+      0,
+      1,
+      3,
+      6
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "fullDebug/main",
+     "sourceSets": [
+      "main",
+      "debug",
+      "full",
+      "fullDebug"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "fullDebug/unitTest",
+     "sourceSets": [
+      "test",
+      "testDebug",
+      "testFull",
+      "testFullDebug"
+     ],
+     "files": [
+      0,
+      1,
+      7,
+      2
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "fullDebug/androidTest",
+     "sourceSets": [
+      "androidTest",
+      "androidTestDebug",
+      "androidTestFull",
+      "androidTestFullDebug"
+     ],
+     "files": [
+      0,
+      1,
+      7,
+      5
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "fullRelease/main",
+     "sourceSets": [
+      "main",
+      "release",
+      "full",
+      "fullRelease"
+     ],
+     "files": [
+      0,
+      1,
+      3,
+      6
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":core:model",
+  "name": "model",
+  "dir": "/work/tasktide/core/model",
+  "buildDir": "/work/tasktide/core/model/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "com.android.kotlin.multiplatform.library",
+   "org.jetbrains.kotlin.multiplatform",
+   "org.jetbrains.kotlin.plugin.serialization",
+   "tasktide.kmp.library"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [
+    {
+     "name": "androidMain",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/androidMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "commonMain",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/commonMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "commonTest",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/commonTest/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "desktopMain",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/desktopMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "desktopTest",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/desktopTest/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonTest"
+     ]
+    }
+   ],
+   "targets": [
+    {
+     "name": "android",
+     "platformType": "androidJvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "androidMain",
+       "allSourceSets": [
+        "androidMain",
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    },
+    {
+     "name": "desktop",
+     "platformType": "jvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "desktopMain",
+       "allSourceSets": [
+        "commonMain",
+        "desktopMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "test",
+       "defaultSourceSet": "desktopTest",
+       "allSourceSets": [
+        "commonTest",
+        "desktopTest"
+       ],
+       "associatedWith": [
+        "main"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "metadata",
+     "platformType": "common",
+     "compilations": [
+      {
+       "name": "commonMain",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "main",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    }
+   ]
+  },
+  "android": {
+   "kind": "kmp-library",
+   "agpVersion": "Android Gradle Plugin version 9.3.3",
+   "namespace": "sample.tasktide.core.model",
+   "compileSdk": "36",
+   "minSdk": "24"
+  },
+  "java": [
+   {
+    "name": "desktopMain",
+    "javaDirs": [],
+    "resourceDirs": []
+   },
+   {
+    "name": "desktopTest",
+    "javaDirs": [],
+    "resourceDirs": []
+   }
+  ],
+  "dependencies": {
+   "projects": [],
+   "external": [
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+     "version": "1.11.0"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-serialization-json",
+     "version": "1.11.0"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/android-sdk/platforms/android-36/android.jar",
+    "/android-sdk/build-tools/36.0.0/core-lambda-stubs.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/1.11.0/3d57dc678bd8d72a60e7adf0eca5c54e3f4f4b79/kotlinx-coroutines-core-jvm-1.11.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-json-jvm/1.11.0/e7e045e99e56f07599bb9ccb708c2190e2af0606/kotlinx-serialization-json-jvm-1.11.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-core-jvm/1.11.0/c1905c9bf7452b045d5af9248835abe64ddad6bf/kotlinx-serialization-core-jvm-1.11.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.20/94c1451890d164aed65d43b3db0b7ecef7c183e7/kotlin-stdlib-2.4.20.jar",
+    "/work/tasktide/core/model/build/classes/kotlin/desktop/main",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-test-jvm/1.11.0/1dfe8ce2b805d913922f283b386895bd0979dfcb/kotlinx-coroutines-test-jvm-1.11.0.jar"
+   ],
+   "entries": [
+    {
+     "kind": "kotlin-compilation",
+     "name": "android/main",
+     "sourceSets": [
+      "androidMain",
+      "commonMain"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/main",
+     "sourceSets": [
+      "commonMain",
+      "desktopMain"
+     ],
+     "files": [
+      2,
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/test",
+     "sourceSets": [
+      "commonTest",
+      "desktopTest"
+     ],
+     "files": [
+      6,
+      2,
+      7,
+      3
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":feature:tasks",
+  "name": "tasks",
+  "dir": "/work/tasktide/feature/tasks",
+  "buildDir": "/work/tasktide/feature/tasks/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "com.android.library",
+   "tasktide.android.library"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [],
+   "targets": [
+    {
+     "name": "",
+     "platformType": "androidJvm",
+     "compilations": [
+      {
+       "name": "debug",
+       "defaultSourceSet": "debug",
+       "allSourceSets": [
+        "debug"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "debugAndroidTest",
+       "defaultSourceSet": "debugAndroidTest",
+       "allSourceSets": [
+        "debugAndroidTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "debugUnitTest",
+       "defaultSourceSet": "debugUnitTest",
+       "allSourceSets": [
+        "debugUnitTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "release",
+       "defaultSourceSet": "release",
+       "allSourceSets": [
+        "release"
+       ],
+       "associatedWith": []
+      }
+     ]
+    }
+   ]
+  },
+  "android": {
+   "kind": "dsl",
+   "agpVersion": "Android Gradle Plugin version 9.3.3",
+   "namespace": "sample.tasktide.feature.tasks",
+   "compileSdk": "36",
+   "minSdk": "24",
+   "targetSdk": null,
+   "applicationId": null,
+   "buildTypes": [
+    "debug",
+    "release"
+   ],
+   "flavorDimensions": [],
+   "productFlavors": [],
+   "buildFeatures": [
+    "viewBinding"
+   ],
+   "sourceSets": [
+    {
+     "name": "androidTest",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "debug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "main",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/feature/tasks/src/main/kotlin"
+      ],
+      "res": [
+       "/work/tasktide/feature/tasks/src/main/res"
+      ]
+     },
+     "manifest": "/work/tasktide/feature/tasks/src/main/AndroidManifest.xml"
+    },
+    {
+     "name": "release",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "test",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/feature/tasks/src/test/kotlin"
+      ]
+     },
+     "manifest": null
+    },
+    {
+     "name": "testDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixtures",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testRelease",
+     "dirs": {},
+     "manifest": null
+    }
+   ],
+   "variants": [
+    {
+     "name": "debug",
+     "buildType": "debug",
+     "flavors": [],
+     "namespace": "sample.tasktide.feature.tasks",
+     "sourceSets": {
+      "main": [
+       "main",
+       "debug"
+      ],
+      "unitTest": [
+       "test",
+       "testDebug"
+      ],
+      "androidTest": [
+       "androidTest",
+       "androidTestDebug"
+      ]
+     },
+     "buildConfigFields": {}
+    },
+    {
+     "name": "release",
+     "buildType": "release",
+     "flavors": [],
+     "namespace": "sample.tasktide.feature.tasks",
+     "sourceSets": {
+      "main": [
+       "main",
+       "release"
+      ]
+     },
+     "buildConfigFields": {}
+    }
+   ]
+  },
+  "java": [],
+  "dependencies": {
+   "projects": [
+    {
+     "configuration": "api",
+     "path": ":core:legacy"
+    },
+    {
+     "configuration": "api",
+     "path": ":core:model"
+    }
+   ],
+   "external": [
+    {
+     "configuration": "api",
+     "coordinates": "androidx.databinding:viewbinding",
+     "version": "9.3.3"
+    },
+    {
+     "configuration": "api",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.appcompat:appcompat",
+     "version": "1.8.0"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.core:core-ktx",
+     "version": "1.18.0"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.fragment:fragment-ktx",
+     "version": "1.9.1"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.lifecycle:lifecycle-runtime",
+     "version": "2.10.0"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.lifecycle:lifecycle-viewmodel",
+     "version": "2.10.0"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.navigation:navigation-fragment",
+     "version": "2.9.7"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "androidx.recyclerview:recyclerview",
+     "version": "1.4.0"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "junit:junit",
+     "version": "4.13.2"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/android-sdk/platforms/android-36/android.jar",
+    "/android-sdk/build-tools/36.0.0/core-lambda-stubs.jar",
+    "/work/tasktide/core/legacy/build/libs/legacy.jar",
+    "/work/tasktide/core/model/build/intermediates/compile_library_classes_jar/androidMain/bundleAndroidMainClassesToCompileJar/classes.jar",
+    "/work/tasktide/feature/tasks/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar"
+   ],
+   "entries": [
+    {
+     "kind": "android-variant",
+     "name": "debug/main",
+     "sourceSets": [
+      "main",
+      "debug"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "debug/unitTest",
+     "sourceSets": [
+      "test",
+      "testDebug"
+     ],
+     "files": [
+      0,
+      1,
+      4,
+      2
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "debug/androidTest",
+     "sourceSets": [
+      "androidTest",
+      "androidTestDebug"
+     ],
+     "files": [
+      0,
+      1,
+      4,
+      2
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "release/main",
+     "sourceSets": [
+      "main",
+      "release"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":sync:service",
+  "name": "service",
+  "dir": "/work/tasktide/sync/service",
+  "buildDir": "/work/tasktide/sync/service/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "com.android.library",
+   "org.jetbrains.kotlin.plugin.parcelize",
+   "tasktide.android.library"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [],
+   "targets": [
+    {
+     "name": "",
+     "platformType": "androidJvm",
+     "compilations": [
+      {
+       "name": "debug",
+       "defaultSourceSet": "debug",
+       "allSourceSets": [
+        "debug"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "debugAndroidTest",
+       "defaultSourceSet": "debugAndroidTest",
+       "allSourceSets": [
+        "debugAndroidTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "debugUnitTest",
+       "defaultSourceSet": "debugUnitTest",
+       "allSourceSets": [
+        "debugUnitTest"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "release",
+       "defaultSourceSet": "release",
+       "allSourceSets": [
+        "release"
+       ],
+       "associatedWith": []
+      }
+     ]
+    }
+   ]
+  },
+  "android": {
+   "kind": "dsl",
+   "agpVersion": "Android Gradle Plugin version 9.3.3",
+   "namespace": "sample.tasktide.sync.service",
+   "compileSdk": "36",
+   "minSdk": "24",
+   "targetSdk": null,
+   "applicationId": null,
+   "buildTypes": [
+    "debug",
+    "release"
+   ],
+   "flavorDimensions": [],
+   "productFlavors": [],
+   "buildFeatures": [
+    "aidl"
+   ],
+   "sourceSets": [
+    {
+     "name": "androidTest",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "androidTestRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "debug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "main",
+     "dirs": {
+      "kotlin": [
+       "/work/tasktide/sync/service/src/main/kotlin"
+      ],
+      "aidl": [
+       "/work/tasktide/sync/service/src/main/aidl"
+      ]
+     },
+     "manifest": "/work/tasktide/sync/service/src/main/AndroidManifest.xml"
+    },
+    {
+     "name": "release",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "test",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixtures",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesDebug",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testFixturesRelease",
+     "dirs": {},
+     "manifest": null
+    },
+    {
+     "name": "testRelease",
+     "dirs": {},
+     "manifest": null
+    }
+   ],
+   "variants": [
+    {
+     "name": "debug",
+     "buildType": "debug",
+     "flavors": [],
+     "namespace": "sample.tasktide.sync.service",
+     "sourceSets": {
+      "main": [
+       "main",
+       "debug"
+      ],
+      "unitTest": [
+       "test",
+       "testDebug"
+      ],
+      "androidTest": [
+       "androidTest",
+       "androidTestDebug"
+      ]
+     },
+     "buildConfigFields": {}
+    },
+    {
+     "name": "release",
+     "buildType": "release",
+     "flavors": [],
+     "namespace": "sample.tasktide.sync.service",
+     "sourceSets": {
+      "main": [
+       "main",
+       "release"
+      ]
+     },
+     "buildConfigFields": {}
+    }
+   ]
+  },
+  "java": [],
+  "dependencies": {
+   "projects": [
+    {
+     "configuration": "api",
+     "path": ":core:model"
+    },
+    {
+     "configuration": "api",
+     "path": ":sync:engine"
+    }
+   ],
+   "external": [
+    {
+     "configuration": "api",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "junit:junit",
+     "version": "4.13.2"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/android-sdk/platforms/android-36/android.jar",
+    "/android-sdk/build-tools/36.0.0/core-lambda-stubs.jar",
+    "/work/tasktide/sync/engine/build/libs/engine.jar",
+    "/work/tasktide/data/db/build/intermediates/compile_library_classes_jar/androidMain/bundleAndroidMainClassesToCompileJar/classes.jar",
+    "/work/tasktide/sync/service/build/intermediates/compile_library_classes_jar/debug/bundleLibCompileToJarDebug/classes.jar"
+   ],
+   "entries": [
+    {
+     "kind": "android-variant",
+     "name": "debug/main",
+     "sourceSets": [
+      "main",
+      "debug"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "debug/unitTest",
+     "sourceSets": [
+      "test",
+      "testDebug"
+     ],
+     "files": [
+      0,
+      1,
+      4,
+      2
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "debug/androidTest",
+     "sourceSets": [
+      "androidTest",
+      "androidTestDebug"
+     ],
+     "files": [
+      0,
+      1,
+      4,
+      2
+     ]
+    },
+    {
+     "kind": "android-variant",
+     "name": "release/main",
+     "sourceSets": [
+      "main",
+      "release"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ }
+]

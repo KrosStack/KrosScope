@@ -1,0 +1,61 @@
+{
+  "id": "T14",
+  "title": "Cover sync conflicts with a test",
+  "statement": "Nothing verifies what the sync engine does when the server already has a newer version of a task that is still waiting to be uploaded. Add test coverage showing that such a task is reported as a conflict, is not marked as synced, and keeps its local content. Production code must not change.",
+  "category": "test_only_change",
+  "mustEdit": [
+    "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt"
+  ],
+  "mustRead": [
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/FakeSyncTransport.kt",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncResult.kt",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/TaskDtoMapper.kt",
+    "data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRepository.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":sync:engine",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.sync.engine.SyncEngine.sync",
+      "signature": "()",
+      "file": "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt",
+      "line": 13
+    },
+    {
+      "module": ":sync:engine",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.sync.engine.FakeSyncTransport",
+      "file": "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/FakeSyncTransport.kt",
+      "line": 9
+    },
+    {
+      "module": ":sync:engine",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.sync.engine.SyncEngineTest",
+      "file": "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt",
+      "line": 16
+    }
+  ],
+  "relationships": [
+    "test_to_subject:013",
+    "sq_query_to_consumer:006"
+  ],
+  "changeScope": {
+    "modules": [
+      ":sync:engine"
+    ],
+    "sourceSets": [
+      "test"
+    ],
+    "variants": []
+  },
+  "relevantTests": [
+    {
+      "module": ":sync:engine",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.sync.engine.SyncEngineTest",
+      "file": "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt"
+    }
+  ]
+}

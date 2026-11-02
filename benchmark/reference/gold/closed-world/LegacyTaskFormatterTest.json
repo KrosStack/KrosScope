@@ -1,0 +1,474 @@
+{
+  "workspaceRoot": "fixtures/reference-workspace",
+  "file": "core/legacy/src/test/java/sample/tasktide/core/legacy/LegacyTaskFormatterTest.java",
+  "module": ":core:legacy",
+  "sourceSet": "test",
+  "language": "java",
+  "completeness": "Every reference from this file to a workspace or generated symbol: type references, qualifiers, constructor and method calls, property/field reads and writes, named arguments, enum entries, supertypes, overrides and resource references. Targets in libraries, the JDK and the Kotlin standard library, and local variables/parameters, are not listed. Imports of workspace symbols are listed separately.",
+  "imports": [
+    {
+      "line": 6,
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      },
+      "import": "sample.tasktide.core.model.Priority"
+    },
+    {
+      "line": 7,
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      },
+      "import": "sample.tasktide.core.model.Task"
+    }
+  ],
+  "edges": [
+    {
+      "line": 10,
+      "column": 19,
+      "text": "LegacyTaskFormatter",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter",
+        "kind": "class",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 6
+      }
+    },
+    {
+      "line": 10,
+      "column": 55,
+      "text": "LegacyTaskFormatter",
+      "kind": "constructor_call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter",
+        "signature": "()",
+        "kind": "constructor",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 11
+      }
+    },
+    {
+      "line": 14,
+      "column": 9,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 14,
+      "column": 21,
+      "text": "TaskFixtures",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures",
+        "kind": "object",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 7
+      }
+    },
+    {
+      "line": 14,
+      "column": 34,
+      "text": "task",
+      "kind": "static_call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures.task",
+        "signature": "(java.lang.String,sample.tasktide.core.model.Priority,java.lang.Long)",
+        "kind": "static method",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 10
+      }
+    },
+    {
+      "line": 14,
+      "column": 51,
+      "text": "Priority",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 14,
+      "column": 60,
+      "text": "HIGH",
+      "kind": "enum_constant",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority.HIGH",
+        "kind": "enum entry",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 9
+      }
+    },
+    {
+      "line": 16,
+      "column": 54,
+      "text": "formatter",
+      "kind": "field_read",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.formatter",
+        "kind": "field",
+        "file": "core/legacy/src/test/java/sample/tasktide/core/legacy/LegacyTaskFormatterTest.java",
+        "line": 10
+      }
+    },
+    {
+      "line": 16,
+      "column": 64,
+      "text": "format",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.format",
+        "signature": "(sample.tasktide.core.model.Task)",
+        "kind": "method",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 23
+      }
+    },
+    {
+      "line": 21,
+      "column": 9,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 21,
+      "column": 21,
+      "text": "TaskFixtures",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures",
+        "kind": "object",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 7
+      }
+    },
+    {
+      "line": 21,
+      "column": 34,
+      "text": "task",
+      "kind": "static_call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures.task",
+        "signature": "(java.lang.String,sample.tasktide.core.model.Priority)",
+        "kind": "static method (jvm overload)",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 10
+      }
+    },
+    {
+      "line": 21,
+      "column": 51,
+      "text": "Priority",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 21,
+      "column": 60,
+      "text": "URGENT",
+      "kind": "enum_constant",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority.URGENT",
+        "kind": "enum entry",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 10
+      }
+    },
+    {
+      "line": 23,
+      "column": 57,
+      "text": "formatter",
+      "kind": "field_read",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.formatter",
+        "kind": "field",
+        "file": "core/legacy/src/test/java/sample/tasktide/core/legacy/LegacyTaskFormatterTest.java",
+        "line": 10
+      }
+    },
+    {
+      "line": 23,
+      "column": 67,
+      "text": "format",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.format",
+        "signature": "(sample.tasktide.core.model.Task)",
+        "kind": "method",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 23
+      }
+    },
+    {
+      "line": 28,
+      "column": 9,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 28,
+      "column": 21,
+      "text": "TaskFixtures",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures",
+        "kind": "object",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 7
+      }
+    },
+    {
+      "line": 28,
+      "column": 34,
+      "text": "task",
+      "kind": "static_call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures.task",
+        "signature": "(java.lang.String,sample.tasktide.core.model.Priority)",
+        "kind": "static method (jvm overload)",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 10
+      }
+    },
+    {
+      "line": 28,
+      "column": 57,
+      "text": "Priority",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 28,
+      "column": 66,
+      "text": "NORMAL",
+      "kind": "enum_constant",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority.NORMAL",
+        "kind": "enum entry",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 30,
+      "column": 39,
+      "text": "formatter",
+      "kind": "field_read",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.formatter",
+        "kind": "field",
+        "file": "core/legacy/src/test/java/sample/tasktide/core/legacy/LegacyTaskFormatterTest.java",
+        "line": 10
+      }
+    },
+    {
+      "line": 30,
+      "column": 49,
+      "text": "slug",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.slug",
+        "signature": "(sample.tasktide.core.model.Task)",
+        "kind": "method",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 32
+      }
+    },
+    {
+      "line": 35,
+      "column": 9,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 35,
+      "column": 21,
+      "text": "TaskFixtures",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures",
+        "kind": "object",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 7
+      }
+    },
+    {
+      "line": 35,
+      "column": 34,
+      "text": "task",
+      "kind": "static_call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "test",
+        "fqName": "sample.tasktide.core.legacy.TaskFixtures.task",
+        "signature": "(java.lang.String,sample.tasktide.core.model.Priority)",
+        "kind": "static method (jvm overload)",
+        "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt",
+        "line": 10
+      }
+    },
+    {
+      "line": 35,
+      "column": 51,
+      "text": "Priority",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 35,
+      "column": 60,
+      "text": "LOW",
+      "kind": "enum_constant",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority.LOW",
+        "kind": "enum entry",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 7
+      }
+    },
+    {
+      "line": 37,
+      "column": 54,
+      "text": "LegacyTaskFormatter",
+      "kind": "constructor_call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter",
+        "signature": "(java.lang.String)",
+        "kind": "constructor",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 15
+      }
+    },
+    {
+      "line": 37,
+      "column": 79,
+      "text": "format",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.format",
+        "signature": "(sample.tasktide.core.model.Task)",
+        "kind": "method",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 23
+      }
+    }
+  ],
+  "declarations": [
+    { "kind": "class", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest", "line": 9 },
+    { "kind": "property", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.formatter", "line": 10 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.formatsTitlePriorityAndDueDate", "line": 13 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.missingDueDateIsLabelled", "line": 20 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.slugIsLowerCaseWithDashes", "line": 27 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest.customSeparatorIsUsed", "line": 34 }
+  ]
+}

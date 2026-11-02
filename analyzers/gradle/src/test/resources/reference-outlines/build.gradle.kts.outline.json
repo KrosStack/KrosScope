@@ -1,0 +1,291 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.android.application"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 56
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.android.library"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 52
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.android.kotlin.multiplatform.library"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 73
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.multiplatform"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 5,
+                        "startColumn": 5,
+                        "endLine": 5,
+                        "endColumn": 57
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.jvm"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 5,
+                        "endLine": 6,
+                        "endColumn": 47
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.serialization"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 7,
+                        "endColumn": 57
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.compose"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 5,
+                        "endLine": 8,
+                        "endColumn": 51
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.parcelize"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 53
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.compose.multiplatform"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 5,
+                        "endLine": 10,
+                        "endColumn": 58
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.ksp"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 40
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.room"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 12,
+                        "endColumn": 41
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.sqldelight"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 13,
+                        "startColumn": 5,
+                        "endLine": 13,
+                        "endColumn": 47
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.wire"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {
+                        "apply": "false"
+                    },
+                    "range": {
+                        "startLine": 14,
+                        "startColumn": 5,
+                        "endLine": 14,
+                        "endColumn": 41
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 15,
+                "endColumn": 2
+            }
+        }
+    ]
+}

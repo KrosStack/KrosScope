@@ -1,0 +1,109 @@
+name: CI
+
+# One Linux run per pull request into main. Changes to documentation and its charts alone start
+# nothing.
+# Windows runs only when asked for, through "Run workflow". The same gate runs before every commit
+# through the pre-commit hook in .githooks, so a run here should confirm a result, not discover one.
+#
+# A push to main, which is what a merge is, starts a short job that compiles and runs the static checks
+# without the tests, and saves the Gradle cache. Pull request runs read that cache: they download no
+# dependency and compile only what the pull request changed.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**/*.md'
+      - 'docs/**/*.svg'
+      - 'docs/benchmarks/charts/**'
+      - 'LICENSE'
+      - 'NOTICE'
+      - 'licenses/**'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '*.md'
+      - 'docs/**/*.md'
+      - 'docs/**/*.svg'
+      - 'docs/benchmarks/charts/**'
+      - 'LICENSE'
+      - 'NOTICE'
+      - 'licenses/**'
+  workflow_dispatch:
+    inputs:
+      windows:
+        description: Also run the check on Windows
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  warm-cache:
+    name: warm the cache
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: false
+
+      - name: Make the wrapper executable
+        run: chmod +x gradlew
+
+      - name: Compile and check without the tests
+        run: ./gradlew check -x test
+
+  check:
+    name: check (${{ matrix.os }})
+    if: github.event_name != 'push'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON((github.event_name == 'workflow_dispatch' && inputs.windows) && '["ubuntu-latest","windows-latest"]' || '["ubuntu-latest"]') }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          # Pull request runs read the build cache; a manual run on a branch writes it.
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Make the wrapper executable
+        if: runner.os != 'Windows'
+        run: chmod +x gradlew
+
+      - name: Check
+        run: ./gradlew check
+        shell: bash
+
+      - name: Keep the reports of a failed run
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports-${{ matrix.os }}
+          path: |
+            **/build/reports/tests/
+            **/build/reports/detekt/
+          retention-days: 3
+          if-no-files-found: ignore

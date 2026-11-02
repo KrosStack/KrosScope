@@ -1,0 +1,236 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.multiplatform",
+                            "expression": "\"org.jetbrains.kotlin.multiplatform\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 45
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "kotlin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "jvm",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 5,
+                        "endLine": 6,
+                        "endColumn": 10
+                    }
+                },
+                {
+                    "name": "sourceSets",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "dependencies",
+                            "receiver": "commonMain",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "project(\":core:model\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 10,
+                                        "startColumn": 13,
+                                        "endLine": 10,
+                                        "endColumn": 40
+                                    }
+                                },
+                                {
+                                    "name": "implementation",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.kotlinx.coroutines.core"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 13,
+                                        "endLine": 11,
+                                        "endColumn": 57
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 9,
+                                "startColumn": 9,
+                                "endLine": 12,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "getting",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "jvmMain",
+                                    "expression": "jvmMain"
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "dependencies",
+                                    "receiver": null,
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "implementation",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": "org.xerial:sqlite-jdbc:3.53.4.0",
+                                                    "expression": "\"org.xerial:sqlite-jdbc:3.53.4.0\""
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 15,
+                                                "startColumn": 17,
+                                                "endLine": 15,
+                                                "endColumn": 66
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 14,
+                                        "startColumn": 13,
+                                        "endLine": 16,
+                                        "endColumn": 14
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 9,
+                                "endLine": 17,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "named",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "jvmTest",
+                                    "expression": "\"jvmTest\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "dependencies",
+                                    "receiver": null,
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "implementation",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": null,
+                                                    "expression": "kotlin(\"test\")"
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 20,
+                                                "startColumn": 17,
+                                                "endLine": 20,
+                                                "endColumn": 47
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 19,
+                                        "startColumn": 13,
+                                        "endLine": 21,
+                                        "endColumn": 14
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 18,
+                                "startColumn": 9,
+                                "endLine": 22,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 5,
+                        "endLine": 23,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 24,
+                "endColumn": 2
+            }
+        }
+    ]
+}

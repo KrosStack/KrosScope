@@ -1,0 +1,143 @@
+{
+    "calls": [
+        {
+            "name": "dependencyResolutionManagement",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "repositories",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "google",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 3,
+                                "startColumn": 9,
+                                "endLine": 3,
+                                "endColumn": 17
+                            }
+                        },
+                        {
+                            "name": "mavenCentral",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 4,
+                                "startColumn": 9,
+                                "endLine": 4,
+                                "endColumn": 23
+                            }
+                        },
+                        {
+                            "name": "gradlePluginPortal",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 5,
+                                "startColumn": 9,
+                                "endLine": 5,
+                                "endColumn": 29
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 6,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "versionCatalogs",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "libs",
+                                    "expression": "\"libs\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "from",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "files(\"../gradle/libs.versions.toml\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 8,
+                                        "startColumn": 26,
+                                        "endLine": 8,
+                                        "endColumn": 69
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 8,
+                                "startColumn": 9,
+                                "endLine": 8,
+                                "endColumn": 71
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 10,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "build-logic",
+                    "expression": "\"build-logic\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 12,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 33
+            }
+        }
+    ]
+}

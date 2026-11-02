@@ -1,0 +1,75 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "dynamic",
+                    "expression": "\"dynamic\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 29
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":fixed",
+                    "expression": "\":fixed\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 18
+            }
+        },
+        {
+            "name": "forEach",
+            "receiver": "listOf(\"alpha\", \"beta\")",
+            "arguments": [],
+            "body": [
+                {
+                    "name": "include",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "\":modules:$it\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 35,
+                        "endLine": 4,
+                        "endColumn": 58
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 60
+            }
+        }
+    ]
+}

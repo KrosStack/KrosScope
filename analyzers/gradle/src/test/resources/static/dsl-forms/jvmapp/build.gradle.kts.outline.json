@@ -1,0 +1,155 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.jvm",
+                            "expression": "\"org.jetbrains.kotlin.jvm\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 35
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "kotlin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "dependencies",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "implementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "project(\":lib\")"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 7,
+                                "startColumn": 9,
+                                "endLine": 7,
+                                "endColumn": 40
+                            }
+                        },
+                        {
+                            "name": "implementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "org.slf4j:slf4j-api:2.0.17",
+                                    "expression": "\"org.slf4j:slf4j-api:2.0.17\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 8,
+                                "startColumn": 9,
+                                "endLine": 8,
+                                "endColumn": 53
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "jvmToolchain",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "21",
+                            "expression": "21"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 21
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "testImplementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin:kotlin-test",
+                            "expression": "\"org.jetbrains.kotlin:kotlin-test\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 15,
+                        "startColumn": 5,
+                        "endLine": 15,
+                        "endColumn": 59
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 14,
+                "startColumn": 1,
+                "endLine": 16,
+                "endColumn": 2
+            }
+        }
+    ]
+}

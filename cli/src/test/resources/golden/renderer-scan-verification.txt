@@ -1,0 +1,20 @@
+Verification failed: the incremental index differs from a clean rebuild in 12 work units and 2 search documents.
+
+  Level       resolved
+  Files       154
+  Work units  0 redone, 103 reused, 0 removed
+  Problems    0 errors, 0 warnings, 5 notes
+  Index       .kscope
+
+Verification
+  kscope.analyzer.kotlin  source-set :lib@main1   different-content
+  kscope.analyzer.kotlin  source-set :lib@main2   different-content
+  kscope.analyzer.kotlin  source-set :lib@main3   different-content
+  kscope.analyzer.kotlin  source-set :lib@main4   different-content
+  kscope.analyzer.kotlin  source-set :lib@main5   different-content
+  kscope.analyzer.kotlin  source-set :lib@main6   different-content
+  kscope.analyzer.kotlin  source-set :lib@main7   different-content
+  kscope.analyzer.kotlin  source-set :lib@main8   different-content
+  kscope.analyzer.kotlin  source-set :lib@main9   different-content
+  kscope.analyzer.kotlin  source-set :lib@main10  different-content
+  2 more (use --format json for the full list)

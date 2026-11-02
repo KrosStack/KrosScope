@@ -1,0 +1,279 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "kotlin-dsl",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 17
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "gradlePlugin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "plugins",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "androidLibrary",
+                                    "expression": "\"androidLibrary\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "libs.plugins.acme.android.library.asProvider().get().pluginId",
+                                "implementationClass": "\"AndroidLibraryPlugin\""
+                            },
+                            "range": {
+                                "startLine": 7,
+                                "startColumn": 9,
+                                "endLine": 10,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "androidLibraryCompose",
+                                    "expression": "\"androidLibraryCompose\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "libs.plugins.acme.android.library.compose.get().pluginId",
+                                "implementationClass": "\"AndroidLibraryComposePlugin\""
+                            },
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 9,
+                                "endLine": 14,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "androidApp",
+                                    "expression": "\"androidApp\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.android.app\"",
+                                "implementationClass": "\"AppPlugin\""
+                            },
+                            "range": {
+                                "startLine": 15,
+                                "startColumn": 9,
+                                "endLine": 18,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "feature",
+                                    "expression": "\"feature\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.feature\"",
+                                "implementationClass": "\"com.acme.logic.FeaturePlugin\""
+                            },
+                            "range": {
+                                "startLine": 19,
+                                "startColumn": 9,
+                                "endLine": 22,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "lint",
+                                    "expression": "\"lint\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.lint\"",
+                                "implementationClass": "\"LintPlugin\""
+                            },
+                            "range": {
+                                "startLine": 23,
+                                "startColumn": 9,
+                                "endLine": 26,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "kmpLibrary",
+                                    "expression": "\"kmpLibrary\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.kmp.library\"",
+                                "implementationClass": "\"KmpLibraryPlugin\""
+                            },
+                            "range": {
+                                "startLine": 27,
+                                "startColumn": 9,
+                                "endLine": 30,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "flavors",
+                                    "expression": "\"flavors\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.flavors\"",
+                                "implementationClass": "\"FlavorsPlugin\""
+                            },
+                            "range": {
+                                "startLine": 31,
+                                "startColumn": 9,
+                                "endLine": 34,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "dynamic",
+                                    "expression": "\"dynamic\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.dynamic\"",
+                                "implementationClass": "\"DynamicPlugin\""
+                            },
+                            "range": {
+                                "startLine": 35,
+                                "startColumn": 9,
+                                "endLine": 38,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "aggregate",
+                                    "expression": "\"aggregate\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.aggregate\"",
+                                "implementationClass": "\"AggregatePlugin\""
+                            },
+                            "range": {
+                                "startLine": 39,
+                                "startColumn": 9,
+                                "endLine": 42,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "broken",
+                                    "expression": "\"broken\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "id": "\"acme.broken\"",
+                                "implementationClass": "\"MissingPlugin\""
+                            },
+                            "range": {
+                                "startLine": 43,
+                                "startColumn": 9,
+                                "endLine": 46,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 5,
+                        "endLine": 47,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 48,
+                "endColumn": 2
+            }
+        }
+    ]
+}

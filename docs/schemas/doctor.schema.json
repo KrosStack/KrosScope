@@ -1,0 +1,53 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_service_DoctorResult",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:doctor:1",
+    "$defs": {
+        "io_github_krosstack_kscope_service_DoctorCheck": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "detail": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "available",
+                "detail"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_DoctorResult": {
+            "type": "object",
+            "properties": {
+                "checks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_DoctorCheck"
+                    }
+                },
+                "diagnostics": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "schemaVersion": {
+                    "const": 1
+                }
+            },
+            "required": [
+                "checks",
+                "diagnostics",
+                "schemaVersion"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

@@ -1,0 +1,46 @@
+package sample.library.wire
+
+public class Book(
+    public val title: String = "",
+    public val pages: Int = 0,
+    public val genre: sample.library.wire.Genre = sample.library.wire.Genre.GENRE_UNSPECIFIED,
+    public val authors: List<String> = emptyList(),
+    public val stock: Map<String, Long> = emptyMap(),
+    public val subtitle: String? = null,
+    public val publisher: sample.library.wire.Book.Publisher? = null,
+    public val cover: okio.ByteString = okio.ByteString.EMPTY,
+    public val borrower: String? = null,
+    public val due: Long? = null,
+    public val added: google.protobuf.Timestamp? = null,
+    unknownFields: okio.ByteString = okio.ByteString.EMPTY,
+) : com.squareup.wire.Message<Book, Nothing>(ADAPTER, unknownFields) {
+    public fun copy(title: String = this.title, pages: Int = this.pages, genre: sample.library.wire.Genre = this.genre, authors: List<String> = this.authors, stock: Map<String, Long> = this.stock, subtitle: String? = this.subtitle, publisher: sample.library.wire.Book.Publisher? = this.publisher, cover: okio.ByteString = this.cover, borrower: String? = this.borrower, due: Long? = this.due, added: google.protobuf.Timestamp? = this.added, unknownFields: okio.ByteString = this.unknownFields): Book = TODO()
+
+    public class Publisher(
+        public val name: String = "",
+        unknownFields: okio.ByteString = okio.ByteString.EMPTY,
+    ) : com.squareup.wire.Message<Publisher, Nothing>(ADAPTER, unknownFields) {
+        public fun copy(name: String = this.name, unknownFields: okio.ByteString = this.unknownFields): Publisher = TODO()
+
+        public companion object {
+            public val ADAPTER: com.squareup.wire.ProtoAdapter<Publisher> = TODO()
+        }
+    }
+
+    public companion object {
+        public val ADAPTER: com.squareup.wire.ProtoAdapter<Book> = TODO()
+    }
+}
+
+public enum class Genre(
+    override val value: Int,
+) : com.squareup.wire.WireEnum {
+    GENRE_UNSPECIFIED(0),
+    FICTION(1);
+
+    public companion object {
+        public val ADAPTER: com.squareup.wire.ProtoAdapter<Genre> = TODO()
+
+        public fun fromValue(value: Int): Genre? = TODO()
+    }
+}

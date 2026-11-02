@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding">8dp</dimen>
+    <dimen name="title_size">16sp</dimen>
+    <bool name="wide">false</bool>
+    <integer name="columns">2</integer>
+</resources>

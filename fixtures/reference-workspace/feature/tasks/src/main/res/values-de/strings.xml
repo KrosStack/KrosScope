@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasks_title">Aufgaben</string>
+    <string name="tasks_empty_title">Nichts zu tun</string>
+    <string name="action_mark_done">Als erledigt markieren</string>
+</resources>

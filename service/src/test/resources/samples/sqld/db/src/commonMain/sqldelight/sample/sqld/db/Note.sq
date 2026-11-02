@@ -1,0 +1,21 @@
+CREATE TABLE note (
+    id INTEGER NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    body TEXT,
+    pinned INTEGER AS Boolean NOT NULL DEFAULT 0
+);
+
+selectAll:
+SELECT * FROM note ORDER BY id;
+
+selectById:
+SELECT * FROM note WHERE id = ?;
+
+titles:
+SELECT title FROM note WHERE pinned = :pinned;
+
+insertNote:
+INSERT INTO note(title, body) VALUES (?, ?);
+
+deleteAll:
+DELETE FROM note;

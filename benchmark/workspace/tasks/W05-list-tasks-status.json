@@ -1,0 +1,53 @@
+{
+  "id": "W05",
+  "title": "Filter listTasks by status",
+  "statement": "Add an optional status query parameter to the listTasks operation of the OpenAPI spec, make the GET /tasks route in taskRoutes return only the tasks with that status when it is given, and make TaskClient.titles pass the parameter of the generated listTasks call.",
+  "category": "openapi_operation_change",
+  "level": 4,
+  "named": true,
+  "mustEdit": [
+    "tasktide-spec/openapi/tasktide.yaml",
+    "tasktide-app/server/src/main/kotlin/sample/tasktide/server/Routes.kt",
+    "tasktide-app/client/src/main/kotlin/sample/tasktide/client/TaskClient.kt"
+  ],
+  "mustRead": [
+    "tasktide-app/server/src/main/kotlin/sample/tasktide/server/TaskStore.kt"
+  ],
+  "symbols": [
+    {
+      "kind": "openapi.operation",
+      "name": "listTasks",
+      "file": "tasktide-spec/openapi/tasktide.yaml",
+      "line": 8
+    },
+    {
+      "module": ":server",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.server.taskRoutes",
+      "file": "tasktide-app/server/src/main/kotlin/sample/tasktide/server/Routes.kt",
+      "line": 8
+    },
+    {
+      "module": ":client",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.client.TaskClient.titles",
+      "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/TaskClient.kt",
+      "line": 6
+    }
+  ],
+  "relationships": [
+    "spec_operation_to_implementation:001",
+    "generated_surface_to_spec:001"
+  ],
+  "changeScope": {
+    "modules": [
+      ":server",
+      ":client"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": []
+}

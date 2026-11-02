@@ -1,0 +1,76 @@
+{
+  "id": "T10",
+  "title": "Remember which app version wrote a preference",
+  "statement": "To detect stale values after upgrades, every stored preference must remember the app version that last wrote it. Existing installs must keep their saved preferences and have the new information filled in with an empty value.",
+  "category": "room_entity_change",
+  "mustEdit": [
+    "data/settings/src/main/kotlin/sample/tasktide/data/settings/UserPreference.kt",
+    "data/settings/src/main/kotlin/sample/tasktide/data/settings/SettingsDatabase.kt",
+    "data/settings/src/main/kotlin/sample/tasktide/data/settings/RoomPreferenceRepository.kt"
+  ],
+  "mustCreate": [
+    "data/settings/schemas/sample.tasktide.data.settings.SettingsDatabase/2.json"
+  ],
+  "mayEdit": [
+    "app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt"
+  ],
+  "mustRead": [
+    "data/settings/src/main/kotlin/sample/tasktide/data/settings/PreferenceDao.kt",
+    "data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt",
+    "app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt",
+    "data/settings/build.gradle.kts",
+    "data/settings/schemas/sample.tasktide.data.settings.SettingsDatabase/1.json"
+  ],
+  "symbols": [
+    {
+      "module": ":data:settings",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.data.settings.UserPreference",
+      "file": "data/settings/src/main/kotlin/sample/tasktide/data/settings/UserPreference.kt",
+      "line": 8
+    },
+    {
+      "module": ":data:settings",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.data.settings.SettingsDatabase",
+      "file": "data/settings/src/main/kotlin/sample/tasktide/data/settings/SettingsDatabase.kt",
+      "line": 9
+    },
+    {
+      "module": ":data:settings",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.data.settings.PreferenceDao",
+      "file": "data/settings/src/main/kotlin/sample/tasktide/data/settings/PreferenceDao.kt",
+      "line": 9
+    }
+  ],
+  "relationships": [
+    "room_entity_dao_database:001",
+    "room_entity_dao_database:002",
+    "room_entity_dao_database:003",
+    "room_entity_dao_database:004",
+    "room_component_to_consumer:001",
+    "room_component_to_consumer:002",
+    "room_component_to_consumer:003",
+    "test_to_subject:011"
+  ],
+  "changeScope": {
+    "modules": [
+      ":data:settings",
+      ":app"
+    ],
+    "sourceSets": [
+      "main",
+      "test"
+    ],
+    "variants": []
+  },
+  "relevantTests": [
+    {
+      "module": ":data:settings",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.data.settings.RoomPreferenceRepositoryTest",
+      "file": "data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt"
+    }
+  ]
+}

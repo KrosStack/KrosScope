@@ -1,0 +1,116 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tasktide.jvm.library",
+                            "expression": "\"tasktide.jvm.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.wire"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 29
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "api",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.wire.runtime"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 7,
+                        "endColumn": 27
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 8,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "wire",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "kotlin",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 14
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 10,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 2
+            }
+        }
+    ]
+}

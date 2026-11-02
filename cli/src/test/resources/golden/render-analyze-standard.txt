@@ -1,0 +1,52 @@
+Read as a task (use --as symbol to look it up as a name).
+2 files to edit and 11 to read, touching 2 modules; 36 files scored; several close candidates.
+
+  Task   Users want to be reminded about a task before it is due
+  Terms  users, want, reminded, task, due
+
+Files to edit (2)
+  score  file                                                                                         because
+  0.129  data/settings/src/main/kotlin/sample/tasktide/data/settings/UserPreference.kt                lexical symbol, graph
+  0.123  data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt  lexical symbol, graph
+
+Files to read (showing 10 of 11)
+  score  file                                                                                     because
+  0.101  data/settings/src/main/kotlin/sample/tasktide/data/settings/PreferenceDao.kt             lexical symbol, graph
+  0.094  data/settings/src/main/kotlin/sample/tasktide/data/settings/RoomPreferenceRepository.kt  lexical symbol, graph
+  0.092  data/settings/src/main/kotlin/sample/tasktide/data/settings/PreferenceRepository.kt      lexical symbol, graph
+  0.090  data/settings/src/main/kotlin/sample/tasktide/data/settings/SettingsDatabase.kt          lexical symbol, graph
+  0.088  data/settings/src/main/kotlin/sample/tasktide/data/settings/PreferenceKeys.kt            lexical symbol, graph
+  0.087  feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListViewModel.kt         lexical symbol, graph
+  0.085  feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskAdapter.kt               lexical symbol, graph
+  0.083  feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt          lexical symbol, graph
+  0.081  feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskDetailActivity.kt        lexical symbol, graph
+  0.072  feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListUiState.kt           lexical symbol, graph
+  1 more relevant (use --detail full to list them)
+
+Documents (1)
+  score  file       because
+  0.053  README.md  lexical symbol, graph
+  Not listed: 2 images and other binary files.
+
+  20 more files scored below 30% of the best score (--format json lists all).
+
+Tests to run (2)
+  data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt
+  feature/tasks/src/test/kotlin/sample/tasktide/feature/tasks/TaskListViewModelTest.kt
+
+Scope of the change
+  Modules          :data:settings, :feature:tasks
+  Source sets      :data:settings@main
+  Platforms        android
+  Crosses modules  yes
+
+Boundaries and gaps
+  Boundary links     0
+  Boundary chains    0 paths
+  Unresolved nearby  0
+
+Context size
+  Minimal      11,212 tokens
+  Recommended  30,572 tokens
+
+Next: kscope context "<task>" --budget 8000 compiles the source of these files.

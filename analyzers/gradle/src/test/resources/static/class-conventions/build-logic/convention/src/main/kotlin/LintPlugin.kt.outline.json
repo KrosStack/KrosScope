@@ -1,0 +1,103 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "LintPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 15,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "when",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "configure",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "lint",
+                                    "receiver": null,
+                                    "arguments": [],
+                                    "body": [],
+                                    "assignments": {
+                                        "checkDependencies": "true"
+                                    },
+                                    "range": {
+                                        "startLine": 9,
+                                        "startColumn": 55,
+                                        "endLine": 9,
+                                        "endColumn": 88
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 9,
+                                "startColumn": 21,
+                                "endLine": 9,
+                                "endColumn": 90
+                            },
+                            "typeArguments": [
+                                "ApplicationExtension"
+                            ]
+                        },
+                        {
+                            "name": "apply",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": "plugin",
+                                    "literal": "com.android.lint",
+                                    "expression": "\"com.android.lint\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 25,
+                                "endLine": 11,
+                                "endColumn": 59
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 13,
+                        "endLine": 12,
+                        "endColumn": 14
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 15,
+                "endColumn": 2
+            }
+        }
+    ]
+}

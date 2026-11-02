@@ -1,0 +1,3 @@
+rootProject.name = 'shelf'
+
+include ':text', ':format', ':android', ':computed', ':consumer'

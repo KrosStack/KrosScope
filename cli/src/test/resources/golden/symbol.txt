@@ -1,0 +1,15 @@
+7 relevant matches for "Greeter"; 7 declarations scored; best: greet.Greeter.
+
+  Kind         kotlin.class
+  Declared at  lib/src/main/kotlin/Greeter.kt:3
+  Signature    class Greeter
+
+Matches (7)
+  score  kind             symbol                          where
+  1.086  kotlin.class     greet.Greeter                   lib/src/main/kotlin/Greeter.kt:3
+  0.080  kotlin.function  greet.Greeter.greet             lib/src/main/kotlin/Greeter.kt:4
+  0.080  kotlin.function  greet.GreeterTest.greetsByName  lib/src/test/kotlin/GreeterTest.kt:4
+  0.073  kotlin.property  app.Main.greeter                app/src/main/kotlin/Main.kt:6
+  0.071  kotlin.class     greet.GreeterTest               lib/src/test/kotlin/GreeterTest.kt:3
+  0.069  kotlin.class     app.Main                        app/src/main/kotlin/Main.kt:5
+  0.069  kotlin.function  app.Main.run                    app/src/main/kotlin/Main.kt:8

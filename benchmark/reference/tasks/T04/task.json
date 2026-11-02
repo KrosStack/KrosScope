@@ -1,0 +1,33 @@
+{
+  "id": "T04",
+  "title": "Rename the task list title string",
+  "category": "resource_rename",
+  "statement": "The name of the string used as the task list screen title is misleading because it is also the title of the navigation destination. Rename the resource to a name that says it is the list title, keeping the German translation working, and update everything that uses it.",
+  "goldFiles": [
+    "feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt",
+    "feature/tasks/src/main/res/navigation/nav_tasks.xml",
+    "feature/tasks/src/main/res/values-de/strings.xml",
+    "feature/tasks/src/main/res/values/strings.xml"
+  ],
+  "mayEditFiles": [],
+  "verify": {
+    "gradleTasks": [
+      ":feature:tasks:testDebugUnitTest"
+    ],
+    "timeoutMinutes": 15
+  },
+  "failToPass": [
+    "sample.tasktide.feature.tasks.TaskListTitleResourceTest#englishAndGermanTextsAreKept",
+    "sample.tasktide.feature.tasks.TaskListTitleResourceTest#exactlyOneNewNameSaysItIsTheListTitle",
+    "sample.tasktide.feature.tasks.TaskListTitleResourceTest#germanStillTranslatesTheSameStrings",
+    "sample.tasktide.feature.tasks.TaskListTitleResourceTest#nothingRefersToTheOldNameAnymore",
+    "sample.tasktide.feature.tasks.TaskListTitleResourceTest#theNavigationLabelAndTheScreenTitleUseTheNewName",
+    "sample.tasktide.feature.tasks.TaskListTitleResourceTest#theOldNameIsNoLongerDefined"
+  ],
+  "passToPass": [
+    "sample.tasktide.feature.tasks.TaskListTitleResourceTest#everyStringReferenceOfTheModuleIsDefined",
+    "sample.tasktide.feature.tasks.TaskListViewModelTest#clearCompletedRemovesOnlyFinishedTasks",
+    "sample.tasktide.feature.tasks.TaskListViewModelTest#itemsCarryPriorityLabelAndDueDate",
+    "sample.tasktide.feature.tasks.TaskListViewModelTest#toggleDoneMarksTheTaskAndRequeuesIt"
+  ]
+}

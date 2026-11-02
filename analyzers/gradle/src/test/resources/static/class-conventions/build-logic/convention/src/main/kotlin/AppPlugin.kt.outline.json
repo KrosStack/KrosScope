@@ -1,0 +1,105 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "AppPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 17,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": "plugin",
+                            "literal": "com.android.application",
+                            "expression": "\"com.android.application\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 13,
+                        "endLine": 7,
+                        "endColumn": 54
+                    }
+                },
+                {
+                    "name": "apply",
+                    "receiver": "extensions.getByType<ApplicationExtension>()",
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "compileSdk": "36",
+                        "defaultConfig.targetSdk": "36"
+                    },
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 13,
+                        "endLine": 11,
+                        "endColumn": 14
+                    }
+                },
+                {
+                    "name": "configure",
+                    "receiver": "extensions",
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "beforeVariants",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {
+                                "it.enable": "true"
+                            },
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 17,
+                                "endLine": 13,
+                                "endColumn": 52
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 13,
+                        "endLine": 14,
+                        "endColumn": 14
+                    },
+                    "typeArguments": [
+                        "ApplicationAndroidComponentsExtension"
+                    ]
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 17,
+                "endColumn": 2
+            }
+        }
+    ]
+}

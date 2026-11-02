@@ -1,0 +1,16 @@
+3 fragments from 3 files: 147 tokens of a budget of 2,000.
+
+  Task            greet a person by name
+  Level           recommended
+  Token count by  o200k_base
+
+Fragments (3)
+  tokens  role  shown as  where
+      35  read  file      app/src/main/kotlin/Main.kt:1-10
+      23  edit  file      lib/src/main/kotlin/Greeter.kt:1-6
+      25  edit  file      lib/src/test/kotlin/GreeterTest.kt:1-6
+
+Left out (3)
+  3 beyond the chosen level
+
+This is a summary. Use --format markdown for the context to paste into a prompt, or --format json for all data.

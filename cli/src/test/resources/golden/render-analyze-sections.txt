@@ -1,0 +1,8 @@
+Documents (1)
+  score  file       because
+  0.053  README.md  lexical symbol, graph
+  Not listed: 2 images and other binary files.
+
+Tests to run (2)
+  data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt
+  feature/tasks/src/test/kotlin/sample/tasktide/feature/tasks/TaskListViewModelTest.kt

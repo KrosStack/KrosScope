@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "indexLevel": "resolved",
+  "toolVersion": "<version>",
+  "indexLocation": "<index>",
+  "indexed": true,
+  "structure": {
+    "repositories": 1,
+    "buildRoots": 1,
+    "modules": 2,
+    "sourceSets": 3,
+    "targets": 0,
+    "variants": 0
+  },
+  "artifactsByType": {
+    "gradle.build-script": 2,
+    "gradle.settings": 1,
+    "kotlin.source": 3,
+    "markdown": 1
+  },
+  "symbolsByKind": {
+    "kotlin.class": 3,
+    "kotlin.function": 3,
+    "kotlin.property": 1
+  },
+  "coverage": [
+    {
+      "relation": "references",
+      "evidence": "compiler",
+      "state": "exact",
+      "count": 1
+    },
+    {
+      "relation": "calls",
+      "evidence": "compiler",
+      "state": "exact",
+      "count": 4
+    },
+    {
+      "relation": "imports",
+      "evidence": "compiler",
+      "state": "exact",
+      "count": 1
+    },
+    {
+      "relation": "depends-on",
+      "evidence": "build-model",
+      "state": "exact",
+      "count": 1
+    }
+  ],
+  "diagnostics": 3,
+  "metricsByName": {},
+  "searchIndexPopulated": true,
+  "settings": {
+    "file": null,
+    "valid": true,
+    "errors": [],
+    "resources": {
+      "workers": {
+        "value": null,
+        "origin": "default"
+      },
+      "workerHeapMib": {
+        "value": 2048,
+        "origin": "default"
+      }
+    },
+    "scan": {
+      "include": [],
+      "exclude": [],
+      "tests": true,
+      "generated": [],
+      "indexState": "current"
+    },
+    "analyzers": {
+      "androidResources": true,
+      "aidl": true,
+      "schemas": true,
+      "nativeBindings": true,
+      "gitHistory": true,
+      "composeResources": true,
+      "webBundles": true,
+      "indexState": "current"
+    },
+    "level": {
+      "value": "resolved",
+      "origin": "default",
+      "trusted": false
+    }
+  }
+}

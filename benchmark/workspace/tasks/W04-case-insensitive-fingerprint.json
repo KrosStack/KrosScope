@@ -1,0 +1,45 @@
+{
+  "id": "W04",
+  "title": "Make the text fingerprint case insensitive on request",
+  "statement": "The 64-bit fingerprint that the application asks the compiled library for treats Buy Milk and buy milk as different texts. Let the caller say that case must be ignored, so that both give the same fingerprint, and keep the current behaviour when the caller does not ask for it.",
+  "category": "jni_signature_change",
+  "level": 4,
+  "named": false,
+  "mustEdit": [
+    "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeHash.kt",
+    "tasktide-native-rust/src/lib.rs"
+  ],
+  "mustRead": [
+    "tasktide-native-rust/Cargo.toml"
+  ],
+  "symbols": [
+    {
+      "module": ":client",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.client.NativeHash.fnv1a",
+      "kind": "kotlin.function",
+      "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/NativeHash.kt",
+      "line": 8
+    },
+    {
+      "kind": "jni.native-function",
+      "name": "Java_sample_tasktide_client_NativeHash_fnv1a",
+      "file": "tasktide-native-rust/src/lib.rs",
+      "line": 15
+    }
+  ],
+  "relationships": [
+    "jni_external_to_native:002",
+    "native_library_load_to_target:002"
+  ],
+  "changeScope": {
+    "modules": [
+      ":client"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": []
+}

@@ -1,0 +1,412 @@
+{
+    "calls": [
+        {
+            "name": "pluginManagement",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "includeBuild",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "build-logic",
+                            "expression": "\"build-logic\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 32
+                    }
+                },
+                {
+                    "name": "repositories",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "google",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 4,
+                                "startColumn": 9,
+                                "endLine": 4,
+                                "endColumn": 17
+                            }
+                        },
+                        {
+                            "name": "mavenCentral",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 5,
+                                "startColumn": 9,
+                                "endLine": 5,
+                                "endColumn": 23
+                            }
+                        },
+                        {
+                            "name": "gradlePluginPortal",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 6,
+                                "startColumn": 9,
+                                "endLine": 6,
+                                "endColumn": 29
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 7,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 8,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencyResolutionManagement",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "repositories",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "google",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 9,
+                                "endLine": 13,
+                                "endColumn": 17
+                            }
+                        },
+                        {
+                            "name": "mavenCentral",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 14,
+                                "startColumn": 9,
+                                "endLine": 14,
+                                "endColumn": 23
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 15,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "repositoriesMode": "RepositoriesMode.FAIL_ON_PROJECT_REPOS"
+            },
+            "range": {
+                "startLine": 10,
+                "startColumn": 1,
+                "endLine": 16,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "tasktide",
+                    "expression": "\"tasktide\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 18,
+                "startColumn": 1,
+                "endLine": 18,
+                "endColumn": 30
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":app",
+                    "expression": "\":app\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 20,
+                "startColumn": 1,
+                "endLine": 20,
+                "endColumn": 16
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":desktop",
+                    "expression": "\":desktop\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 21,
+                "startColumn": 1,
+                "endLine": 21,
+                "endColumn": 20
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":core:model",
+                    "expression": "\":core:model\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 22,
+                "startColumn": 1,
+                "endLine": 22,
+                "endColumn": 23
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":core:legacy",
+                    "expression": "\":core:legacy\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 23,
+                "startColumn": 1,
+                "endLine": 23,
+                "endColumn": 24
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":data:db",
+                    "expression": "\":data:db\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 24,
+                "startColumn": 1,
+                "endLine": 24,
+                "endColumn": 20
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":data:settings",
+                    "expression": "\":data:settings\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 25,
+                "startColumn": 1,
+                "endLine": 25,
+                "endColumn": 26
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":sync:protocol",
+                    "expression": "\":sync:protocol\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 26,
+                "startColumn": 1,
+                "endLine": 26,
+                "endColumn": 26
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":sync:engine",
+                    "expression": "\":sync:engine\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 27,
+                "startColumn": 1,
+                "endLine": 27,
+                "endColumn": 24
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":sync:service",
+                    "expression": "\":sync:service\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 28,
+                "startColumn": 1,
+                "endLine": 28,
+                "endColumn": 25
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":feature:tasks",
+                    "expression": "\":feature:tasks\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 29,
+                "startColumn": 1,
+                "endLine": 29,
+                "endColumn": 26
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":feature:settings",
+                    "expression": "\":feature:settings\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 30,
+                "startColumn": 1,
+                "endLine": 30,
+                "endColumn": 29
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":ui:shared",
+                    "expression": "\":ui:shared\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 31,
+                "startColumn": 1,
+                "endLine": 31,
+                "endColumn": 22
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":native:bridge",
+                    "expression": "\":native:bridge\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 32,
+                "startColumn": 1,
+                "endLine": 32,
+                "endColumn": 26
+            }
+        }
+    ]
+}

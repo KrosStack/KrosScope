@@ -1,0 +1,52 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.acme.android.library.compose"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 53
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [],
+            "assignments": {
+                "namespace": "\"acme.ui\""
+            },
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 7,
+                "endColumn": 2
+            }
+        }
+    ]
+}

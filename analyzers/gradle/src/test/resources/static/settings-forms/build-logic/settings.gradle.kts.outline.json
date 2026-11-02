@@ -1,0 +1,23 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "build-logic",
+                    "expression": "\"build-logic\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 33
+            }
+        }
+    ]
+}

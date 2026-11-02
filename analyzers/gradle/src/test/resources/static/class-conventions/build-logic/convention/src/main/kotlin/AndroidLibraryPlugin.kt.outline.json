@@ -1,0 +1,320 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "AndroidLibraryPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 21,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": "plugin",
+                            "literal": "com.android.library",
+                            "expression": "\"com.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 13,
+                        "endLine": 7,
+                        "endColumn": 50
+                    }
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": "plugin",
+                            "literal": "acme.lint",
+                            "expression": "\"acme.lint\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 13,
+                        "endLine": 8,
+                        "endColumn": 40
+                    }
+                },
+                {
+                    "name": "configure",
+                    "receiver": "extensions",
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "configureAndroid",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "this"
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "val",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "this",
+                                            "expression": "this"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 17,
+                                        "endLine": 11,
+                                        "endColumn": 39
+                                    },
+                                    "typeArguments": [
+                                        "Project"
+                                    ]
+                                },
+                                {
+                                    "name": "val",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "commonExtension",
+                                            "expression": "commonExtension"
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "this"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 17,
+                                        "endLine": 11,
+                                        "endColumn": 39
+                                    },
+                                    "typeArguments": [
+                                        "CommonExtension"
+                                    ]
+                                },
+                                {
+                                    "name": "apply",
+                                    "receiver": "commonExtension",
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "apply",
+                                            "receiver": "defaultConfig",
+                                            "arguments": [],
+                                            "body": [],
+                                            "assignments": {
+                                                "minSdk": "24"
+                                            },
+                                            "range": {
+                                                "startLine": 11,
+                                                "startColumn": 17,
+                                                "endLine": 11,
+                                                "endColumn": 39
+                                            }
+                                        },
+                                        {
+                                            "name": "apply",
+                                            "receiver": "buildFeatures",
+                                            "arguments": [],
+                                            "body": [],
+                                            "assignments": {
+                                                "buildConfig": "true"
+                                            },
+                                            "range": {
+                                                "startLine": 11,
+                                                "startColumn": 17,
+                                                "endLine": 11,
+                                                "endColumn": 39
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {
+                                        "compileSdk": "35"
+                                    },
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 17,
+                                        "endLine": 11,
+                                        "endColumn": 39
+                                    }
+                                },
+                                {
+                                    "name": "dependencies",
+                                    "receiver": null,
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "coreLibraryDesugaring",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": null,
+                                                    "expression": "libs.findLibrary(\"desugar.jdk.libs\").get()"
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 11,
+                                                "startColumn": 17,
+                                                "endLine": 11,
+                                                "endColumn": 39
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 17,
+                                        "endLine": 11,
+                                        "endColumn": 39
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 17,
+                                "endLine": 11,
+                                "endColumn": 39
+                            },
+                            "inlined": true
+                        }
+                    ],
+                    "assignments": {
+                        "defaultConfig.targetSdk": "35"
+                    },
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 13,
+                        "endLine": 13,
+                        "endColumn": 14
+                    },
+                    "typeArguments": [
+                        "LibraryExtension"
+                    ]
+                },
+                {
+                    "name": "dependencies",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "testImplementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "libs.findLibrary(\"junit\").get()"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 15,
+                                "startColumn": 17,
+                                "endLine": 15,
+                                "endColumn": 70
+                            }
+                        },
+                        {
+                            "name": "implementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "libs.findLibrary(\"androidx.tracing.ktx\").get()"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 16,
+                                "startColumn": 17,
+                                "endLine": 16,
+                                "endColumn": 81
+                            }
+                        },
+                        {
+                            "name": "add",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "testImplementation",
+                                    "expression": "\"testImplementation\""
+                                },
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "libs.findBundle(\"testing\").get()"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 17,
+                                "startColumn": 17,
+                                "endLine": 17,
+                                "endColumn": 76
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 14,
+                        "startColumn": 13,
+                        "endLine": 18,
+                        "endColumn": 14
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 21,
+                "endColumn": 2
+            }
+        }
+    ]
+}

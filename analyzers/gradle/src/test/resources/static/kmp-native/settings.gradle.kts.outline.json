@@ -1,0 +1,52 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "native",
+                    "expression": "\"native\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 28
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":ios",
+                    "expression": "\":ios\""
+                },
+                {
+                    "name": null,
+                    "literal": ":custom",
+                    "expression": "\":custom\""
+                },
+                {
+                    "name": null,
+                    "literal": ":classic",
+                    "expression": "\":classic\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 39
+            }
+        }
+    ]
+}

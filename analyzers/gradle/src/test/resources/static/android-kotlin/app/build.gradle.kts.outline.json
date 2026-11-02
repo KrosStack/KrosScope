@@ -1,0 +1,372 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.application",
+                            "expression": "\"com.android.application\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 34
+                    }
+                },
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.plugin.compose",
+                            "expression": "\"org.jetbrains.kotlin.plugin.compose\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 46
+                    }
+                },
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.plugin.parcelize",
+                            "expression": "\"org.jetbrains.kotlin.plugin.parcelize\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 48
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "defaultConfig",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "buildConfigField",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "String",
+                                    "expression": "\"String\""
+                                },
+                                {
+                                    "name": null,
+                                    "literal": "SYNC_ENDPOINT",
+                                    "expression": "\"SYNC_ENDPOINT\""
+                                },
+                                {
+                                    "name": null,
+                                    "literal": "https://sync.example/v1",
+                                    "expression": "\"https://sync.example/v1\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 14,
+                                "startColumn": 9,
+                                "endLine": 14,
+                                "endColumn": 79
+                            }
+                        }
+                    ],
+                    "assignments": {
+                        "applicationId": "\"sample.app\"",
+                        "minSdk": "24"
+                    },
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 15,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "buildFeatures",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "buildConfig": "true",
+                        "viewBinding": "true",
+                        "compose": "true",
+                        "aidl": "false"
+                    },
+                    "range": {
+                        "startLine": 17,
+                        "startColumn": 5,
+                        "endLine": 22,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "buildTypes",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "debug",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "buildConfigField",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "boolean",
+                                            "expression": "\"boolean\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "VERBOSE_LOGGING",
+                                            "expression": "\"VERBOSE_LOGGING\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "true",
+                                            "expression": "\"true\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 26,
+                                        "startColumn": 13,
+                                        "endLine": 26,
+                                        "endColumn": 67
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 25,
+                                "startColumn": 9,
+                                "endLine": 27,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "release",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {
+                                "isMinifyEnabled": "false"
+                            },
+                            "range": {
+                                "startLine": 28,
+                                "startColumn": 9,
+                                "endLine": 30,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "staging",
+                                    "expression": "\"staging\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "initWith",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "getByName(\"debug\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 32,
+                                        "startColumn": 13,
+                                        "endLine": 32,
+                                        "endColumn": 41
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 31,
+                                "startColumn": 9,
+                                "endLine": 33,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 24,
+                        "startColumn": 5,
+                        "endLine": 34,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "+=",
+                    "receiver": "flavorDimensions",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tier",
+                            "expression": "\"tier\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 36,
+                        "startColumn": 5,
+                        "endLine": 36,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "productFlavors",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "demo",
+                                    "expression": "\"demo\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "buildConfigField",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "int",
+                                            "expression": "\"int\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "MAX_TASKS",
+                                            "expression": "\"MAX_TASKS\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "25",
+                                            "expression": "\"25\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 40,
+                                        "startColumn": 13,
+                                        "endLine": 40,
+                                        "endColumn": 55
+                                    }
+                                }
+                            ],
+                            "assignments": {
+                                "dimension": "\"tier\""
+                            },
+                            "range": {
+                                "startLine": 38,
+                                "startColumn": 9,
+                                "endLine": 41,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "full",
+                                    "expression": "\"full\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "dimension": "\"tier\""
+                            },
+                            "range": {
+                                "startLine": 42,
+                                "startColumn": 9,
+                                "endLine": 44,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 37,
+                        "startColumn": 5,
+                        "endLine": 45,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "namespace": "\"sample.app\"",
+                "compileSdk": "36"
+            },
+            "range": {
+                "startLine": 7,
+                "startColumn": 1,
+                "endLine": 46,
+                "endColumn": 2
+            }
+        }
+    ]
+}

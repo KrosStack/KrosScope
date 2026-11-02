@@ -1,0 +1,87 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.library",
+                            "expression": "\"com.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 30
+                    }
+                },
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "acme.base",
+                            "expression": "\"acme.base\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 5,
+                        "startColumn": 5,
+                        "endLine": 5,
+                        "endColumn": 20
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 6,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "configure",
+            "receiver": "extensions",
+            "arguments": [],
+            "body": [
+                {
+                    "name": "defaultConfig",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "minSdk": "24"
+                    },
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 13,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "compileSdk": "36"
+            },
+            "range": {
+                "startLine": 8,
+                "startColumn": 1,
+                "endLine": 14,
+                "endColumn": 2
+            }
+        }
+    ]
+}

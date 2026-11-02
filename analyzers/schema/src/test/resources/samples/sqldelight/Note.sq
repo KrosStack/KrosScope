@@ -1,0 +1,43 @@
+import com.example.NoteKind;
+import kotlin.Boolean;
+
+CREATE TABLE note (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    kind TEXT AS NoteKind NOT NULL,
+    pinned INTEGER AS Boolean NOT NULL DEFAULT 0, -- a trailing comment; with a semicolon
+    body TEXT,
+    owner_id INTEGER REFERENCES owner(id)
+);
+
+CREATE TABLE owner (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL
+) WITHOUT ROWID;
+
+search:
+SELECT * FROM note WHERE title LIKE :query AND pinned = :pinned LIMIT :limit OFFSET :offset;
+
+byIds:
+SELECT id, title FROM note WHERE id IN :ids;
+
+withOwner:
+SELECT note.title, owner.name AS owner_name FROM note JOIN owner ON owner.id = note.owner_id WHERE note.id = ?;
+
+countAll:
+SELECT COUNT(*) FROM note;
+
+insertNote:
+INSERT INTO note(title, kind) VALUES (?, ?);
+
+rename:
+UPDATE note SET title = ? WHERE id = ?;
+
+purge:
+DELETE FROM note WHERE pinned = 0 AND body IS NULL;
+
+between:
+SELECT id FROM note WHERE id BETWEEN ? AND ? AND title = ? AND title = ?;
+
+broken:
+SELECT broken (( FROM note WHERE id = ?;

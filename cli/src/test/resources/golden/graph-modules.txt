@@ -1,0 +1,5 @@
+Module graph: 2 modules, 2 nodes, 1 relationship.
+
+  :app  depends on  :lib
+
+Use --format dot for Graphviz, or --format json for evidence and unresolved references.

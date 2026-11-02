@@ -1,0 +1,23 @@
+Read "Greeter" as a name (use --as task to analyse it as a task).
+greet.Greeter is a kotlin.class in :lib; 4 places refer to it and 1 test covers it.
+
+  Kind         kotlin.class
+  Declared at  lib/src/main/kotlin/Greeter.kt:3
+  Signature    class Greeter
+  Module       :lib
+  Source set   :lib@main
+
+Referred to by (4)
+  relation  node
+  calls     app.Main.greeter
+  calls     app.Main.run()
+  calls     greet.GreeterTest.greetsByName()
+  imports   app/src/main/kotlin/Main.kt
+
+Tests to run (1)
+  lib/src/test/kotlin/GreeterTest.kt
+
+Impact
+  A change here can affect 4 nodes (1 file, 2 modules) and is covered by 1 test.
+
+Next: kscope impact greet.Greeter lists everything a change affects, nearest first; kscope related greet.Greeter shows the closest files.

@@ -1,0 +1,65 @@
+{
+  "id": "T08",
+  "title": "Update Compose Multiplatform to the next feature release",
+  "statement": "The shared Compose UI library in the version catalog is one feature release behind. Update it to the next feature release and make sure everything that depends on it, including the generated resource accessors used by the shared components, still builds for Android and desktop.",
+  "category": "catalog_version_bump",
+  "mustEdit": [
+    "gradle/libs.versions.toml"
+  ],
+  "mayEdit": [
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/PriorityBadge.kt",
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/TaskCard.kt",
+    "ui/shared/build.gradle.kts"
+  ],
+  "mustRead": [
+    "ui/shared/build.gradle.kts",
+    "desktop/build.gradle.kts",
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/PriorityBadge.kt",
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/TaskCard.kt",
+    "ui/shared/src/commonMain/composeResources/values/strings.xml"
+  ],
+  "symbols": [
+    {
+      "file": "gradle/libs.versions.toml",
+      "kind": "catalog.version",
+      "name": "compose-multiplatform",
+      "line": 5
+    },
+    {
+      "module": ":ui:shared",
+      "file": "ui/shared/build.gradle.kts",
+      "kind": "gradle.module",
+      "name": ":ui:shared",
+      "line": 25
+    }
+  ],
+  "relationships": [
+    "catalog_alias_to_module:040",
+    "catalog_alias_to_module:076",
+    "catalog_alias_to_module:077",
+    "catalog_alias_to_module:078",
+    "catalog_alias_to_module:079",
+    "compose_resource_to_consumer:001",
+    "compose_resource_to_consumer:002",
+    "compose_resource_to_consumer:003",
+    "compose_resource_to_consumer:004",
+    "compose_resource_to_consumer:005",
+    "compose_resource_to_consumer:006",
+    "compose_resource_to_consumer:007"
+  ],
+  "changeScope": {
+    "modules": [
+      ":ui:shared",
+      ":desktop",
+      ":app",
+      ":feature:settings"
+    ],
+    "sourceSets": [
+      "commonMain",
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": [],
+  "notes": "Expected edits beyond the catalog depend on the API of the new release; the files in mayEdit are the ones that consume the generated resource accessors."
+}

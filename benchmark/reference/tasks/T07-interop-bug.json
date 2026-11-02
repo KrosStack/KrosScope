@@ -1,0 +1,83 @@
+{
+  "id": "T07",
+  "title": "CSV export shows 1970 for tasks without a due date",
+  "statement": "Exported CSV files contain the date 1970-01-01 for every task that has no due date. The due column of such tasks must be empty. Other columns and the behaviour of the other export formats must not change.",
+  "category": "java_kotlin_interop_bugfix",
+  "mustEdit": [
+    "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/CsvExporter.kt"
+  ],
+  "mustRead": [
+    "core/legacy/src/main/java/sample/tasktide/core/legacy/DateUtils.java",
+    "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+    "core/legacy/src/main/java/sample/tasktide/core/legacy/Exporter.java",
+    "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/ExportRegistry.kt",
+    "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/CsvExporterTest.kt",
+    "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/TaskFixtures.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":core:legacy",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.core.legacy.CsvExporter.row",
+      "signature": "(sample.tasktide.core.model.Task)",
+      "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/CsvExporter.kt",
+      "line": 9
+    },
+    {
+      "module": ":core:legacy",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.core.legacy.DateUtils.formatIso",
+      "signature": "(long)",
+      "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/DateUtils.java",
+      "line": 13
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.core.model.Task.dueAt",
+      "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+      "line": 11
+    }
+  ],
+  "relationships": [
+    "kotlin_calls_java:001",
+    "kotlin_calls_java:002",
+    "kotlin_calls_java:003",
+    "kotlin_calls_java:004",
+    "kotlin_calls_java:005",
+    "kotlin_calls_java:006",
+    "kotlin_calls_java:007",
+    "java_calls_kotlin:007",
+    "test_to_subject:006"
+  ],
+  "changeScope": {
+    "modules": [
+      ":core:legacy"
+    ],
+    "sourceSets": [
+      "main",
+      "test"
+    ],
+    "variants": []
+  },
+  "relevantTests": [
+    {
+      "module": ":core:legacy",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.core.legacy.CsvExporterTest",
+      "file": "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/CsvExporterTest.kt"
+    },
+    {
+      "module": ":core:legacy",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatterTest",
+      "file": "core/legacy/src/test/java/sample/tasktide/core/legacy/LegacyTaskFormatterTest.java"
+    },
+    {
+      "module": ":core:legacy",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.core.legacy.DateUtilsTest",
+      "file": "core/legacy/src/test/java/sample/tasktide/core/legacy/DateUtilsTest.java"
+    }
+  ]
+}

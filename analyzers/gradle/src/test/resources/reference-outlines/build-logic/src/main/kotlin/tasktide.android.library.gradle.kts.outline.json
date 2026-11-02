@@ -1,0 +1,185 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.library",
+                            "expression": "\"com.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 30
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "configure",
+            "receiver": "extensions",
+            "arguments": [],
+            "body": [
+                {
+                    "name": "defaultConfig",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "minSdk": "24"
+                    },
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 14,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "compileOptions",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "sourceCompatibility": "JavaVersion.VERSION_17",
+                        "targetCompatibility": "JavaVersion.VERSION_17"
+                    },
+                    "range": {
+                        "startLine": 16,
+                        "startColumn": 5,
+                        "endLine": 19,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "testOptions",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "unitTests.isReturnDefaultValues": "true"
+                    },
+                    "range": {
+                        "startLine": 21,
+                        "startColumn": 5,
+                        "endLine": 23,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "compileSdk": "36"
+            },
+            "range": {
+                "startLine": 9,
+                "startColumn": 1,
+                "endLine": 24,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "add",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "testImplementation",
+                            "expression": "\"testImplementation\""
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "catalog.findLibrary(\"junit\").get()"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 27,
+                        "startColumn": 5,
+                        "endLine": 27,
+                        "endColumn": 66
+                    }
+                },
+                {
+                    "name": "add",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "testImplementation",
+                            "expression": "\"testImplementation\""
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "catalog.findLibrary(\"kotlin-test\").get()"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 28,
+                        "startColumn": 5,
+                        "endLine": 28,
+                        "endColumn": 72
+                    }
+                },
+                {
+                    "name": "add",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "testImplementation",
+                            "expression": "\"testImplementation\""
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "catalog.findLibrary(\"kotlinx-coroutines-test\").get()"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 29,
+                        "startColumn": 5,
+                        "endLine": 29,
+                        "endColumn": 84
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 26,
+                "startColumn": 1,
+                "endLine": 30,
+                "endColumn": 2
+            }
+        }
+    ]
+}

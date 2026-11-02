@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>kscope map</title>
+  <link rel="stylesheet" href="app/style.css">
+  <link rel="icon" href="app/icon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" id="home" href="#" title="Back to the whole workspace">kscope map</a>
+    <nav class="trail" id="trail" aria-label="Where you are"></nav>
+    <div class="command" role="search">
+      <input id="command" type="search" autocomplete="off" spellcheck="false"
+             aria-label="Find a file or module, or describe a change"
+             placeholder="Find a file, or describe a change">
+      <ul id="results" class="results" hidden></ul>
+    </div>
+    <button class="plain" id="theme" type="button" title="Switch between bright field and fluorescence">Fluorescence</button>
+  </header>
+
+  <main class="stage">
+    <div class="field" id="field">
+      <canvas id="map" tabindex="0" aria-label="Map of the workspace. Use the list on the side to move with the keyboard."></canvas>
+      <div class="tip" id="tip" hidden></div>
+      <div class="notice" id="notice" hidden></div>
+      <div class="changes" id="changes" hidden></div>
+      <footer class="controls" id="controls"></footer>
+    </div>
+    <aside class="panel" id="panel" aria-label="Details"></aside>
+  </main>
+
+  <script type="module" src="app/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+name: Create release tag
+
+# Tags the last commit of main as v<version> and starts "Publish release" for that tag.
+# Run it from the Actions tab on main, with a Semantic Versioning 2.0.0 version such as 0.2.0 or 1.0.0-rc.1.
+# The version must already be the one in gradle.properties and have its section in CHANGELOG.md: a release is
+# prepared in a pull request, and this workflow only marks the commit that a pull request put on main.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release (Semantic Versioning, for example 0.2.0 or 1.0.0-rc.1)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: tag main
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Refuse any branch but main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Run this workflow on main: it tags the last commit of main."
+          exit 1
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check the version
+        id: release
+        env:
+          VERSION: ${{ inputs.version }}
+        run: bash .github/scripts/release-version.sh "$VERSION"
+
+      - name: Create and push the tag
+        env:
+          TAG: ${{ steps.release.outputs.tag }}
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "KrosScope $VERSION" "$GITHUB_SHA"
+          git push origin "refs/tags/$TAG"
+
+      # A tag pushed with the workflow's own token starts no workflow, so this starts the publication itself.
+      # A tag pushed by a person starts "Publish release" directly.
+      - name: Start "Publish release"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          gh workflow run publish-release.yml --ref "$TAG" -f tag="$TAG"
+          echo "Started \"Publish release\" for $TAG." >> "$GITHUB_STEP_SUMMARY"

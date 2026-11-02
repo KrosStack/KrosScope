@@ -1,0 +1,125 @@
+{
+    "calls": [
+        {
+            "name": "pluginManagement",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "includeBuild",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "build-logic",
+                            "expression": "\"build-logic\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 32
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "classes",
+                    "expression": "\"classes\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 29
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":app",
+                    "expression": "\":app\""
+                },
+                {
+                    "name": null,
+                    "literal": ":lib",
+                    "expression": "\":lib\""
+                },
+                {
+                    "name": null,
+                    "literal": ":ui",
+                    "expression": "\":ui\""
+                },
+                {
+                    "name": null,
+                    "literal": ":feature",
+                    "expression": "\":feature\""
+                },
+                {
+                    "name": null,
+                    "literal": ":core",
+                    "expression": "\":core\""
+                },
+                {
+                    "name": null,
+                    "literal": ":kmp",
+                    "expression": "\":kmp\""
+                },
+                {
+                    "name": null,
+                    "literal": ":plain",
+                    "expression": "\":plain\""
+                },
+                {
+                    "name": null,
+                    "literal": ":dynamic",
+                    "expression": "\":dynamic\""
+                },
+                {
+                    "name": null,
+                    "literal": ":flavored",
+                    "expression": "\":flavored\""
+                },
+                {
+                    "name": null,
+                    "literal": ":scripted",
+                    "expression": "\":scripted\""
+                },
+                {
+                    "name": null,
+                    "literal": ":aggregate",
+                    "expression": "\":aggregate\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 7,
+                "startColumn": 1,
+                "endLine": 7,
+                "endColumn": 122
+            }
+        }
+    ]
+}

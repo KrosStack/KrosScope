@@ -1,0 +1,822 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.android.application"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 44
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.compose"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 39
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "defaultConfig",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "buildConfigField",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "String",
+                                    "expression": "\"String\""
+                                },
+                                {
+                                    "name": null,
+                                    "literal": "SYNC_ENDPOINT",
+                                    "expression": "\"SYNC_ENDPOINT\""
+                                },
+                                {
+                                    "name": null,
+                                    "literal": "\"https://sync.tasktide.example/v1\"",
+                                    "expression": "\"\\\"https://sync.tasktide.example/v1\\\"\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 18,
+                                "startColumn": 9,
+                                "endLine": 18,
+                                "endColumn": 92
+                            }
+                        }
+                    ],
+                    "assignments": {
+                        "applicationId": "\"sample.tasktide\"",
+                        "minSdk": "24",
+                        "targetSdk": "36",
+                        "versionCode": "1",
+                        "versionName": "\"1.0.0\"",
+                        "testInstrumentationRunner": "\"androidx.test.runner.AndroidJUnitRunner\""
+                    },
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 5,
+                        "endLine": 19,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "buildFeatures",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "buildConfig": "true",
+                        "viewBinding": "true",
+                        "compose": "true"
+                    },
+                    "range": {
+                        "startLine": 21,
+                        "startColumn": 5,
+                        "endLine": 25,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "buildTypes",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "debug",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "buildConfigField",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "boolean",
+                                            "expression": "\"boolean\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "VERBOSE_LOGGING",
+                                            "expression": "\"VERBOSE_LOGGING\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "true",
+                                            "expression": "\"true\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 29,
+                                        "startColumn": 13,
+                                        "endLine": 29,
+                                        "endColumn": 67
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 28,
+                                "startColumn": 9,
+                                "endLine": 30,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "release",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "buildConfigField",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "boolean",
+                                            "expression": "\"boolean\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "VERBOSE_LOGGING",
+                                            "expression": "\"VERBOSE_LOGGING\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "false",
+                                            "expression": "\"false\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 32,
+                                        "startColumn": 13,
+                                        "endLine": 32,
+                                        "endColumn": 68
+                                    }
+                                }
+                            ],
+                            "assignments": {
+                                "isMinifyEnabled": "false"
+                            },
+                            "range": {
+                                "startLine": 31,
+                                "startColumn": 9,
+                                "endLine": 34,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 27,
+                        "startColumn": 5,
+                        "endLine": 35,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "+=",
+                    "receiver": "flavorDimensions",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tier",
+                            "expression": "\"tier\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 37,
+                        "startColumn": 5,
+                        "endLine": 37,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "productFlavors",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "demo",
+                                    "expression": "\"demo\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "buildConfigField",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "int",
+                                            "expression": "\"int\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "MAX_TASKS",
+                                            "expression": "\"MAX_TASKS\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "25",
+                                            "expression": "\"25\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 42,
+                                        "startColumn": 13,
+                                        "endLine": 42,
+                                        "endColumn": 55
+                                    }
+                                }
+                            ],
+                            "assignments": {
+                                "dimension": "\"tier\"",
+                                "applicationIdSuffix": "\".demo\""
+                            },
+                            "range": {
+                                "startLine": 39,
+                                "startColumn": 9,
+                                "endLine": 43,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "full",
+                                    "expression": "\"full\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "buildConfigField",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "int",
+                                            "expression": "\"int\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "MAX_TASKS",
+                                            "expression": "\"MAX_TASKS\""
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": "10000",
+                                            "expression": "\"10000\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 46,
+                                        "startColumn": 13,
+                                        "endLine": 46,
+                                        "endColumn": 58
+                                    }
+                                }
+                            ],
+                            "assignments": {
+                                "dimension": "\"tier\""
+                            },
+                            "range": {
+                                "startLine": 44,
+                                "startColumn": 9,
+                                "endLine": 47,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 38,
+                        "startColumn": 5,
+                        "endLine": 48,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "compileOptions",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "sourceCompatibility": "JavaVersion.VERSION_17",
+                        "targetCompatibility": "JavaVersion.VERSION_17"
+                    },
+                    "range": {
+                        "startLine": 50,
+                        "startColumn": 5,
+                        "endLine": 53,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "testOptions",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "unitTests.isReturnDefaultValues": "true"
+                    },
+                    "range": {
+                        "startLine": 55,
+                        "startColumn": 5,
+                        "endLine": 57,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "namespace": "\"sample.tasktide.app\"",
+                "compileSdk": "36"
+            },
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 58,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":core:model\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 61,
+                        "startColumn": 5,
+                        "endLine": 61,
+                        "endColumn": 43
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":core:legacy\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 62,
+                        "startColumn": 5,
+                        "endLine": 62,
+                        "endColumn": 44
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":data:db\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 63,
+                        "startColumn": 5,
+                        "endLine": 63,
+                        "endColumn": 40
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":data:settings\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 64,
+                        "startColumn": 5,
+                        "endLine": 64,
+                        "endColumn": 46
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":sync:engine\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 65,
+                        "startColumn": 5,
+                        "endLine": 65,
+                        "endColumn": 44
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":sync:service\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 66,
+                        "startColumn": 5,
+                        "endLine": 66,
+                        "endColumn": 45
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":feature:tasks\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 67,
+                        "startColumn": 5,
+                        "endLine": 67,
+                        "endColumn": 46
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":feature:settings\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 68,
+                        "startColumn": 5,
+                        "endLine": 68,
+                        "endColumn": 49
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":ui:shared\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 69,
+                        "startColumn": 5,
+                        "endLine": 69,
+                        "endColumn": 42
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":native:bridge\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 70,
+                        "startColumn": 5,
+                        "endLine": 70,
+                        "endColumn": 46
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.bundles.androidx.views"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 72,
+                        "startColumn": 5,
+                        "endLine": 72,
+                        "endColumn": 48
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.navigation.fragment"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 73,
+                        "startColumn": 5,
+                        "endLine": 73,
+                        "endColumn": 54
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.navigation.ui"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 74,
+                        "startColumn": 5,
+                        "endLine": 74,
+                        "endColumn": 48
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.lifecycle.runtime"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 75,
+                        "startColumn": 5,
+                        "endLine": 75,
+                        "endColumn": 52
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "platform(libs.androidx.compose.bom)"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 76,
+                        "startColumn": 5,
+                        "endLine": 76,
+                        "endColumn": 56
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.compose.ui"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 77,
+                        "startColumn": 5,
+                        "endLine": 77,
+                        "endColumn": 45
+                    }
+                },
+                {
+                    "name": "testImplementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.junit"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 79,
+                        "startColumn": 5,
+                        "endLine": 79,
+                        "endColumn": 35
+                    }
+                },
+                {
+                    "name": "testImplementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.kotlin.test"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 80,
+                        "startColumn": 5,
+                        "endLine": 80,
+                        "endColumn": 41
+                    }
+                },
+                {
+                    "name": "testImplementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.kotlinx.coroutines.test"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 81,
+                        "startColumn": 5,
+                        "endLine": 81,
+                        "endColumn": 53
+                    }
+                },
+                {
+                    "name": "androidTestImplementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.test.ext.junit"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 83,
+                        "startColumn": 5,
+                        "endLine": 83,
+                        "endColumn": 60
+                    }
+                },
+                {
+                    "name": "androidTestImplementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.test.runner"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 84,
+                        "startColumn": 5,
+                        "endLine": 84,
+                        "endColumn": 57
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 60,
+                "startColumn": 1,
+                "endLine": 85,
+                "endColumn": 2
+            }
+        }
+    ]
+}

@@ -1,0 +1,149 @@
+// sqldelight/TaskDatabase.kt
+package sample.tasktide.data.db
+
+public interface TaskDatabase : app.cash.sqldelight.Transacter {
+    public val noteQueries: sample.notes.NoteQueries
+
+    public val tagQueries: sample.tasktide.data.db.TagQueries
+
+    public val taskQueries: sample.tasktide.data.db.TaskQueries
+
+    public companion object {
+        public val Schema: app.cash.sqldelight.db.SqlSchema<app.cash.sqldelight.db.QueryResult.Value<Unit>> = TODO()
+
+        public operator fun invoke(driver: app.cash.sqldelight.db.SqlDriver): TaskDatabase = TODO()
+
+        public fun allTableNames(): List<String> = TODO()
+    }
+}
+
+// sqldelight/data_db_src_commonMain_sqldelight_sample_notes_Note.sq.kt
+package sample.notes
+
+public data class Note(
+    public val id: Long,
+    public val title: String,
+    public val kind: com.example.NoteKind,
+    public val pinned: kotlin.Boolean,
+    public val body: String?,
+    public val owner_id: Long?,
+)
+
+public data class Owner(
+    public val id: Long,
+    public val name: String,
+)
+
+public data class ByIds(
+    public val id: Long,
+    public val title: String,
+)
+
+public data class WithOwner(
+    public val title: String,
+    public val owner_name: String,
+)
+
+public class NoteQueries(
+    driver: app.cash.sqldelight.db.SqlDriver,
+) : app.cash.sqldelight.TransacterImpl(driver) {
+    public fun <T : Any> search(query: String, pinned: kotlin.Boolean, limit: Long, offset: Long, mapper: (id: Long, title: String, kind: com.example.NoteKind, pinned: kotlin.Boolean, body: String?, owner_id: Long?) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun search(query: String, pinned: kotlin.Boolean, limit: Long, offset: Long): app.cash.sqldelight.Query<sample.notes.Note> = TODO()
+
+    public fun <T : Any> byIds(ids: Collection<Long>, mapper: (id: Long, title: String) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun byIds(ids: Collection<Long>): app.cash.sqldelight.Query<sample.notes.ByIds> = TODO()
+
+    public fun <T : Any> withOwner(id: Long, mapper: (title: String, owner_name: String) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun withOwner(id: Long): app.cash.sqldelight.Query<sample.notes.WithOwner> = TODO()
+
+    public fun countAll(): app.cash.sqldelight.Query<Long> = TODO()
+
+    public fun insertNote(title: String, kind: com.example.NoteKind): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+
+    public fun rename(title: String, id: Long): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+
+    public fun purge(): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+
+    public fun between(id: Long, id_: Long, title: String, title_: String): app.cash.sqldelight.Query<Long> = TODO()
+
+    public fun broken(id: Any?): app.cash.sqldelight.Query<Any> = TODO()
+}
+
+// sqldelight/data_db_src_commonMain_sqldelight_sample_tasktide_data_db_Tag.sq.kt
+package sample.tasktide.data.db
+
+public data class TagRow(
+    public val task_id: String,
+    public val name: String,
+)
+
+public class TagQueries(
+    driver: app.cash.sqldelight.db.SqlDriver,
+) : app.cash.sqldelight.TransacterImpl(driver) {
+    public fun <T : Any> selectAll(mapper: (task_id: String, name: String) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun selectAll(): app.cash.sqldelight.Query<sample.tasktide.data.db.TagRow> = TODO()
+
+    public fun selectForTask(task_id: String): app.cash.sqldelight.Query<String> = TODO()
+
+    public fun insert(task_id: String, name: String): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+
+    public fun deleteForTask(task_id: String): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+}
+
+// sqldelight/data_db_src_commonMain_sqldelight_sample_tasktide_data_db_Task.sq.kt
+package sample.tasktide.data.db
+
+public data class TaskRow(
+    public val id: String,
+    public val title: String,
+    public val notes: String,
+    public val priority: Long,
+    public val due_at: Long?,
+    public val done: Long,
+    public val sync_state: String,
+    public val synced_at: Long?,
+    public val updated_at: Long,
+)
+
+public data class CountOpenByPriority(
+    public val priority: Long,
+    public val open_count: Long,
+)
+
+public data class LastSyncedAt(
+    public val last_synced: Long?,
+)
+
+public class TaskQueries(
+    driver: app.cash.sqldelight.db.SqlDriver,
+) : app.cash.sqldelight.TransacterImpl(driver) {
+    public fun <T : Any> selectAll(mapper: (id: String, title: String, notes: String, priority: Long, due_at: Long?, done: Long, sync_state: String, synced_at: Long?, updated_at: Long) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun selectAll(): app.cash.sqldelight.Query<sample.tasktide.data.db.TaskRow> = TODO()
+
+    public fun <T : Any> selectById(id: String, mapper: (id: String, title: String, notes: String, priority: Long, due_at: Long?, done: Long, sync_state: String, synced_at: Long?, updated_at: Long) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun selectById(id: String): app.cash.sqldelight.Query<sample.tasktide.data.db.TaskRow> = TODO()
+
+    public fun <T : Any> selectPending(mapper: (id: String, title: String, notes: String, priority: Long, due_at: Long?, done: Long, sync_state: String, synced_at: Long?, updated_at: Long) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun selectPending(): app.cash.sqldelight.Query<sample.tasktide.data.db.TaskRow> = TODO()
+
+    public fun <T : Any> countOpenByPriority(mapper: (priority: Long, open_count: Long) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun countOpenByPriority(): app.cash.sqldelight.Query<sample.tasktide.data.db.CountOpenByPriority> = TODO()
+
+    public fun upsert(TaskRow: sample.tasktide.data.db.TaskRow): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+
+    public fun markSynced(synced_at: Long?, id: String): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+
+    public fun deleteById(id: String): app.cash.sqldelight.db.QueryResult<Long> = TODO()
+
+    public fun <T : Any> lastSyncedAt(mapper: (last_synced: Long?) -> T): app.cash.sqldelight.Query<T> = TODO()
+
+    public fun lastSyncedAt(): app.cash.sqldelight.Query<sample.tasktide.data.db.LastSyncedAt> = TODO()
+}

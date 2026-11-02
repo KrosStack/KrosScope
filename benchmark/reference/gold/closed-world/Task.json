@@ -1,0 +1,266 @@
+{
+  "workspaceRoot": "fixtures/reference-workspace",
+  "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+  "module": ":core:model",
+  "sourceSet": "commonMain",
+  "language": "kotlin",
+  "completeness": "Every reference from this file to a workspace or generated symbol: type references, qualifiers, constructor and method calls, property/field reads and writes, named arguments, enum entries, supertypes, overrides and resource references. Targets in libraries, the JDK and the Kotlin standard library, and local variables/parameters, are not listed. Imports of workspace symbols are listed separately.",
+  "imports": [],
+  "edges": [
+    {
+      "line": 7,
+      "column": 13,
+      "text": "TaskId",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.TaskId",
+        "kind": "value class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/TaskId.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 10,
+      "column": 19,
+      "text": "Priority",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 10,
+      "column": 30,
+      "text": "Priority",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 10,
+      "column": 39,
+      "text": "NORMAL",
+      "kind": "enum_entry",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority.NORMAL",
+        "kind": "enum entry",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 14,
+      "column": 20,
+      "text": "SyncState",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.SyncState",
+        "kind": "sealed interface",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/SyncState.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 14,
+      "column": 32,
+      "text": "SyncState",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.SyncState",
+        "kind": "sealed interface",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/SyncState.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 14,
+      "column": 42,
+      "text": "Pending",
+      "kind": "object_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.SyncState.Pending",
+        "kind": "data object",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/SyncState.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 15,
+      "column": 27,
+      "text": "currentTimeMillis",
+      "kind": "call",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.currentTimeMillis",
+        "signature": "()",
+        "kind": "expect function",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt",
+        "line": 3
+      }
+    },
+    {
+      "line": 17,
+      "column": 29,
+      "text": "currentTimeMillis",
+      "kind": "call",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.currentTimeMillis",
+        "signature": "()",
+        "kind": "expect function",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt",
+        "line": 3
+      }
+    },
+    {
+      "line": 17,
+      "column": 51,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 18,
+      "column": 9,
+      "text": "copy",
+      "kind": "call",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.copy",
+        "kind": "compiler-generated method",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6,
+        "compilerGenerated": true
+      }
+    },
+    {
+      "line": 18,
+      "column": 14,
+      "text": "done",
+      "kind": "named_argument",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.done",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 12
+      }
+    },
+    {
+      "line": 18,
+      "column": 22,
+      "text": "done",
+      "kind": "property_read",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.done",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 12
+      }
+    },
+    {
+      "line": 18,
+      "column": 28,
+      "text": "syncState",
+      "kind": "named_argument",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.syncState",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 14
+      }
+    },
+    {
+      "line": 18,
+      "column": 40,
+      "text": "SyncState",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.SyncState",
+        "kind": "sealed interface",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/SyncState.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 18,
+      "column": 50,
+      "text": "Pending",
+      "kind": "object_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.SyncState.Pending",
+        "kind": "data object",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/SyncState.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 18,
+      "column": 59,
+      "text": "updatedAt",
+      "kind": "named_argument",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.updatedAt",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 15
+      }
+    }
+  ],
+  "declarations": [
+    { "kind": "class", "fqName": "sample.tasktide.core.model.Task", "line": 6 },
+    { "kind": "constructor", "fqName": "sample.tasktide.core.model.Task.<init>", "line": 6 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.id", "line": 7 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.title", "line": 8 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.notes", "line": 9 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.priority", "line": 10 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.dueAt", "line": 11 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.done", "line": 12 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.tags", "line": 13 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.syncState", "line": 14 },
+    { "kind": "property", "fqName": "sample.tasktide.core.model.Task.updatedAt", "line": 15 },
+    { "kind": "function", "fqName": "sample.tasktide.core.model.Task.toggled", "line": 17 }
+  ]
+}

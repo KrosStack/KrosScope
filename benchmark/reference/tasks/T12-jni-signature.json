@@ -1,0 +1,58 @@
+{
+  "id": "T12",
+  "title": "Checksum a slice of a byte array",
+  "statement": "Computing the checksum of a large export copies the whole payload first. The native checksum must be able to work on a part of an array given by a start position and a length, and the callers must be updated accordingly.",
+  "category": "jni_signature_change",
+  "mustEdit": [
+    "native/bridge/src/main/kotlin/sample/tasktide/nativebridge/Checksum.kt",
+    "native/bridge/src/main/cpp/checksum.c",
+    "native/bridge/src/main/kotlin/sample/tasktide/nativebridge/TaskChecksums.kt",
+    "app/src/main/kotlin/sample/tasktide/app/ExportProvider.kt"
+  ],
+  "mustRead": [
+    "native/bridge/src/test/kotlin/sample/tasktide/nativebridge/TaskChecksumsTest.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":native:bridge",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.nativebridge.Checksum.crc32",
+      "file": "native/bridge/src/main/kotlin/sample/tasktide/nativebridge/Checksum.kt",
+      "line": 8
+    },
+    {
+      "module": ":native:bridge",
+      "file": "native/bridge/src/main/cpp/checksum.c",
+      "kind": "jni.function",
+      "name": "Java_sample_tasktide_nativebridge_Checksum_crc32",
+      "line": 13
+    }
+  ],
+  "relationships": [
+    "jni_external_to_native:001"
+  ],
+  "changeScope": {
+    "modules": [
+      ":native:bridge",
+      ":app"
+    ],
+    "sourceSets": [
+      "main",
+      "test"
+    ],
+    "variants": [
+      "demoDebug",
+      "demoRelease",
+      "fullDebug",
+      "fullRelease"
+    ]
+  },
+  "relevantTests": [
+    {
+      "module": ":native:bridge",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.nativebridge.TaskChecksumsTest",
+      "file": "native/bridge/src/test/kotlin/sample/tasktide/nativebridge/TaskChecksumsTest.kt"
+    }
+  ]
+}

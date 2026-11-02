@@ -1,0 +1,36 @@
+{
+  "id": "T06",
+  "title": "Completed tasks count towards the demo task limit",
+  "category": "flavor_specific_behavior",
+  "statement": "People get around the task limit of the demo edition by finishing tasks and adding new ones. In the demo edition, completed tasks must also count towards the limit. The full edition keeps counting only open tasks.",
+  "goldFiles": [
+    "app/src/demo/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt",
+    "app/src/full/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt",
+    "app/src/main/kotlin/sample/tasktide/app/TaskCreator.kt",
+    "app/src/main/kotlin/sample/tasktide/app/config/FeatureFlags.kt"
+  ],
+  "mayEditFiles": [
+    "app/src/test/kotlin/sample/tasktide/app/TaskCreatorTest.kt"
+  ],
+  "verify": {
+    "gradleTasks": [
+      ":app:testDemoDebugUnitTest",
+      ":app:testFullDebugUnitTest"
+    ],
+    "timeoutMinutes": 15
+  },
+  "failToPass": [
+    "sample.tasktide.app.DemoTaskLimitTest#completedTasksCountTowardsTheLimit",
+    "sample.tasktide.app.DemoTaskLimitTest#openAndCompletedTasksAreAddedUp"
+  ],
+  "passToPass": [
+    "sample.tasktide.app.DemoTaskLimitTest#demoEditionKeepsSyncDisabled",
+    "sample.tasktide.app.DemoTaskLimitTest#demoLimitStillAllowsTasksBelowIt",
+    "sample.tasktide.app.FullTaskLimitTest#completedTasksDoNotCountTowardsTheLimit",
+    "sample.tasktide.app.FullTaskLimitTest#fullEditionKeepsSyncEnabled",
+    "sample.tasktide.app.FullTaskLimitTest#onlyOpenTasksCountTowardsTheLimit",
+    "sample.tasktide.app.TaskCreatorTest#createdTaskIsTrimmedAndStored",
+    "sample.tasktide.app.TaskCreatorTest#creationStopsAtTheOpenTaskLimit",
+    "sample.tasktide.app.TaskCreatorTest#openTasksBelowTheLimitStillAllowCreation"
+  ]
+}

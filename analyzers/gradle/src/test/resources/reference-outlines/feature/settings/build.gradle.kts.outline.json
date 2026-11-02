@@ -1,0 +1,234 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tasktide.android.library",
+                            "expression": "\"tasktide.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 35
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.compose"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 39
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "buildFeatures",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "compose": "true"
+                    },
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "namespace": "\"sample.tasktide.feature.settings\""
+            },
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "dependencies",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "api",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":data:settings\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 15,
+                        "startColumn": 5,
+                        "endLine": 15,
+                        "endColumn": 35
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "project(\":ui:shared\")"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 16,
+                        "startColumn": 5,
+                        "endLine": 16,
+                        "endColumn": 42
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "platform(libs.androidx.compose.bom)"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 17,
+                        "startColumn": 5,
+                        "endLine": 17,
+                        "endColumn": 56
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.compose.ui"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 18,
+                        "startColumn": 5,
+                        "endLine": 18,
+                        "endColumn": 45
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.compose.material3"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 19,
+                        "startColumn": 5,
+                        "endLine": 19,
+                        "endColumn": 52
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.activity.compose"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 20,
+                        "startColumn": 5,
+                        "endLine": 20,
+                        "endColumn": 51
+                    }
+                },
+                {
+                    "name": "implementation",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.androidx.lifecycle.viewmodel"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 21,
+                        "startColumn": 5,
+                        "endLine": 21,
+                        "endColumn": 54
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 14,
+                "startColumn": 1,
+                "endLine": 22,
+                "endColumn": 2
+            }
+        }
+    ]
+}

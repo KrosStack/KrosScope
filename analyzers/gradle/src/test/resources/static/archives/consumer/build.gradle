@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation files('libs/tasktide-text-1.0.0.jar', "$rootDir/vendor/shared.jar")
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    runtimeOnly files("${gradle.gradleUserHomeDir}/cache.jar")
+}

@@ -1,0 +1,151 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tasktide.kmp.library",
+                            "expression": "\"tasktide.kmp.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.serialization"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 45
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "kotlin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "android",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "namespace": "\"sample.tasktide.core.model\""
+                    },
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "sourceSets",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "dependencies",
+                            "receiver": "commonMain",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.kotlinx.coroutines.core"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 13,
+                                        "startColumn": 13,
+                                        "endLine": 13,
+                                        "endColumn": 46
+                                    }
+                                },
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.kotlinx.serialization.json"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 14,
+                                        "startColumn": 13,
+                                        "endLine": 14,
+                                        "endColumn": 49
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 12,
+                                "startColumn": 9,
+                                "endLine": 15,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 16,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 17,
+                "endColumn": 2
+            }
+        }
+    ]
+}

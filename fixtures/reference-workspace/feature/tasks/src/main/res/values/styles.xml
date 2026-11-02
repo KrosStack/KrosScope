@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TaskTitle" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">@dimen/task_title_text_size</item>
+    </style>
+
+    <style name="TaskTitle.Done">
+        <item name="android:textColor">@color/task_text_secondary</item>
+    </style>
+
+    <style name="TaskMeta" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/task_text_secondary</item>
+    </style>
+</resources>

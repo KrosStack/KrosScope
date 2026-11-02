@@ -1,0 +1,10 @@
+Matches (8)
+  score  kind             symbol                          where
+  1.086  kotlin.class     greet.Greeter                   lib/src/main/kotlin/Greeter.kt:3
+  0.080  kotlin.function  greet.Greeter.greet             lib/src/main/kotlin/Greeter.kt:4
+  0.078  kotlin.function  greet.GreeterTest.greetsByName  lib/src/test/kotlin/GreeterTest.kt:4
+  0.074  kotlin.class     greet.GreeterHelperFactory      lib/src/main/kotlin/deeply/nested/package/with/many/directories/GreeterHelperFactory.kt:3
+  0.072  kotlin.property  app.Main.greeter                app/src/main/kotlin/Main.kt:6
+  0.069  kotlin.class     greet.GreeterTest               lib/src/test/kotlin/GreeterTest.kt:3
+  0.068  kotlin.function  app.Main.run                    app/src/main/kotlin/Main.kt:8
+  0.067  kotlin.class     app.Main                        app/src/main/kotlin/Main.kt:5

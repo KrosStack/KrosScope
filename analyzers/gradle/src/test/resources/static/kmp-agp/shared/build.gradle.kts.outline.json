@@ -1,0 +1,302 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.multiplatform",
+                            "expression": "\"org.jetbrains.kotlin.multiplatform\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 45
+                    }
+                },
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.kotlin.multiplatform.library",
+                            "expression": "\"com.android.kotlin.multiplatform.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 51
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "kotlin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "jvm",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "desktop",
+                            "expression": "\"desktop\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 7,
+                        "endColumn": 19
+                    }
+                },
+                {
+                    "name": "android",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "namespace": "\"sample.shared\"",
+                        "compileSdk": "36"
+                    },
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 5,
+                        "endLine": 12,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "sourceSets",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "dependencies",
+                            "receiver": "commonMain",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "project(\":data\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 16,
+                                        "startColumn": 13,
+                                        "endLine": 16,
+                                        "endColumn": 34
+                                    }
+                                },
+                                {
+                                    "name": "implementation",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0",
+                                            "expression": "\"org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 17,
+                                        "startColumn": 13,
+                                        "endLine": 17,
+                                        "endColumn": 83
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 15,
+                                "startColumn": 9,
+                                "endLine": 18,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "named",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "desktopMain",
+                                    "expression": "\"desktopMain\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "dependencies",
+                                    "receiver": null,
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "implementation",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": "org.xerial:sqlite-jdbc:3.53.4.0",
+                                                    "expression": "\"org.xerial:sqlite-jdbc:3.53.4.0\""
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 21,
+                                                "startColumn": 17,
+                                                "endLine": 21,
+                                                "endColumn": 66
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 20,
+                                        "startColumn": 13,
+                                        "endLine": 22,
+                                        "endColumn": 14
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 19,
+                                "startColumn": 9,
+                                "endLine": 23,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "creating",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "shared",
+                                    "expression": "shared"
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "dependsOn",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "commonMain.get()"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 25,
+                                        "startColumn": 13,
+                                        "endLine": 25,
+                                        "endColumn": 40
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 24,
+                                "startColumn": 9,
+                                "endLine": 26,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "getting",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "desktopMain",
+                                    "expression": "desktopMain"
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "dependsOn",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "shared"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 28,
+                                        "startColumn": 13,
+                                        "endLine": 28,
+                                        "endColumn": 30
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 27,
+                                "startColumn": 9,
+                                "endLine": 29,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 14,
+                        "startColumn": 5,
+                        "endLine": 30,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 31,
+                "endColumn": 2
+            }
+        }
+    ]
+}

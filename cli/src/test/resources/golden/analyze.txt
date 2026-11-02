@@ -1,0 +1,41 @@
+Read as a task (use --as symbol to look it up as a name).
+2 files to edit and 1 to read, touching 1 module; 3 files scored; several close candidates.
+
+  Task   greet a person by name
+  Terms  greet, person, name
+
+Files to edit (2)
+  score  file                                because
+  0.131  lib/src/test/kotlin/GreeterTest.kt  lexical symbol, lexical artifact
+  0.129  lib/src/main/kotlin/Greeter.kt      lexical artifact, lexical symbol
+
+Files to read (1)
+  score  file                         because
+  0.078  app/src/main/kotlin/Main.kt  lexical artifact, graph
+
+Tests to run (1)
+  lib/src/test/kotlin/GreeterTest.kt
+
+Scope of the change
+  Modules          :lib
+  Source sets      :lib@main, :lib@test
+  Crosses modules  no
+
+Boundaries and gaps
+  Boundary links     0
+  Boundary chains    0 paths
+  Unresolved nearby  0
+
+Connectedness of the top files
+  file                                fan-in  fan-out  lines
+  lib/src/test/kotlin/GreeterTest.kt       0        2      5
+  lib/src/main/kotlin/Greeter.kt           5        0      5
+  app/src/main/kotlin/Main.kt              0        3      9
+
+Context size
+  Minimal      95 tokens
+  Recommended  147 tokens
+  Deep         147 tokens
+  Full         147 tokens
+
+Next: kscope context "<task>" --budget 8000 compiles the source of these files.

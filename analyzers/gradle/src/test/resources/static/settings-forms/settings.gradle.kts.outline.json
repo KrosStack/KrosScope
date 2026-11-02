@@ -1,0 +1,161 @@
+{
+    "calls": [
+        {
+            "name": "pluginManagement",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "includeBuild",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "build-logic",
+                            "expression": "\"build-logic\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 32
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "forms",
+                    "expression": "\"forms\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 27
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":app",
+                    "expression": "\":app\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 7,
+                "startColumn": 1,
+                "endLine": 7,
+                "endColumn": 16
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":core:model",
+                    "expression": "\":core:model\""
+                },
+                {
+                    "name": null,
+                    "literal": ":core:legacy",
+                    "expression": "\":core:legacy\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 8,
+                "startColumn": 1,
+                "endLine": 8,
+                "endColumn": 39
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "feature:tasks",
+                    "expression": "\"feature:tasks\""
+                },
+                {
+                    "name": null,
+                    "literal": "feature:settings",
+                    "expression": "\"feature:settings\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 9,
+                "startColumn": 1,
+                "endLine": 9,
+                "endColumn": 45
+            }
+        },
+        {
+            "name": "=",
+            "receiver": "project(\":core:legacy\").projectDir",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": null,
+                    "expression": "file(\"legacy-impl\")"
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 10,
+                "startColumn": 1,
+                "endLine": 10,
+                "endColumn": 57
+            }
+        },
+        {
+            "name": "includeBuild",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "tools",
+                    "expression": "\"tools\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 11,
+                "startColumn": 1,
+                "endLine": 11,
+                "endColumn": 22
+            }
+        }
+    ]
+}

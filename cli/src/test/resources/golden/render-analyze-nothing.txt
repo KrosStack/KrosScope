@@ -1,0 +1,4 @@
+Nothing in the index matches this task.
+Terms searched: users, want, reminded, task, due
+
+Name a class, module or feature of the code, or run `kscope scan` if the code changed.

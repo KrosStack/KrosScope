@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId computeGroup()
+                artifactId 'unreadable'
+                version '1.0.0'
+            }
+        }
+    }
+}

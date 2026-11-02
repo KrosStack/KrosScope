@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/item_count_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <include
+        android:id="@+id/badge"
+        layout="@layout/view_badge" />
+
+    <include layout="@layout/view_badge" />
+
+    <include
+        android:id="@+id/platform_bar"
+        layout="@layout/missing_bar" />
+
+    <com.example.ui.widget.PriorityView
+        android:id="@+id/priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <view
+        android:id="@+id/pill"
+        class="com.example.ui.widget.PillView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.example.ui.HomeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/host"
+        android:name="com.example.ui.HostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/entries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="com.example.ui.widget.GridManager" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/relative_entries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager=".RelativeManager" />
+
+    <WebView
+        android:id="@+id/web"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <ViewStub
+        android:id="@+id/stub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/class"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/item_count2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

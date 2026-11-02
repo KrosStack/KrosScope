@@ -1,0 +1,133 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.library",
+                            "expression": "\"com.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 30
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "buildTypes",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "staging",
+                                    "expression": "\"staging\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 9,
+                                "startColumn": 9,
+                                "endLine": 9,
+                                "endColumn": 26
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 5,
+                        "endLine": 10,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "productFlavors",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "forEach",
+                            "receiver": "listOf(\"free\", \"paid\")",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "create",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "it"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 13,
+                                        "startColumn": 42,
+                                        "endLine": 13,
+                                        "endColumn": 52
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 9,
+                                "endLine": 13,
+                                "endColumn": 54
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 14,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "namespace": "\"acme.scripted\""
+            },
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 15,
+                "endColumn": 2
+            }
+        }
+    ]
+}

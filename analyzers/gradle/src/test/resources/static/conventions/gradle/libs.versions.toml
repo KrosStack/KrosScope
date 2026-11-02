@@ -1,0 +1,22 @@
+[versions]
+kotlin = "2.4.20"
+coroutines = "1.11.0"
+junit = "4.13.2"
+room = "2.8.5"
+ksp = "2.3.12"
+compose-bom = "2026.06.01"
+
+[libraries]
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+junit = { module = "junit:junit", version.ref = "junit" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+
+[bundles]
+testing = ["kotlin-test", "junit"]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

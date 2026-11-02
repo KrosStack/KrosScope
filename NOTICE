@@ -1,0 +1,74 @@
+KrosScope
+Copyright 2026 The KrosScope contributors
+
+Licensed under the Apache License, Version 2.0; see the LICENSE file.
+
+The distribution of KrosScope bundles third-party components. Their versions and licences are listed in
+THIRD-PARTY-LICENSES.md, and the texts that must accompany some of them are in the licenses directory. The notices
+below are the ones that those licences require.
+
+--------------------------------------------------------------------------------
+Apache Groovy 5.1.3 (Apache License 2.0)
+
+Apache Groovy
+Copyright 2003-2026 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+This product includes/uses ANTLR4 (https://github.com/antlr/antlr4)
+Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+
+The ANTLR 4 runtime and ASM that Groovy bundles are licensed under the BSD 3-Clause licence; see
+licenses/groovy-antlr4-BSD-3-Clause.txt and licenses/groovy-asm-BSD-3-Clause.txt.
+
+--------------------------------------------------------------------------------
+Kotlin compiler 2.4.10 (Apache License 2.0), in the Kotlin worker
+
+The compiler jar embeds code of other projects without their licence files. The texts that their licences require
+to accompany a binary distribution are:
+- JLine (BSD 3-Clause): licenses/kotlin-compiler-jline-BSD-3-Clause.txt
+- Stax2 API (BSD 2-Clause): licenses/kotlin-compiler-stax2-api-BSD-2-Clause.txt
+- JDOM: licenses/kotlin-compiler-jdom.txt
+- the ANTLR 4 runtime and ASM (BSD 3-Clause): the same texts as for Groovy, licenses/groovy-antlr4-BSD-3-Clause.txt
+  and licenses/groovy-asm-BSD-3-Clause.txt
+
+This product includes software developed by the JDOM Project (http://www.jdom.org/).
+
+--------------------------------------------------------------------------------
+SLF4J 2.0.17 (MIT)
+
+Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland). See licenses/slf4j-MIT.txt.
+
+--------------------------------------------------------------------------------
+Checker Framework qualifiers 3.19.0 (MIT)
+
+Copyright 2004-present by the Checker Framework developers. See licenses/checker-qual-MIT.txt.
+
+--------------------------------------------------------------------------------
+SQLite JDBC 3.53.4.0 (Apache License 2.0)
+
+The driver bundles code that is licensed under the BSD 2-Clause licence,
+Copyright (c) 2006, David Crawshaw. See licenses/sqlite-jdbc-zentus-BSD-2-Clause.txt. The jar also carries
+native SQLite libraries.
+
+--------------------------------------------------------------------------------
+JTokkit 1.1.0 (MIT) and colormath 3.6.0 (MIT)
+
+JTokkit is published by Knuddels GmbH & Co. KG and colormath by AJ Alt, as their Maven metadata states. Both are
+licensed under the MIT licence; see licenses/jtokkit-MIT.txt and licenses/colormath-MIT.txt.
+
+--------------------------------------------------------------------------------
+Components that are available under two licences
+
+Java Native Access (JNA) 5.14.0 is available under the Apache License 2.0 or the GNU Lesser General Public License
+2.1 or later, and JSqlParser 5.4 under the Apache License 2.0 or the GNU Lesser General Public License 2.1.
+KrosScope uses both under the Apache License 2.0.
+
+--------------------------------------------------------------------------------
+JetBrains libraries
+
+The Kotlin analysis worker (workers/kotlin/lib) is built from the Kotlin compiler and Analysis API artifacts of
+JetBrains s.r.o., which their Maven metadata licenses under the Apache License 2.0, and from Kotlin standard library
+and kotlinx artifacts under the same licence. The compiler artifact embeds further open-source libraries; see
+THIRD-PARTY-LICENSES.md.

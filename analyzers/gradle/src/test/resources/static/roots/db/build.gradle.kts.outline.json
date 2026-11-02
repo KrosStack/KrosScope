@@ -1,0 +1,139 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.library",
+                            "expression": "\"com.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 30
+                    }
+                },
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "app.cash.sqldelight",
+                            "expression": "\"app.cash.sqldelight\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 30
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [],
+            "assignments": {
+                "namespace": "\"sample.db\"",
+                "compileSdk": "36"
+            },
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 9,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "sqldelight",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "databases",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "create",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "TaskDatabase",
+                                    "expression": "\"TaskDatabase\""
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "set",
+                                    "receiver": "packageName",
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "sample.db",
+                                            "expression": "\"sample.db\""
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 14,
+                                        "startColumn": 13,
+                                        "endLine": 14,
+                                        "endColumn": 41
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 9,
+                                "endLine": 15,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 16,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 11,
+                "startColumn": 1,
+                "endLine": 17,
+                "endColumn": 2
+            }
+        }
+    ]
+}

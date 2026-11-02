@@ -1,0 +1,5 @@
+Tests to run (1)
+  lib/src/test/kotlin/GreeterTest.kt
+
+Impact
+  A change here can affect 4 nodes (1 file, 2 modules) and is covered by 1 test.

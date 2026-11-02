@@ -1,0 +1,39 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_service_NodeResolution",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:node-resolution:1",
+    "$defs": {
+        "io_github_krosstack_kscope_service_NodeResolution": {
+            "type": "object",
+            "properties": {
+                "candidates": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "requested": {
+                    "type": "string"
+                },
+                "schemaVersion": {
+                    "const": 1
+                },
+                "indexLevel": {
+                    "type": "string",
+                    "enum": [
+                        "syntax",
+                        "resolved",
+                        "exact"
+                    ]
+                }
+            },
+            "required": [
+                "requested",
+                "candidates",
+                "schemaVersion",
+                "indexLevel"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

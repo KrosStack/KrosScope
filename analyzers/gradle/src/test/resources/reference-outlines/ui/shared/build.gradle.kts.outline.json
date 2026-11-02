@@ -1,0 +1,240 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tasktide.kmp.library",
+                            "expression": "\"tasktide.kmp.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.compose.multiplatform"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 46
+                    }
+                },
+                {
+                    "name": "alias",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "libs.plugins.kotlin.compose"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 5,
+                        "endLine": 4,
+                        "endColumn": 39
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "kotlin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "android",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "androidResources",
+                            "receiver": null,
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {
+                                "enable": "true"
+                            },
+                            "range": {
+                                "startLine": 10,
+                                "startColumn": 9,
+                                "endLine": 12,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {
+                        "namespace": "\"sample.tasktide.ui.shared\""
+                    },
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 5,
+                        "endLine": 13,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "sourceSets",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "dependencies",
+                            "receiver": "commonMain",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "project(\":core:model\")"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 17,
+                                        "startColumn": 13,
+                                        "endLine": 17,
+                                        "endColumn": 40
+                                    }
+                                },
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.compose.runtime"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 18,
+                                        "startColumn": 13,
+                                        "endLine": 18,
+                                        "endColumn": 38
+                                    }
+                                },
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.compose.foundation"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 19,
+                                        "startColumn": 13,
+                                        "endLine": 19,
+                                        "endColumn": 41
+                                    }
+                                },
+                                {
+                                    "name": "api",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "libs.compose.components.resources"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 20,
+                                        "startColumn": 13,
+                                        "endLine": 20,
+                                        "endColumn": 51
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 16,
+                                "startColumn": 9,
+                                "endLine": 21,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 15,
+                        "startColumn": 5,
+                        "endLine": 22,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 7,
+                "startColumn": 1,
+                "endLine": 23,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "resources",
+            "receiver": "compose",
+            "arguments": [],
+            "body": [],
+            "assignments": {
+                "packageOfResClass": "\"sample.tasktide.ui.shared.resources\"",
+                "publicResClass": "true"
+            },
+            "range": {
+                "startLine": 25,
+                "startColumn": 1,
+                "endLine": 28,
+                "endColumn": 2
+            }
+        }
+    ]
+}

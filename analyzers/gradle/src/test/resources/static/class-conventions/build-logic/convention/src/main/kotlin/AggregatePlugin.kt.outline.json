@@ -1,0 +1,244 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "AggregatePlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 16,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": "pluginManager",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "SerializationPlugin::class.java"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 13,
+                        "endLine": 7,
+                        "endColumn": 65
+                    }
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 13,
+                        "endLine": 8,
+                        "endColumn": 32
+                    },
+                    "typeArguments": [
+                        "PingPlugin"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 13,
+                        "endLine": 9,
+                        "endColumn": 34
+                    },
+                    "typeArguments": [
+                        "AbsentPlugin"
+                    ]
+                },
+                {
+                    "name": "dependencies",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "add",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "implementation",
+                                    "expression": "\"implementation\""
+                                },
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "project(\":core\")"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 17,
+                                "endLine": 11,
+                                "endColumn": 56
+                            }
+                        },
+                        {
+                            "name": "implementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "org.example:library:1.0",
+                                    "expression": "\"org.example:library:1.0\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 12,
+                                "startColumn": 17,
+                                "endLine": 12,
+                                "endColumn": 60
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 13,
+                        "endLine": 13,
+                        "endColumn": 14
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 16,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "PingPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 18,
+                        "startColumn": 1,
+                        "endLine": 22,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": "target",
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 20,
+                        "startColumn": 9,
+                        "endLine": 20,
+                        "endColumn": 35
+                    },
+                    "typeArguments": [
+                        "PongPlugin"
+                    ]
+                }
+            ],
+            "range": {
+                "startLine": 18,
+                "startColumn": 1,
+                "endLine": 22,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "PongPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 24,
+                        "startColumn": 1,
+                        "endLine": 28,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": "target",
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 26,
+                        "startColumn": 9,
+                        "endLine": 26,
+                        "endColumn": 35
+                    },
+                    "typeArguments": [
+                        "PingPlugin"
+                    ]
+                }
+            ],
+            "range": {
+                "startLine": 24,
+                "startColumn": 1,
+                "endLine": 28,
+                "endColumn": 2
+            }
+        }
+    ]
+}

@@ -1,0 +1,60 @@
+diff --git a/core/model/src/androidMain/kotlin/sample/tasktide/core/model/Platform.android.kt b/core/model/src/androidMain/kotlin/sample/tasktide/core/model/Platform.android.kt
+index adb899a..508d8e9 100644
+--- a/core/model/src/androidMain/kotlin/sample/tasktide/core/model/Platform.android.kt
++++ b/core/model/src/androidMain/kotlin/sample/tasktide/core/model/Platform.android.kt
+@@ -1,9 +1,12 @@
+ package sample.tasktide.core.model
+ 
++import java.util.TimeZone
+ import java.util.UUID
+ 
+ actual fun currentTimeMillis(): Long = System.currentTimeMillis()
+ 
++actual fun deviceUtcOffsetMillis(): Long = TimeZone.getDefault().getOffset(System.currentTimeMillis()).toLong()
++
+ actual class UuidGenerator actual constructor() {
+     actual fun next(): String = UUID.randomUUID().toString()
+ }
+diff --git a/core/model/src/commonMain/kotlin/sample/tasktide/core/model/IsoDates.kt b/core/model/src/commonMain/kotlin/sample/tasktide/core/model/IsoDates.kt
+index fa8e3c3..4b2a6fe 100644
+--- a/core/model/src/commonMain/kotlin/sample/tasktide/core/model/IsoDates.kt
++++ b/core/model/src/commonMain/kotlin/sample/tasktide/core/model/IsoDates.kt
+@@ -5,7 +5,7 @@ private const val EPOCH_SHIFT_DAYS = 719_468L
+ private const val DAYS_PER_ERA = 146_097L
+ 
+ fun Long.toIsoDate(): String {
+-    val shifted = floorDiv(MILLIS_PER_DAY) + EPOCH_SHIFT_DAYS
++    val shifted = (this + deviceUtcOffsetMillis()).floorDiv(MILLIS_PER_DAY) + EPOCH_SHIFT_DAYS
+     val era = shifted.floorDiv(DAYS_PER_ERA)
+     val dayOfEra = shifted - era * DAYS_PER_ERA
+     val yearOfEra = (dayOfEra - dayOfEra / 1_460 + dayOfEra / 36_524 - dayOfEra / 146_096) / 365
+diff --git a/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt b/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt
+index 164c53d..196bd3f 100644
+--- a/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt
++++ b/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt
+@@ -2,6 +2,8 @@ package sample.tasktide.core.model
+ 
+ expect fun currentTimeMillis(): Long
+ 
++expect fun deviceUtcOffsetMillis(): Long
++
+ expect class UuidGenerator() {
+     fun next(): String
+ }
+diff --git a/core/model/src/desktopMain/kotlin/sample/tasktide/core/model/Platform.desktop.kt b/core/model/src/desktopMain/kotlin/sample/tasktide/core/model/Platform.desktop.kt
+index b6dda10..268164f 100644
+--- a/core/model/src/desktopMain/kotlin/sample/tasktide/core/model/Platform.desktop.kt
++++ b/core/model/src/desktopMain/kotlin/sample/tasktide/core/model/Platform.desktop.kt
+@@ -1,9 +1,12 @@
+ package sample.tasktide.core.model
+ 
++import java.util.TimeZone
+ import java.util.UUID
+ 
+ actual fun currentTimeMillis(): Long = System.currentTimeMillis()
+ 
++actual fun deviceUtcOffsetMillis(): Long = TimeZone.getDefault().getOffset(System.currentTimeMillis()).toLong()
++
+ actual class UuidGenerator actual constructor() {
+     actual fun next(): String = UUID.randomUUID().toString()
+ }

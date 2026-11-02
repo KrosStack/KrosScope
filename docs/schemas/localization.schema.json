@@ -1,0 +1,1133 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationSuiteResult",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:localization:1",
+    "$defs": {
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationAnalysisScores": {
+            "type": "object",
+            "properties": {
+                "moduleExactMatch": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "modulePrecision": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "moduleRecall": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "scopeAccuracy": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "sourceSetExactMatch": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "sourceSetPrecision": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "sourceSetRecall": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "symbolRecall10": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "testPrecision": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "testRecall": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "variantExactMatch": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "variantPrecision": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "variantRecall": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationCorpusSummary": {
+            "type": "object",
+            "properties": {
+                "binaryFiles": {
+                    "type": "integer"
+                },
+                "generatedFiles": {
+                    "type": "integer"
+                },
+                "oversizedFiles": {
+                    "type": "integer"
+                },
+                "readableTextFiles": {
+                    "type": "integer"
+                },
+                "unreadableFiles": {
+                    "type": "integer"
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationGateScores": {
+            "type": "object",
+            "properties": {
+                "ndcg10": {
+                    "type": "number"
+                },
+                "recall10": {
+                    "type": "number"
+                },
+                "recall5": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "recall5",
+                "recall10",
+                "ndcg10"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationGoldScope": {
+            "type": "object",
+            "properties": {
+                "modules": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sourceSets": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "variants": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationMethodResult": {
+            "type": "object",
+            "properties": {
+                "predictedScope": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationGoldScope"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "predictedSymbols": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedSymbol"
+                    }
+                },
+                "rankedFiles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "scores": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationScores"
+                },
+                "selectedFiles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "selectedTests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedFile"
+                    }
+                }
+            },
+            "required": [
+                "scores",
+                "rankedFiles",
+                "selectedFiles"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationScores": {
+            "type": "object",
+            "properties": {
+                "analysis": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationAnalysisScores"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "averagePrecision": {
+                    "type": "number"
+                },
+                "contextRecall10": {
+                    "type": "number"
+                },
+                "editPrecision": {
+                    "type": "number"
+                },
+                "ndcg10": {
+                    "type": "number"
+                },
+                "recall1": {
+                    "type": "number"
+                },
+                "recall10": {
+                    "type": "number"
+                },
+                "recall3": {
+                    "type": "number"
+                },
+                "recall5": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "recall1",
+                "recall3",
+                "recall5",
+                "recall10",
+                "ndcg10",
+                "averagePrecision",
+                "editPrecision",
+                "contextRecall10"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationSetResult": {
+            "type": "object",
+            "properties": {
+                "gatePassed": {
+                    "type": "boolean"
+                },
+                "kind": {
+                    "type": "string",
+                    "enum": [
+                        "ORIGINAL",
+                        "HELD_OUT"
+                    ]
+                },
+                "methods": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationScores"
+                    }
+                },
+                "strongestBm25": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationGateScores"
+                },
+                "strongestLexical": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationGateScores"
+                },
+                "symbolRecallPassed": {
+                    "type": "boolean"
+                },
+                "tasks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_TaskLocalization"
+                    }
+                },
+                "testSelectionPassed": {
+                    "type": "boolean"
+                },
+                "tier2Comparisons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_stats_ComparisonReport"
+                    }
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "kind",
+                "tasks",
+                "methods",
+                "strongestLexical",
+                "gatePassed",
+                "testSelectionPassed",
+                "symbolRecallPassed",
+                "valid"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_LocalizationSuiteResult": {
+            "type": "object",
+            "properties": {
+                "complete": {
+                    "type": "boolean"
+                },
+                "corpus": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationCorpusSummary"
+                },
+                "gatePassed": {
+                    "type": "boolean"
+                },
+                "policy": {
+                    "type": "string",
+                    "enum": [
+                        "STRONGEST_LEXICAL",
+                        "TWO_TIER"
+                    ]
+                },
+                "schemaVersion": {
+                    "const": 1
+                },
+                "sets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationSetResult"
+                    }
+                },
+                "targetsPassed": {
+                    "type": "boolean"
+                },
+                "valid": {
+                    "type": "boolean"
+                },
+                "validationErrors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "sets",
+                "corpus",
+                "gatePassed",
+                "targetsPassed",
+                "valid",
+                "complete",
+                "schemaVersion"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_localization_TaskLocalization": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "methods": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_localization_LocalizationMethodResult"
+                    }
+                },
+                "missingGoldFiles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "statement": {
+                    "type": "string"
+                },
+                "validGold": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id",
+                "statement",
+                "methods",
+                "missingGoldFiles"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_stats_BootstrapSettings": {
+            "type": "object",
+            "properties": {
+                "confidenceLevel": {
+                    "type": "number"
+                },
+                "percentileInterpolation": {
+                    "type": "string",
+                    "enum": [
+                        "LINEAR"
+                    ]
+                },
+                "resamples": {
+                    "type": "integer"
+                },
+                "seed": {
+                    "type": "integer"
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_stats_ComparisonReport": {
+            "type": "object",
+            "properties": {
+                "baseline": {
+                    "type": "string"
+                },
+                "baselineMean": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "candidate": {
+                    "type": "string"
+                },
+                "candidateMean": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "lower95": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "metric": {
+                    "type": "string",
+                    "enum": [
+                        "RECALL_5",
+                        "RECALL_10",
+                        "NDCG_10",
+                        "GOLD_CONTEXT_RECALL",
+                        "TOKEN_PRECISION"
+                    ]
+                },
+                "outcome": {
+                    "type": "string",
+                    "enum": [
+                        "SIGNIFICANT_WIN",
+                        "SIGNIFICANT_LOSS",
+                        "INCONCLUSIVE",
+                        "UNMEASURED"
+                    ]
+                },
+                "pairs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_stats_PairedValue"
+                    }
+                },
+                "pointDelta": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "settings": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_benchmark_stats_BootstrapSettings"
+                },
+                "significant": {
+                    "type": "boolean"
+                },
+                "upper95": {
+                    "anyOf": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "metric",
+                "candidate",
+                "baseline",
+                "candidateMean",
+                "baselineMean",
+                "pointDelta",
+                "lower95",
+                "upper95",
+                "significant",
+                "outcome",
+                "pairs",
+                "settings",
+                "valid"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_benchmark_stats_PairedValue": {
+            "type": "object",
+            "properties": {
+                "baseline": {
+                    "type": "number"
+                },
+                "candidate": {
+                    "type": "number"
+                },
+                "taskId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "taskId",
+                "candidate",
+                "baseline"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_model_ArtifactRef": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string"
+                },
+                "repository": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "repository",
+                "path"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_model_NodeRef": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "ref": {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_model_ArtifactRef"
+                        },
+                        "type": {
+                            "const": "artifact"
+                        }
+                    },
+                    "required": [
+                        "ref",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "coordinate": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "external"
+                        }
+                    },
+                    "required": [
+                        "coordinate",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "module"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "source-set"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "symbol"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "io_github_krosstack_kscope_model_Scope": {
+            "type": "object",
+            "properties": {
+                "sourceSet": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "target": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "variant": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_model_SourceLocation": {
+            "type": "object",
+            "properties": {
+                "artifact": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_model_ArtifactRef"
+                },
+                "range": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_model_TextRange"
+                }
+            },
+            "required": [
+                "artifact",
+                "range"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_model_Symbol": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "certainty": {
+                    "type": "string",
+                    "enum": [
+                        "exact",
+                        "probable",
+                        "heuristic"
+                    ]
+                },
+                "container": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "declaration": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_model_SourceLocation"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "documentation": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "evidenceClass": {
+                    "type": "string",
+                    "enum": [
+                        "compiler",
+                        "build-model",
+                        "generated-artifact",
+                        "content",
+                        "convention",
+                        "structural",
+                        "textual",
+                        "historical",
+                        "ml"
+                    ]
+                },
+                "flags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "expect",
+                            "actual",
+                            "external",
+                            "abstract",
+                            "open",
+                            "override",
+                            "static",
+                            "suspend",
+                            "test",
+                            "deprecated"
+                        ]
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "kind": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_model_SymbolKind"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nameLocation": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_model_SourceLocation"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "origin": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_model_SymbolOrigin"
+                },
+                "qualifiedName": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "scope": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_model_Scope"
+                },
+                "signature": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "visibility": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": [
+                                "public",
+                                "protected",
+                                "internal",
+                                "private",
+                                "local"
+                            ]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "id",
+                "kind",
+                "name",
+                "qualifiedName",
+                "signature",
+                "container",
+                "visibility",
+                "flags",
+                "origin",
+                "declaration",
+                "nameLocation",
+                "documentation",
+                "scope",
+                "evidenceClass",
+                "certainty"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_model_SymbolKind": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "enum": [
+                        "package",
+                        "type",
+                        "callable",
+                        "variable",
+                        "resource",
+                        "component",
+                        "contract",
+                        "schema",
+                        "build"
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "category"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_model_SymbolOrigin": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "generator": {
+                            "type": "string"
+                        },
+                        "sourceOfTruth": {
+                            "anyOf": [
+                                {
+                                    "$ref": "#/$defs/io_github_krosstack_kscope_model_NodeRef"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ]
+                        },
+                        "type": {
+                            "const": "generated"
+                        }
+                    },
+                    "required": [
+                        "generator",
+                        "sourceOfTruth",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "coordinate": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ]
+                        },
+                        "type": {
+                            "const": "library"
+                        }
+                    },
+                    "required": [
+                        "coordinate",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "const": "source"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "plugin": {
+                            "type": "string"
+                        },
+                        "type": {
+                            "const": "synthetic"
+                        }
+                    },
+                    "required": [
+                        "plugin",
+                        "type"
+                    ],
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "io_github_krosstack_kscope_model_TextRange": {
+            "type": "object",
+            "properties": {
+                "endColumn": {
+                    "type": "integer"
+                },
+                "endLine": {
+                    "type": "integer"
+                },
+                "startColumn": {
+                    "type": "integer"
+                },
+                "startLine": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "startLine",
+                "startColumn",
+                "endLine",
+                "endColumn"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_retrieval_RankedFile": {
+            "type": "object",
+            "properties": {
+                "artifact": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_model_ArtifactRef"
+                },
+                "reasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_SignalContribution"
+                    }
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "edit",
+                        "read"
+                    ]
+                },
+                "score": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "artifact",
+                "score",
+                "role",
+                "reasons"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_retrieval_RankedSymbol": {
+            "type": "object",
+            "properties": {
+                "reasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_SignalContribution"
+                    }
+                },
+                "score": {
+                    "type": "number"
+                },
+                "symbol": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_model_Symbol"
+                }
+            },
+            "required": [
+                "symbol",
+                "score"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_retrieval_SignalContribution": {
+            "type": "object",
+            "properties": {
+                "score": {
+                    "type": "number"
+                },
+                "signal": {
+                    "type": "string",
+                    "enum": [
+                        "lexical-symbol",
+                        "lexical-artifact",
+                        "graph",
+                        "category",
+                        "history",
+                        "exact",
+                        "test-relation",
+                        "test-reference",
+                        "test-edit"
+                    ]
+                }
+            },
+            "required": [
+                "signal",
+                "score"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

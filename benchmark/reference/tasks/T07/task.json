@@ -1,0 +1,37 @@
+{
+  "id": "T07",
+  "title": "CSV export shows 1970 for tasks without a due date",
+  "category": "java_kotlin_interop_bugfix",
+  "statement": "Exported CSV files contain the date 1970-01-01 for every task that has no due date. The due column of such tasks must be empty. Other columns and the behaviour of the other export formats must not change.",
+  "goldFiles": [
+    "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/CsvExporter.kt"
+  ],
+  "mayEditFiles": [
+    "core/legacy/src/test/kotlin/sample/tasktide/core/legacy/CsvExporterTest.kt"
+  ],
+  "verify": {
+    "gradleTasks": [
+      ":core:legacy:test"
+    ],
+    "timeoutMinutes": 15
+  },
+  "failToPass": [
+    "sample.tasktide.core.legacy.CsvExporterTest#rowsWithAndWithoutDueDateKeepTheirOtherColumns",
+    "sample.tasktide.core.legacy.CsvExporterTest#taskWithoutDueDateHasEmptyDueColumn"
+  ],
+  "passToPass": [
+    "sample.tasktide.core.legacy.CsvExporterTest#outputStartsWithHeader",
+    "sample.tasktide.core.legacy.CsvExporterTest#overdueExportIgnoresTasksWithoutDueDate",
+    "sample.tasktide.core.legacy.CsvExporterTest#registryResolvesKnownFormats",
+    "sample.tasktide.core.legacy.CsvExporterTest#rowContainsFormattedColumns",
+    "sample.tasktide.core.legacy.CsvExporterTest#taskDueAtTheEpochStillShowsItsDate",
+    "sample.tasktide.core.legacy.CsvExporterTest#titlesWithCommasAreQuoted",
+    "sample.tasktide.core.legacy.DateUtilsTest#formatsEpochAsIsoDate",
+    "sample.tasktide.core.legacy.DateUtilsTest#formatsLaterDay",
+    "sample.tasktide.core.legacy.DateUtilsTest#overdueWhenDueDateIsInThePast",
+    "sample.tasktide.core.legacy.LegacyTaskFormatterTest#customSeparatorIsUsed",
+    "sample.tasktide.core.legacy.LegacyTaskFormatterTest#formatsTitlePriorityAndDueDate",
+    "sample.tasktide.core.legacy.LegacyTaskFormatterTest#missingDueDateIsLabelled",
+    "sample.tasktide.core.legacy.LegacyTaskFormatterTest#slugIsLowerCaseWithDashes"
+  ]
+}

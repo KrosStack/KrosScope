@@ -1,0 +1,57 @@
+diff --git a/app/src/demo/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt b/app/src/demo/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt
+index 23c401d..557e9f2 100644
+--- a/app/src/demo/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt
++++ b/app/src/demo/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt
+@@ -6,4 +6,5 @@ import sample.tasktide.app.config.FeatureFlags
+ object FlavorFlags : FeatureFlags {
+     override val syncEnabled: Boolean = false
+     override val maxTasks: Int = BuildConfig.MAX_TASKS
++    override val completedTasksCountTowardsLimit: Boolean = true
+ }
+diff --git a/app/src/full/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt b/app/src/full/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt
+index 8bb87d3..6b84c7f 100644
+--- a/app/src/full/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt
++++ b/app/src/full/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt
+@@ -6,4 +6,5 @@ import sample.tasktide.app.config.FeatureFlags
+ object FlavorFlags : FeatureFlags {
+     override val syncEnabled: Boolean = true
+     override val maxTasks: Int = BuildConfig.MAX_TASKS
++    override val completedTasksCountTowardsLimit: Boolean = false
+ }
+diff --git a/app/src/main/kotlin/sample/tasktide/app/TaskCreator.kt b/app/src/main/kotlin/sample/tasktide/app/TaskCreator.kt
+index 5597ece..4ffcb54 100644
+--- a/app/src/main/kotlin/sample/tasktide/app/TaskCreator.kt
++++ b/app/src/main/kotlin/sample/tasktide/app/TaskCreator.kt
+@@ -12,8 +12,8 @@ class TaskCreator(
+     private val flags: FeatureFlags,
+ ) {
+     suspend fun create(title: String, priority: Priority = Priority.NORMAL): CreateResult {
+-        val open = store.observeAll().first().count { !it.done }
+-        if (open >= flags.maxTasks) return CreateResult.LimitReached(flags.maxTasks)
++        val counted = store.observeAll().first().count { flags.completedTasksCountTowardsLimit || !it.done }
++        if (counted >= flags.maxTasks) return CreateResult.LimitReached(flags.maxTasks)
+         val task = Task(id = TaskId.generate(), title = title.trim(), priority = priority)
+         store.upsert(task)
+         return CreateResult.Created(task)
+diff --git a/app/src/main/kotlin/sample/tasktide/app/config/FeatureFlags.kt b/app/src/main/kotlin/sample/tasktide/app/config/FeatureFlags.kt
+index c68998c..4f5c298 100644
+--- a/app/src/main/kotlin/sample/tasktide/app/config/FeatureFlags.kt
++++ b/app/src/main/kotlin/sample/tasktide/app/config/FeatureFlags.kt
+@@ -3,4 +3,5 @@ package sample.tasktide.app.config
+ interface FeatureFlags {
+     val syncEnabled: Boolean
+     val maxTasks: Int
++    val completedTasksCountTowardsLimit: Boolean
+ }
+diff --git a/app/src/test/kotlin/sample/tasktide/app/TaskCreatorTest.kt b/app/src/test/kotlin/sample/tasktide/app/TaskCreatorTest.kt
+index d374c96..8d1092c 100644
+--- a/app/src/test/kotlin/sample/tasktide/app/TaskCreatorTest.kt
++++ b/app/src/test/kotlin/sample/tasktide/app/TaskCreatorTest.kt
+@@ -20,6 +20,7 @@ class TaskCreatorTest {
+     private fun flags(limit: Int) = object : FeatureFlags {
+         override val syncEnabled: Boolean = true
+         override val maxTasks: Int = limit
++        override val completedTasksCountTowardsLimit: Boolean = false
+     }
+ 
+     @Test

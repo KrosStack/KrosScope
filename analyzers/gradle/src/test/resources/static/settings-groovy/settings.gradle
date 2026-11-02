@@ -1,0 +1,9 @@
+pluginManagement {
+    includeBuild 'build-logic'
+}
+
+rootProject.name = 'groovy-forms'
+
+include ':app', ':core:model'
+include 'feature:tasks'
+project(':core:model').projectDir = new File(settingsDir, 'model-impl')

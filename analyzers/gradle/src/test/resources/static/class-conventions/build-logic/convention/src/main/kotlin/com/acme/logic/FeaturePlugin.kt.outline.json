@@ -1,0 +1,177 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "com.acme.logic.FeaturePlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 1,
+                        "endLine": 17,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": "plugins",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "acme.android.library",
+                            "expression": "\"acme.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 13,
+                        "endLine": 9,
+                        "endColumn": 50
+                    }
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 13,
+                        "endLine": 10,
+                        "endColumn": 41
+                    },
+                    "typeArguments": [
+                        "SerializationPlugin"
+                    ]
+                },
+                {
+                    "name": "dependencies",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "implementation",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "project(\":ui\")"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 12,
+                                "startColumn": 17,
+                                "endLine": 12,
+                                "endColumn": 49
+                            }
+                        },
+                        {
+                            "name": "api",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "project(\":core\")"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 17,
+                                "endLine": 13,
+                                "endColumn": 40
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 13,
+                        "endLine": 14,
+                        "endColumn": 14
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 6,
+                "startColumn": 1,
+                "endLine": 17,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "com.acme.logic.SerializationPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 19,
+                        "startColumn": 1,
+                        "endLine": 23,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": "target.pluginManager",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.plugin.serialization",
+                            "expression": "\"org.jetbrains.kotlin.plugin.serialization\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 21,
+                        "startColumn": 9,
+                        "endLine": 21,
+                        "endColumn": 80
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 19,
+                "startColumn": 1,
+                "endLine": 23,
+                "endColumn": 2
+            }
+        }
+    ]
+}

@@ -1,0 +1,52 @@
+<ESC>[2mRead as a task (use --as symbol to look it up as a name).<ESC>[0m
+<ESC>[1m<ESC>[32m2 files to edit and 11 to read, touching 2 modules; 36 files scored; several close candidates.<ESC>[0m
+
+  Task   Users want to be reminded about a task before it is due
+  Terms  users, want, reminded, task, due
+
+<ESC>[1mFiles to edit (2)<ESC>[0m
+<ESC>[1m<ESC>[36m  score  file                                                                 because<ESC>[0m
+  0.129  data/settings/src/main/kotlin/sample/tasktide/.../UserPreference.kt  lexical symbol, graph
+  0.123  data/settings/src/test/kotlin/.../RoomPreferenceRepositoryTest.kt    lexical symbol, graph
+
+<ESC>[1mFiles to read (showing 10 of 11)<ESC>[0m
+<ESC>[1m<ESC>[36m  score  file                                                                  because<ESC>[0m
+  0.101  data/settings/src/main/kotlin/sample/tasktide/.../PreferenceDao.kt    lexical symbol, graph
+  0.094  data/settings/src/main/kotlin/sample/.../RoomPreferenceRepository.kt  lexical symbol, graph
+  0.092  data/settings/src/main/kotlin/sample/.../PreferenceRepository.kt      lexical symbol, graph
+  0.090  data/settings/src/main/kotlin/sample/.../SettingsDatabase.kt          lexical symbol, graph
+  0.088  data/settings/src/main/kotlin/sample/tasktide/.../PreferenceKeys.kt   lexical symbol, graph
+  0.087  feature/tasks/src/main/kotlin/sample/.../TaskListViewModel.kt         lexical symbol, graph
+  0.085  feature/tasks/src/main/kotlin/sample/tasktide/.../TaskAdapter.kt      lexical symbol, graph
+  0.083  feature/tasks/src/main/kotlin/sample/.../TaskListFragment.kt          lexical symbol, graph
+  0.081  feature/tasks/src/main/kotlin/sample/.../TaskDetailActivity.kt        lexical symbol, graph
+  0.072  feature/tasks/src/main/kotlin/sample/tasktide/.../TaskListUiState.kt  lexical symbol, graph
+<ESC>[2m  1 more relevant (use --detail full to list them)<ESC>[0m
+
+<ESC>[1mDocuments (1)<ESC>[0m
+<ESC>[1m<ESC>[36m  score  file       because<ESC>[0m
+  0.053  README.md  lexical symbol, graph
+<ESC>[2m  Not listed: 2 images and other binary files.<ESC>[0m
+
+<ESC>[2m  20 more files scored below 30% of the best score (--format json lists all).<ESC>[0m
+
+<ESC>[1mTests to run (2)<ESC>[0m
+  data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt
+  feature/tasks/src/test/kotlin/sample/tasktide/feature/tasks/TaskListViewModelTest.kt
+
+<ESC>[1mScope of the change<ESC>[0m
+  Modules          :data:settings, :feature:tasks
+  Source sets      :data:settings@main
+  Platforms        android
+  Crosses modules  yes
+
+<ESC>[1mBoundaries and gaps<ESC>[0m
+  Boundary links     0
+  Boundary chains    0 paths
+  Unresolved nearby  0
+
+<ESC>[1mContext size<ESC>[0m
+  Minimal      11,212 tokens
+  Recommended  30,572 tokens
+
+<ESC>[2mNext: kscope context "<task>" --budget 8000 compiles the source of these files.<ESC>[0m

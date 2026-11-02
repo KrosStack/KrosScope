@@ -1,0 +1,166 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "FlavorsPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 12,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "configure",
+                    "receiver": "extensions",
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "configureFlavors",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "this"
+                                }
+                            ],
+                            "body": [
+                                {
+                                    "name": "val",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": "commonExtension",
+                                            "expression": "commonExtension"
+                                        },
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "this"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 8,
+                                        "startColumn": 17,
+                                        "endLine": 8,
+                                        "endColumn": 39
+                                    },
+                                    "typeArguments": [
+                                        "CommonExtension"
+                                    ]
+                                },
+                                {
+                                    "name": "apply",
+                                    "receiver": "commonExtension",
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "productFlavors",
+                                            "receiver": null,
+                                            "arguments": [],
+                                            "body": [
+                                                {
+                                                    "name": "forEach",
+                                                    "receiver": "AcmeFlavor.entries",
+                                                    "arguments": [],
+                                                    "body": [
+                                                        {
+                                                            "name": "register",
+                                                            "receiver": null,
+                                                            "arguments": [
+                                                                {
+                                                                    "name": null,
+                                                                    "literal": null,
+                                                                    "expression": "flavor.name"
+                                                                }
+                                                            ],
+                                                            "body": [],
+                                                            "assignments": {
+                                                                "dimension": "\"tier\""
+                                                            },
+                                                            "range": {
+                                                                "startLine": 8,
+                                                                "startColumn": 17,
+                                                                "endLine": 8,
+                                                                "endColumn": 39
+                                                            }
+                                                        }
+                                                    ],
+                                                    "assignments": {},
+                                                    "range": {
+                                                        "startLine": 8,
+                                                        "startColumn": 17,
+                                                        "endLine": 8,
+                                                        "endColumn": 39
+                                                    }
+                                                }
+                                            ],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 8,
+                                                "startColumn": 17,
+                                                "endLine": 8,
+                                                "endColumn": 39
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 8,
+                                        "startColumn": 17,
+                                        "endLine": 8,
+                                        "endColumn": 39
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 8,
+                                "startColumn": 17,
+                                "endLine": 8,
+                                "endColumn": 39
+                            },
+                            "inlined": true
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 13,
+                        "endLine": 9,
+                        "endColumn": 14
+                    },
+                    "typeArguments": [
+                        "LibraryExtension"
+                    ]
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 2
+            }
+        }
+    ]
+}

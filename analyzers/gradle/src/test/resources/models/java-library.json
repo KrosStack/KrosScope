@@ -1,0 +1,57 @@
+[
+  {
+    "schema": 1,
+    "path": ":lib",
+    "name": "lib",
+    "dir": "/work/javalib/lib",
+    "buildDir": "/work/javalib/lib/build",
+    "build": {"name": "javalib", "rootDir": "/work/javalib", "included": false, "gradleVersion": "9.5.1"},
+    "plugins": ["java", "java-library", "java-test-fixtures"],
+    "kotlin": null,
+    "android": null,
+    "java": [
+      {"name": "main", "javaDirs": ["/work/javalib/lib/src/main/java"], "resourceDirs": ["/work/javalib/lib/src/main/resources"]},
+      {"name": "test", "javaDirs": ["/work/javalib/lib/src/test/java"], "resourceDirs": []},
+      {"name": "testFixtures", "javaDirs": ["/work/javalib/lib/src/testFixtures/java"], "resourceDirs": []}
+    ],
+    "dependencies": {
+      "projects": [{"configuration": "api", "path": ":core"}, {"configuration": "implementation", "path": ":missing"}],
+      "external": [{"configuration": "implementation", "coordinates": "com.google.guava:guava", "version": "33.0.0-jre"}]
+    },
+    "generators": {"sqldelightDatabases": [], "wireKotlin": null, "kspProcessors": []},
+    "classpaths": {
+      "files": ["/gradle-home/guava.jar", "/gradle-home/junit.jar"],
+      "entries": [
+        {"kind": "java", "name": "main", "sourceSets": ["main"], "files": [0]},
+        {"kind": "java", "name": "test", "sourceSets": ["test"], "files": [0, 1]}
+      ]
+    },
+    "errors": {"classpaths": ["testFixtures: org.gradle.api.artifacts.ResolveException: Could not resolve %ROOT%/lib/libs/missing.jar\nsecond line"]}
+  },
+  {
+    "schema": 1,
+    "path": ":core",
+    "name": "core",
+    "dir": "/work/javalib/core",
+    "buildDir": "/work/javalib/core/build",
+    "build": {"name": "javalib", "rootDir": "/work/javalib", "included": false, "gradleVersion": "9.5.1"},
+    "plugins": ["java-library"],
+    "kotlin": null,
+    "android": null,
+    "java": [
+      {"name": "main", "javaDirs": ["/work/javalib/core/src/main/java"], "resourceDirs": []}
+    ],
+    "classpaths": {"files": [], "entries": []},
+    "errors": {}
+  },
+  {
+    "schema": 1,
+    "path": ":",
+    "name": "javalib",
+    "dir": "/work/javalib",
+    "buildDir": "/work/javalib/build",
+    "build": {"name": "javalib", "rootDir": "/work/javalib", "included": false, "gradleVersion": "9.5.1"},
+    "plugins": [],
+    "errors": {}
+  }
+]

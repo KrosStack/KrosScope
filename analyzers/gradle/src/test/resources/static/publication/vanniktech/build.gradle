@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+    id 'com.vanniktech.maven.publish'
+}
+
+mavenPublishing {
+    coordinates('org.example.van', 'van-core', '4.0.0')
+}

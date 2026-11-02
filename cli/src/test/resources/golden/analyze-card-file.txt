@@ -1,0 +1,23 @@
+Read "lib/src/main/kotlin/Greeter.kt" as a file (use --as task to analyse it as a task).
+lib/src/main/kotlin/Greeter.kt is a file in :lib; 4 places refer to it and 1 test covers it.
+
+  Kind         file
+  Declared at  lib/src/main/kotlin/Greeter.kt
+  Declares     kotlin.class greet.Greeter, kotlin.function greet.Greeter.greet
+  Module       :lib
+  Source set   :lib@main
+
+Referred to by (4)
+  relation  node
+  calls     app.Main.greeter
+  calls     app.Main.run()
+  calls     greet.GreeterTest.greetsByName()
+  imports   app/src/main/kotlin/Main.kt
+
+Tests to run (1)
+  lib/src/test/kotlin/GreeterTest.kt
+
+Impact
+  A change here can affect 4 nodes (1 file, 2 modules) and is covered by 1 test.
+
+Next: kscope impact lib/src/main/kotlin/Greeter.kt lists everything a change affects, nearest first; kscope related lib/src/main/kotlin/Greeter.kt shows the closest files.

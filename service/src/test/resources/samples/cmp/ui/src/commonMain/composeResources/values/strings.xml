@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="greeting">Hello</string>
+    <string name="farewell">Goodbye</string>
+    <plurals name="tasks">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
+    <string-array name="levels">
+        <item>Low</item>
+        <item>High</item>
+    </string-array>
+</resources>

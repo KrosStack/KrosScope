@@ -1,0 +1,21 @@
+2 of 5 checks passed.
+
+  ok       jdk          Java 17; JDK 17 or newer required
+  missing  worker       Kotlin analysis worker not found
+  ok       git          Git found
+  missing  index        No index in this workspace
+  missing  android-sdk  Android SDK directory not found
+
+What to do
+  worker: Set KSCOPE_HOME to the kscope installation directory, or reinstall kscope.
+  index: Run `kscope scan` to build it.
+  android-sdk: Optional. Set ANDROID_HOME to the Android SDK to analyse Android modules against it.
+
+Encodings
+  Standard output  IBM850 (console)
+  Standard error   UTF-8 (redirected or captured)
+  Default charset  UTF-8
+  Arguments        Cp1252
+
+Non-ASCII characters in command-line arguments can be replaced before kscope sees them
+(a limit of JDK 17 on Windows). Pass such text with --task-file, which is read as UTF-8.

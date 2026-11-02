@@ -1,0 +1,13 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+    id 'org.jetbrains.compose'
+}
+
+kotlin {
+    jvm()
+}
+
+compose.resources {
+    packageOfResClass = 'sample.ui.resources'
+    publicResClass = true
+}

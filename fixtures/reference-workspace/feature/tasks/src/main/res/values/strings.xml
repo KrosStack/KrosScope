@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasks_title">Tasks</string>
+    <string name="task_detail_title">Task details</string>
+    <string name="tasks_empty_title">Nothing to do</string>
+    <string name="tasks_empty_hint">Add a task to get started.</string>
+    <string name="task_priority_format">Priority: %1$s</string>
+    <string name="task_due_format">Due %1$s</string>
+    <string name="action_mark_done">Mark as done</string>
+    <string name="action_delete_done">Clear completed</string>
+    <string name="action_export">Export</string>
+</resources>

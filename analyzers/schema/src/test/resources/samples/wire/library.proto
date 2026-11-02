@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package sample.library;
+
+option java_package = "sample.library.wire";
+
+import "other.proto";
+
+// A book on a shelf. It has a title.
+message Book {
+  string title = 1;
+  int32 pages = 2;
+  Genre genre = 3;
+  repeated string authors = 4;
+  map<string, int64> stock = 5;
+  optional string subtitle = 6;
+  Publisher publisher = 7;
+  bytes cover = 8;
+  oneof lending {
+    string borrower = 9;
+    int64 due = 10;
+  }
+  google.protobuf.Timestamp added = 11 [deprecated = true];
+
+  message Publisher {
+    string name = 1;
+  }
+}
+
+enum Genre {
+  GENRE_UNSPECIFIED = 0;
+  FICTION = 1;
+}
+
+service Catalog {
+  rpc Find(Book) returns (Book);
+  rpc Watch(Book) returns (stream Book) {
+    option deprecated = true;
+  }
+}

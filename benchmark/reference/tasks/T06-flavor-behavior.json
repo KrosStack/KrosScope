@@ -1,0 +1,68 @@
+{
+  "id": "T06",
+  "title": "Completed tasks count towards the demo task limit",
+  "statement": "People get around the task limit of the demo edition by finishing tasks and adding new ones. In the demo edition, completed tasks must also count towards the limit. The full edition keeps counting only open tasks.",
+  "category": "flavor_specific_behavior",
+  "mustEdit": [
+    "app/src/main/kotlin/sample/tasktide/app/config/FeatureFlags.kt",
+    "app/src/demo/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt",
+    "app/src/full/kotlin/sample/tasktide/app/flavor/FlavorFlags.kt",
+    "app/src/main/kotlin/sample/tasktide/app/TaskCreator.kt"
+  ],
+  "mustRead": [
+    "app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt",
+    "app/src/main/kotlin/sample/tasktide/app/MainActivity.kt",
+    "app/src/test/kotlin/sample/tasktide/app/TaskCreatorTest.kt",
+    "app/build.gradle.kts"
+  ],
+  "symbols": [
+    {
+      "module": ":app",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.app.config.FeatureFlags",
+      "file": "app/src/main/kotlin/sample/tasktide/app/config/FeatureFlags.kt",
+      "line": 3
+    },
+    {
+      "module": ":app",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.app.TaskCreator.create",
+      "file": "app/src/main/kotlin/sample/tasktide/app/TaskCreator.kt",
+      "line": 14
+    }
+  ],
+  "relationships": [
+    "flavor_specific_implementation:001",
+    "flavor_specific_implementation:002",
+    "flavor_specific_implementation:003",
+    "flavor_specific_implementation:004",
+    "buildconfig_field_to_consumer:003",
+    "buildconfig_field_to_consumer:004"
+  ],
+  "changeScope": {
+    "modules": [
+      ":app"
+    ],
+    "sourceSets": [
+      "main",
+      "demo",
+      "full",
+      "test"
+    ],
+    "variants": [
+      "demoDebug",
+      "demoRelease",
+      "fullDebug",
+      "fullRelease"
+    ]
+  },
+  "relevantTests": [
+    {
+      "module": ":app",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.app.TaskCreatorTest",
+      "file": "app/src/test/kotlin/sample/tasktide/app/TaskCreatorTest.kt"
+    }
+  ],
+  "notes": "Run the unit tests of both flavors (testDemoDebugUnitTest and testFullDebugUnitTest)."
+}

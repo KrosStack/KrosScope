@@ -1,0 +1,8 @@
+A single Gradle build.
+Inspected 1 directory, 4 levels deep.
+Skipped 1 ignored directory.
+
+Git
+  Checkout  .
+  This is   the repository
+  Evidence  .git directory

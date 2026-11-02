@@ -1,0 +1,278 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_service_StructureResult",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:structure:1",
+    "$defs": {
+        "io_github_krosstack_kscope_service_GitReport": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "evidence": {
+                    "type": "string"
+                },
+                "linkedWorktree": {
+                    "type": "boolean"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "repository",
+                        "linked-worktree",
+                        "submodule"
+                    ]
+                }
+            },
+            "required": [
+                "directory",
+                "role",
+                "linkedWorktree",
+                "evidence"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_GradleBuildReport": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "evidence": {
+                    "type": "string"
+                },
+                "includedBuilds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "includedBy": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "top-level",
+                        "included",
+                        "nested-independent"
+                    ]
+                },
+                "settingsFile": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "directory",
+                "settingsFile",
+                "role",
+                "includedBy",
+                "includedBuilds",
+                "evidence"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_NestedRepositoryReport": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "evidence": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "repository",
+                        "linked-worktree",
+                        "submodule"
+                    ]
+                },
+                "sameRepositoryAs": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "directory",
+                "role",
+                "sameRepositoryAs",
+                "evidence"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_ProjectReport": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "ecosystem": {
+                    "type": "string"
+                },
+                "evidence": {
+                    "type": "string"
+                },
+                "markerFile": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "directory",
+                "ecosystem",
+                "markerFile",
+                "evidence"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_StructureConclusion": {
+            "type": "object",
+            "properties": {
+                "evidence": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "kind": {
+                    "type": "string",
+                    "enum": [
+                        "single-build",
+                        "several-builds",
+                        "several-repositories",
+                        "none"
+                    ]
+                },
+                "summary": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "summary",
+                "evidence"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_StructureResult": {
+            "type": "object",
+            "properties": {
+                "conclusion": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_StructureConclusion"
+                },
+                "depth": {
+                    "type": "integer"
+                },
+                "directoriesVisited": {
+                    "type": "integer"
+                },
+                "directory": {
+                    "type": "string"
+                },
+                "git": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_service_GitReport"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "gradleBuilds": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_GradleBuildReport"
+                    }
+                },
+                "ignoreRulesNotice": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "ignoredDirectoriesSkipped": {
+                    "type": "integer"
+                },
+                "nestedRepositories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_NestedRepositoryReport"
+                    }
+                },
+                "projects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_ProjectReport"
+                    }
+                },
+                "truncated": {
+                    "type": "boolean"
+                },
+                "worktrees": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_WorktreeReport"
+                    }
+                },
+                "schemaVersion": {
+                    "const": 1
+                }
+            },
+            "required": [
+                "directory",
+                "depth",
+                "conclusion",
+                "git",
+                "worktrees",
+                "gradleBuilds",
+                "projects",
+                "nestedRepositories",
+                "directoriesVisited",
+                "ignoredDirectoriesSkipped",
+                "ignoreRulesNotice",
+                "truncated",
+                "schemaVersion"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_WorktreeReport": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "evidence": {
+                    "type": "string"
+                },
+                "exists": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "directory",
+                "exists",
+                "evidence"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

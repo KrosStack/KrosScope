@@ -1,0 +1,168 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_service_ScanResult",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:scan:1",
+    "$defs": {
+        "io_github_krosstack_kscope_service_DiagnosticEntry": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "severity": {
+                    "type": "string",
+                    "enum": [
+                        "error",
+                        "warning",
+                        "info"
+                    ]
+                }
+            },
+            "required": [
+                "severity",
+                "code",
+                "message"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_DiagnosticSummary": {
+            "type": "object",
+            "properties": {
+                "entries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_DiagnosticEntry"
+                    }
+                },
+                "errors": {
+                    "type": "integer"
+                },
+                "infos": {
+                    "type": "integer"
+                },
+                "warnings": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "errors",
+                "warnings",
+                "infos",
+                "entries"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_DifferenceEntry": {
+            "type": "object",
+            "properties": {
+                "difference": {
+                    "type": "string"
+                },
+                "producer": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "producer",
+                "unit",
+                "difference"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_ScanResult": {
+            "type": "object",
+            "properties": {
+                "artifacts": {
+                    "type": "integer"
+                },
+                "diagnostics": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_DiagnosticSummary"
+                },
+                "indexLocation": {
+                    "type": "string"
+                },
+                "stageMillis": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "unitsProduced": {
+                    "type": "integer"
+                },
+                "unitsRemoved": {
+                    "type": "integer"
+                },
+                "unitsSkipped": {
+                    "type": "integer"
+                },
+                "verification": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_service_VerificationResult"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "schemaVersion": {
+                    "const": 1
+                },
+                "indexLevel": {
+                    "type": "string",
+                    "enum": [
+                        "syntax",
+                        "resolved",
+                        "exact"
+                    ]
+                }
+            },
+            "required": [
+                "artifacts",
+                "unitsProduced",
+                "unitsSkipped",
+                "unitsRemoved",
+                "diagnostics",
+                "verification",
+                "stageMillis",
+                "indexLocation",
+                "schemaVersion",
+                "indexLevel"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_VerificationResult": {
+            "type": "object",
+            "properties": {
+                "differences": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_DifferenceEntry"
+                    }
+                },
+                "differingSearchDocuments": {
+                    "type": "integer"
+                },
+                "differingUnits": {
+                    "type": "integer"
+                },
+                "matches": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "matches",
+                "differingUnits",
+                "differences"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

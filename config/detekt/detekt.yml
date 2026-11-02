@@ -1,0 +1,87 @@
+config:
+  validation: true
+  warningsAsErrors: true
+
+comments:
+  DocumentationOverPrivateFunction:
+    active: true
+  DocumentationOverPrivateProperty:
+    active: true
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+  UndocumentedPublicProperty:
+    active: false
+
+complexity:
+  CyclomaticComplexMethod:
+    allowedComplexity: 10
+  LargeClass:
+    allowedLines: 400
+  LongMethod:
+    allowedLines: 40
+  LongParameterList:
+    allowedFunctionParameters: 5
+    allowedConstructorParameters: 5
+    ignoreDataClasses: true
+  NestedBlockDepth:
+    allowedDepth: 3
+  TooManyFunctions:
+    excludes: []
+
+exceptions:
+  InstanceOfCheckForException:
+    excludes: []
+  ThrowingExceptionsWithoutMessageOrCause:
+    excludes: []
+  TooGenericExceptionCaught:
+    excludes: []
+
+naming:
+  FunctionNaming:
+    excludes: ['**/test/**']
+
+performance:
+  ForEachOnRange:
+    excludes: []
+  SpreadOperator:
+    excludes: []
+
+potential-bugs:
+  LateinitUsage:
+    excludes: []
+  MissingPackageDeclaration:
+    excludes: []
+  UnsafeCallOnNullableType:
+    excludes: []
+
+style:
+  ForbiddenComment:
+    comments:
+      - reason: 'Open work is tracked in issues, not in comments.'
+        value: 'TODO'
+      - reason: 'Open work is tracked in issues, not in comments.'
+        value: 'FIXME'
+      - reason: 'Open work is tracked in issues, not in comments.'
+        value: 'STOPSHIP'
+  ForbiddenMethodCall:
+    active: true
+    excludes: ['**/*Detector.kt']
+    methods:
+      - reason: 'File names and extensions are inspected only inside ArtifactDetector implementations.'
+        value: 'kotlin.io.getExtension'
+      - reason: 'File names and extensions are inspected only inside ArtifactDetector implementations.'
+        value: 'kotlin.io.path.getExtension'
+  MagicNumber:
+    excludes: ['**/test/**', '**/*.kts']
+  MaxLineLength:
+    maxLineLength: 120
+
+kscope:
+  SingleBehavingType:
+    active: true
+
+ktlint:
+  active: true
+  code_style: 'intellij_idea'

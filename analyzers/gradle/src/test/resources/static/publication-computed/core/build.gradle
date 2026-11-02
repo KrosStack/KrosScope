@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+def publicationName = 'release'
+
+afterEvaluate {
+    publishing {
+        publications {
+            "$publicationName"(MavenPublication) {
+                from components.java
+                groupId 'org.example.shared'
+                artifactId 'core'
+                version project.findProperty("project.version") + versionSuffix()
+            }
+        }
+    }
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Droid</string>
+    <string name="greeting">Hello, <b>%1$s</b></string>
+    <string name="alias">@string/app_name</string>
+    <string name="from_lib">@string/lib_title</string>
+    <string name="shadowed">@string/lib_only</string>
+    <string name="library_style">@string/abc_action_bar_home_description</string>
+    <string name="platform">@android:string/ok</string>
+    <string name="app_name">Duplicate</string>
+    <plurals name="items">
+        <item quantity="one">@string/app_name</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+    <string-array name="modes">
+        <item>@string/greeting</item>
+        <item>literal</item>
+    </string-array>
+    <item name="spacer" type="id" />
+    <item name="gap" type="dimen" format="float">0.5</item>
+</resources>

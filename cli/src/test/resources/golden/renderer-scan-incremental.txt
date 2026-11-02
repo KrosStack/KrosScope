@@ -1,0 +1,10 @@
+Updated the index: 154 files, 24 of 100 work units redone (3.4 s).
+
+  Level       resolved
+  Files       154
+  Work units  24 redone, 76 reused, 0 removed
+  Problems    0 errors, 0 warnings, 5 notes
+  Index       .kscope
+
+Time by stage
+  Analysing sources  3.4 s

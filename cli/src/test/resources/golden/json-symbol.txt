@@ -1,0 +1,453 @@
+{
+  "schemaVersion": 1,
+  "indexLevel": "resolved",
+  "query": {
+    "text": "kscope gradle fixed-repository-id//:lib main greet/Greeter#",
+    "terms": [
+      "kscope",
+      "gradle",
+      "fixedrepositoryid",
+      "fixed",
+      "repository",
+      "id",
+      "lib",
+      "main",
+      "greet",
+      "greeter"
+    ],
+    "exactMentions": [
+      "greet/Greeter"
+    ],
+    "expansions": [],
+    "hints": [
+      "build"
+    ]
+  },
+  "symbols": [
+    {
+      "symbol": {
+        "id": "kscope gradle fixed-repository-id//:lib main greet/Greeter#",
+        "kind": {
+          "id": "kotlin.class",
+          "category": "type"
+        },
+        "name": "Greeter",
+        "qualifiedName": "greet.Greeter",
+        "signature": "class Greeter",
+        "container": null,
+        "visibility": "public",
+        "flags": [],
+        "origin": {
+          "type": "source"
+        },
+        "declaration": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/main/kotlin/Greeter.kt"
+          },
+          "range": {
+            "startLine": 3,
+            "startColumn": 1,
+            "endLine": 5,
+            "endColumn": 2
+          }
+        },
+        "nameLocation": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/main/kotlin/Greeter.kt"
+          },
+          "range": {
+            "startLine": 3,
+            "startColumn": 7,
+            "endLine": 3,
+            "endColumn": 14
+          }
+        },
+        "documentation": null,
+        "scope": {
+          "sourceSet": "fixed-repository-id//:lib@main",
+          "target": null,
+          "variant": null
+        },
+        "evidenceClass": "structural",
+        "certainty": "exact",
+        "attributes": {}
+      },
+      "score": 1.0857142857142856,
+      "reasons": []
+    },
+    {
+      "symbol": {
+        "id": "kscope gradle fixed-repository-id//:lib main greet/Greeter#greet(String).",
+        "kind": {
+          "id": "kotlin.function",
+          "category": "callable"
+        },
+        "name": "greet",
+        "qualifiedName": "greet.Greeter.greet",
+        "signature": "fun greet(name: String): String",
+        "container": "kscope gradle fixed-repository-id//:lib main greet/Greeter#",
+        "visibility": "public",
+        "flags": [],
+        "origin": {
+          "type": "source"
+        },
+        "declaration": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/main/kotlin/Greeter.kt"
+          },
+          "range": {
+            "startLine": 4,
+            "startColumn": 5,
+            "endLine": 4,
+            "endColumn": 53
+          }
+        },
+        "nameLocation": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/main/kotlin/Greeter.kt"
+          },
+          "range": {
+            "startLine": 4,
+            "startColumn": 9,
+            "endLine": 4,
+            "endColumn": 14
+          }
+        },
+        "documentation": null,
+        "scope": {
+          "sourceSet": "fixed-repository-id//:lib@main",
+          "target": null,
+          "variant": null
+        },
+        "evidenceClass": "structural",
+        "certainty": "exact",
+        "attributes": {}
+      },
+      "score": 0.08023715415019764,
+      "reasons": [
+        {
+          "signal": "lexical-symbol",
+          "score": 0.045454545454545456
+        },
+        {
+          "signal": "graph",
+          "score": 0.034782608695652174
+        }
+      ]
+    },
+    {
+      "symbol": {
+        "id": "kscope gradle fixed-repository-id//:lib test greet/GreeterTest#greetsByName().",
+        "kind": {
+          "id": "kotlin.function",
+          "category": "callable"
+        },
+        "name": "greetsByName",
+        "qualifiedName": "greet.GreeterTest.greetsByName",
+        "signature": "fun greetsByName()",
+        "container": "kscope gradle fixed-repository-id//:lib test greet/GreeterTest#",
+        "visibility": "public",
+        "flags": [],
+        "origin": {
+          "type": "source"
+        },
+        "declaration": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/test/kotlin/GreeterTest.kt"
+          },
+          "range": {
+            "startLine": 4,
+            "startColumn": 5,
+            "endLine": 4,
+            "endColumn": 46
+          }
+        },
+        "nameLocation": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/test/kotlin/GreeterTest.kt"
+          },
+          "range": {
+            "startLine": 4,
+            "startColumn": 9,
+            "endLine": 4,
+            "endColumn": 21
+          }
+        },
+        "documentation": null,
+        "scope": {
+          "sourceSet": "fixed-repository-id//:lib@test",
+          "target": null,
+          "variant": null
+        },
+        "evidenceClass": "structural",
+        "certainty": "exact",
+        "attributes": {}
+      },
+      "score": 0.07984189723320159,
+      "reasons": [
+        {
+          "signal": "lexical-symbol",
+          "score": 0.043478260869565216
+        },
+        {
+          "signal": "graph",
+          "score": 0.03636363636363637
+        }
+      ]
+    },
+    {
+      "symbol": {
+        "id": "kscope gradle fixed-repository-id//:app main app/Main#greeter.",
+        "kind": {
+          "id": "kotlin.property",
+          "category": "variable"
+        },
+        "name": "greeter",
+        "qualifiedName": "app.Main.greeter",
+        "signature": "private val greeter",
+        "container": "kscope gradle fixed-repository-id//:app main app/Main#",
+        "visibility": "private",
+        "flags": [],
+        "origin": {
+          "type": "source"
+        },
+        "declaration": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "app/src/main/kotlin/Main.kt"
+          },
+          "range": {
+            "startLine": 6,
+            "startColumn": 5,
+            "endLine": 6,
+            "endColumn": 36
+          }
+        },
+        "nameLocation": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "app/src/main/kotlin/Main.kt"
+          },
+          "range": {
+            "startLine": 6,
+            "startColumn": 17,
+            "endLine": 6,
+            "endColumn": 24
+          }
+        },
+        "documentation": null,
+        "scope": {
+          "sourceSet": "fixed-repository-id//:app@main",
+          "target": null,
+          "variant": null
+        },
+        "evidenceClass": "structural",
+        "certainty": "exact",
+        "attributes": {}
+      },
+      "score": 0.07333333333333333,
+      "reasons": [
+        {
+          "signal": "lexical-symbol",
+          "score": 0.04
+        },
+        {
+          "signal": "graph",
+          "score": 0.03333333333333333
+        }
+      ]
+    },
+    {
+      "symbol": {
+        "id": "kscope gradle fixed-repository-id//:lib test greet/GreeterTest#",
+        "kind": {
+          "id": "kotlin.class",
+          "category": "type"
+        },
+        "name": "GreeterTest",
+        "qualifiedName": "greet.GreeterTest",
+        "signature": "class GreeterTest",
+        "container": null,
+        "visibility": "public",
+        "flags": [],
+        "origin": {
+          "type": "source"
+        },
+        "declaration": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/test/kotlin/GreeterTest.kt"
+          },
+          "range": {
+            "startLine": 3,
+            "startColumn": 1,
+            "endLine": 5,
+            "endColumn": 2
+          }
+        },
+        "nameLocation": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "lib/src/test/kotlin/GreeterTest.kt"
+          },
+          "range": {
+            "startLine": 3,
+            "startColumn": 7,
+            "endLine": 3,
+            "endColumn": 18
+          }
+        },
+        "documentation": null,
+        "scope": {
+          "sourceSet": "fixed-repository-id//:lib@test",
+          "target": null,
+          "variant": null
+        },
+        "evidenceClass": "structural",
+        "certainty": "exact",
+        "attributes": {}
+      },
+      "score": 0.0712962962962963,
+      "reasons": [
+        {
+          "signal": "lexical-symbol",
+          "score": 0.041666666666666664
+        },
+        {
+          "signal": "graph",
+          "score": 0.02962962962962963
+        }
+      ]
+    },
+    {
+      "symbol": {
+        "id": "kscope gradle fixed-repository-id//:app main app/Main#",
+        "kind": {
+          "id": "kotlin.class",
+          "category": "type"
+        },
+        "name": "Main",
+        "qualifiedName": "app.Main",
+        "signature": "class Main",
+        "container": null,
+        "visibility": "public",
+        "flags": [],
+        "origin": {
+          "type": "source"
+        },
+        "declaration": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "app/src/main/kotlin/Main.kt"
+          },
+          "range": {
+            "startLine": 5,
+            "startColumn": 1,
+            "endLine": 9,
+            "endColumn": 2
+          }
+        },
+        "nameLocation": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "app/src/main/kotlin/Main.kt"
+          },
+          "range": {
+            "startLine": 5,
+            "startColumn": 7,
+            "endLine": 5,
+            "endColumn": 11
+          }
+        },
+        "documentation": null,
+        "scope": {
+          "sourceSet": "fixed-repository-id//:app@main",
+          "target": null,
+          "variant": null
+        },
+        "evidenceClass": "structural",
+        "certainty": "exact",
+        "attributes": {}
+      },
+      "score": 0.06923076923076923,
+      "reasons": [
+        {
+          "signal": "lexical-symbol",
+          "score": 0.038461538461538464
+        },
+        {
+          "signal": "graph",
+          "score": 0.03076923076923077
+        }
+      ]
+    },
+    {
+      "symbol": {
+        "id": "kscope gradle fixed-repository-id//:app main app/Main#run().",
+        "kind": {
+          "id": "kotlin.function",
+          "category": "callable"
+        },
+        "name": "run",
+        "qualifiedName": "app.Main.run",
+        "signature": "fun run(): String",
+        "container": "kscope gradle fixed-repository-id//:app main app/Main#",
+        "visibility": "public",
+        "flags": [],
+        "origin": {
+          "type": "source"
+        },
+        "declaration": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "app/src/main/kotlin/Main.kt"
+          },
+          "range": {
+            "startLine": 8,
+            "startColumn": 5,
+            "endLine": 8,
+            "endColumn": 47
+          }
+        },
+        "nameLocation": {
+          "artifact": {
+            "repository": "fixed-repository-id",
+            "path": "app/src/main/kotlin/Main.kt"
+          },
+          "range": {
+            "startLine": 8,
+            "startColumn": 9,
+            "endLine": 8,
+            "endColumn": 12
+          }
+        },
+        "documentation": null,
+        "scope": {
+          "sourceSet": "fixed-repository-id//:app@main",
+          "target": null,
+          "variant": null
+        },
+        "evidenceClass": "structural",
+        "certainty": "exact",
+        "attributes": {}
+      },
+      "score": 0.06903703703703704,
+      "reasons": [
+        {
+          "signal": "lexical-symbol",
+          "score": 0.037037037037037035
+        },
+        {
+          "signal": "graph",
+          "score": 0.032
+        }
+      ]
+    }
+  ]
+}

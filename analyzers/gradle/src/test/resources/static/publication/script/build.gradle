@@ -1,0 +1,7 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'org.example.script'
+version = '1.0.0'

@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'org.example.shared'
+version = '1.0'
+
+afterEvaluate {
+    version += '-SNAPSHOT'
+    publishing {
+        publications {
+            release(MavenPublication) {
+                artifactId = 'snapshot'
+            }
+        }
+    }
+}

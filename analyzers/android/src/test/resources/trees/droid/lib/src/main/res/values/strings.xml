@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lib_title">Library</string>
+    <string name="lib_only">Only in the library</string>
+    <string name="shadowed">Library version</string>
+    <string name="in_two_libs">First</string>
+</resources>

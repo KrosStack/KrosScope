@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_tasks"
+    app:startDestination="@id/taskListFragment">
+
+    <fragment
+        android:id="@+id/taskListFragment"
+        android:name="sample.tasktide.feature.tasks.TaskListFragment"
+        android:label="@string/tasks_title" />
+
+    <activity
+        android:id="@+id/taskDetailActivity"
+        android:name="sample.tasktide.feature.tasks.TaskDetailActivity"
+        android:label="@string/task_detail_title" />
+</navigation>

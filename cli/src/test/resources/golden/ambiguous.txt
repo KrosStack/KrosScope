@@ -1,0 +1,5 @@
+"Greeter" is ambiguous: 2 declarations match.
+  name           pass this to choose it
+  other.Greeter  kscope gradle <repository>//:app main other/Greeter#
+  greet.Greeter  kscope gradle <repository>//:lib main greet/Greeter#
+Run the command again with one of these values, or with path:line to pick by location.

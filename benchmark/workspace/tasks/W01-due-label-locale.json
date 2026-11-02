@@ -1,0 +1,46 @@
+{
+  "id": "W01",
+  "title": "Add a locale to the due label of the kit and use it in the app",
+  "statement": "Due labels are English only. Add a locale parameter to DueDates.label in the format module of the kit, publish it as version 1.3.0, and make dueLabel in the client module of the app pass the locale \"en\" and depend on version 1.3.0 of the format module.",
+  "category": "cross_repository_api_change",
+  "level": 4,
+  "named": true,
+  "mustEdit": [
+    "tasktide-kit/format/src/main/kotlin/sample/tasktide/format/DueDates.kt",
+    "tasktide-kit/format/build.gradle.kts",
+    "tasktide-app/client/src/main/kotlin/sample/tasktide/client/DueLabel.kt",
+    "tasktide-app/client/build.gradle.kts"
+  ],
+  "mustRead": [],
+  "symbols": [
+    {
+      "module": ":format",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.format.DueDates.label",
+      "file": "tasktide-kit/format/src/main/kotlin/sample/tasktide/format/DueDates.kt",
+      "line": 4
+    },
+    {
+      "module": ":client",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.client.dueLabel",
+      "file": "tasktide-app/client/src/main/kotlin/sample/tasktide/client/DueLabel.kt",
+      "line": 5
+    }
+  ],
+  "relationships": [
+    "coordinate_dependency_to_module:001",
+    "coordinate_reference_to_declaration:001"
+  ],
+  "changeScope": {
+    "modules": [
+      ":format",
+      ":client"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": []
+}

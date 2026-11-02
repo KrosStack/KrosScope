@@ -1,0 +1,23 @@
+Scanned 154 files in 9.0 s with 1 error.
+
+  Level       resolved
+  Files       154
+  Work units  103 redone, 0 reused, 0 removed
+  Problems    1 error, 12 warnings, 5 notes
+  Index       .kscope
+
+Problems
+  error    kotlin.worker-failed    The Kotlin worker failed: out of memory
+  warning  gradle.catalog.alias-1  The alias 1 is declared twice
+  warning  gradle.catalog.alias-2  The alias 2 is declared twice
+  warning  gradle.catalog.alias-3  The alias 3 is declared twice
+  warning  gradle.catalog.alias-4  The alias 4 is declared twice
+  warning  gradle.catalog.alias-5  The alias 5 is declared twice
+  warning  gradle.catalog.alias-6  The alias 6 is declared twice
+  warning  gradle.catalog.alias-7  The alias 7 is declared twice
+  warning  gradle.catalog.alias-8  The alias 8 is declared twice
+  warning  gradle.catalog.alias-9  The alias 9 is declared twice
+  3 more (use --format json for the full list)
+
+Time by stage
+  Analysing sources  9.0 s

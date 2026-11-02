@@ -1,0 +1,4 @@
+Looked up as a name, as requested (use --as task to analyse it as a task).
+Nothing in the index is named "greet a person by name".
+
+Run `kscope scan` if the code changed.

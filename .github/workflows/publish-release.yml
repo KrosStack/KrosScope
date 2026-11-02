@@ -1,0 +1,97 @@
+name: Publish release
+
+# Publishes a release for a v<version> tag on main: it runs the check, builds the distribution, makes sure the
+# packaged tool reports the version, and creates the GitHub release with the archives, their SHA-256 sums and
+# the version's section of CHANGELOG.md as notes. "Create release tag" starts it; so does pushing such a tag.
+# Run it by hand with the tag to publish again: the archives and notes of an existing release are replaced.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to publish, for example v0.2.0
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: publish ${{ inputs.tag || github.ref_name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Check the tag
+        id: release
+        run: bash .github/scripts/release-version.sh "$TAG" --tagged
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Make the wrapper executable
+        run: chmod +x gradlew
+
+      - name: Check
+        run: ./gradlew check
+
+      - name: Build the distribution
+        run: ./gradlew :cli:distZip :cli:distTar
+
+      - name: Run the packaged tool
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          unpacked=$(mktemp -d)
+          unzip -q "cli/build/distributions/kscope-$VERSION.zip" -d "$unpacked"
+          reported=$("$unpacked/kscope-$VERSION/bin/kscope" --version)
+          echo "$reported"
+          if [ "$reported" != "kscope version $VERSION" ]; then
+            echo "::error::The packaged tool reports \"$reported\", not version $VERSION."
+            exit 1
+          fi
+
+      - name: Prepare the assets and notes
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          mkdir release
+          cp "cli/build/distributions/kscope-$VERSION.zip" release/
+          gzip -9 -c "cli/build/distributions/kscope-$VERSION.tar" > "release/kscope-$VERSION.tar.gz"
+          (cd release && sha256sum "kscope-$VERSION.zip" "kscope-$VERSION.tar.gz" > SHA256SUMS)
+          bash .github/scripts/release-notes.sh "$VERSION" > notes.md
+          test -s notes.md
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.release.outputs.version }}
+          PRERELEASE: ${{ steps.release.outputs.prerelease }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" release/* --clobber
+            gh release edit "$TAG" --notes-file notes.md
+          else
+            flags=()
+            if [ "$PRERELEASE" = true ]; then flags+=(--prerelease); fi
+            gh release create "$TAG" release/* --verify-tag --title "KrosScope $VERSION" --notes-file notes.md "${flags[@]}"
+          fi
+          echo "Published [$TAG]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$TAG)." >> "$GITHUB_STEP_SUMMARY"

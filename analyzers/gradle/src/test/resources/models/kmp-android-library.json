@@ -1,0 +1,858 @@
+[
+ {
+  "schema": 1,
+  "path": ":",
+  "name": "tasktide",
+  "dir": "/work/tasktide",
+  "buildDir": "/work/tasktide/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1",
+   "includedBuilds": [
+    {
+     "name": "build-logic",
+     "dir": "/work/tasktide/build-logic"
+    }
+   ]
+  },
+  "plugins": [],
+  "kotlin": null,
+  "android": null,
+  "java": null,
+  "dependencies": {
+   "projects": [],
+   "external": []
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [],
+   "entries": []
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":core:model",
+  "name": "model",
+  "dir": "/work/tasktide/core/model",
+  "buildDir": "/work/tasktide/core/model/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "com.android.kotlin.multiplatform.library",
+   "org.jetbrains.kotlin.multiplatform",
+   "org.jetbrains.kotlin.plugin.serialization",
+   "tasktide.kmp.library"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [
+    {
+     "name": "androidMain",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/androidMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "commonMain",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/commonMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "commonTest",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/commonTest/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "desktopMain",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/desktopMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "desktopTest",
+     "kotlinDirs": [
+      "/work/tasktide/core/model/src/desktopTest/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonTest"
+     ]
+    }
+   ],
+   "targets": [
+    {
+     "name": "android",
+     "platformType": "androidJvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "androidMain",
+       "allSourceSets": [
+        "androidMain",
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    },
+    {
+     "name": "desktop",
+     "platformType": "jvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "desktopMain",
+       "allSourceSets": [
+        "commonMain",
+        "desktopMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "test",
+       "defaultSourceSet": "desktopTest",
+       "allSourceSets": [
+        "commonTest",
+        "desktopTest"
+       ],
+       "associatedWith": [
+        "main"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "metadata",
+     "platformType": "common",
+     "compilations": [
+      {
+       "name": "commonMain",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "main",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    }
+   ]
+  },
+  "android": {
+   "kind": "kmp-library",
+   "agpVersion": "Android Gradle Plugin version 9.3.3",
+   "namespace": "sample.tasktide.core.model",
+   "compileSdk": "36",
+   "minSdk": "24"
+  },
+  "java": [
+   {
+    "name": "desktopMain",
+    "javaDirs": [],
+    "resourceDirs": []
+   },
+   {
+    "name": "desktopTest",
+    "javaDirs": [],
+    "resourceDirs": []
+   }
+  ],
+  "dependencies": {
+   "projects": [],
+   "external": [
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-core",
+     "version": "1.11.0"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-serialization-json",
+     "version": "1.11.0"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/android-sdk/platforms/android-36/android.jar",
+    "/android-sdk/build-tools/36.0.0/core-lambda-stubs.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/1.11.0/3d57dc678bd8d72a60e7adf0eca5c54e3f4f4b79/kotlinx-coroutines-core-jvm-1.11.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-json-jvm/1.11.0/e7e045e99e56f07599bb9ccb708c2190e2af0606/kotlinx-serialization-json-jvm-1.11.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-serialization-core-jvm/1.11.0/c1905c9bf7452b045d5af9248835abe64ddad6bf/kotlinx-serialization-core-jvm-1.11.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/2.4.20/94c1451890d164aed65d43b3db0b7ecef7c183e7/kotlin-stdlib-2.4.20.jar",
+    "/work/tasktide/core/model/build/classes/kotlin/desktop/main",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-test-jvm/1.11.0/1dfe8ce2b805d913922f283b386895bd0979dfcb/kotlinx-coroutines-test-jvm-1.11.0.jar"
+   ],
+   "entries": [
+    {
+     "kind": "kotlin-compilation",
+     "name": "android/main",
+     "sourceSets": [
+      "androidMain",
+      "commonMain"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/main",
+     "sourceSets": [
+      "commonMain",
+      "desktopMain"
+     ],
+     "files": [
+      2,
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/test",
+     "sourceSets": [
+      "commonTest",
+      "desktopTest"
+     ],
+     "files": [
+      6,
+      2,
+      7,
+      3
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":data:db",
+  "name": "db",
+  "dir": "/work/tasktide/data/db",
+  "buildDir": "/work/tasktide/data/db/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "app.cash.sqldelight",
+   "com.android.kotlin.multiplatform.library",
+   "org.jetbrains.kotlin.multiplatform",
+   "tasktide.kmp.library"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [
+    {
+     "name": "androidMain",
+     "kotlinDirs": [
+      "/work/tasktide/data/db/src/androidMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "commonMain",
+     "kotlinDirs": [
+      "/work/tasktide/data/db/build/generated/sqldelight/code/TaskDatabase/commonMain",
+      "/work/tasktide/data/db/src/commonMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "commonTest",
+     "kotlinDirs": [
+      "/work/tasktide/data/db/src/commonTest/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "desktopMain",
+     "kotlinDirs": [
+      "/work/tasktide/data/db/src/desktopMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "desktopTest",
+     "kotlinDirs": [
+      "/work/tasktide/data/db/src/desktopTest/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonTest"
+     ]
+    }
+   ],
+   "targets": [
+    {
+     "name": "android",
+     "platformType": "androidJvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "androidMain",
+       "allSourceSets": [
+        "androidMain",
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    },
+    {
+     "name": "desktop",
+     "platformType": "jvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "desktopMain",
+       "allSourceSets": [
+        "commonMain",
+        "desktopMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "test",
+       "defaultSourceSet": "desktopTest",
+       "allSourceSets": [
+        "commonTest",
+        "desktopTest"
+       ],
+       "associatedWith": [
+        "main"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "metadata",
+     "platformType": "common",
+     "compilations": [
+      {
+       "name": "commonMain",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "main",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    }
+   ]
+  },
+  "android": {
+   "kind": "kmp-library",
+   "agpVersion": "Android Gradle Plugin version 9.3.3",
+   "namespace": "sample.tasktide.data.db",
+   "compileSdk": "36",
+   "minSdk": "24"
+  },
+  "java": [
+   {
+    "name": "desktopMain",
+    "javaDirs": [],
+    "resourceDirs": []
+   },
+   {
+    "name": "desktopTest",
+    "javaDirs": [],
+    "resourceDirs": []
+   }
+  ],
+  "dependencies": {
+   "projects": [
+    {
+     "configuration": "commonMainApi",
+     "path": ":core:model"
+    }
+   ],
+   "external": [
+    {
+     "configuration": "androidMainImplementation",
+     "coordinates": "app.cash.sqldelight:android-driver",
+     "version": "2.4.0"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "app.cash.sqldelight:runtime",
+     "version": "2.4.0"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonMainImplementation",
+     "coordinates": "app.cash.sqldelight:coroutines-extensions",
+     "version": "2.4.0"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    },
+    {
+     "configuration": "desktopMainImplementation",
+     "coordinates": "app.cash.sqldelight:sqlite-driver",
+     "version": "2.4.0"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [
+    {
+     "name": "TaskDatabase",
+     "packageName": "sample.tasktide.data.db"
+    }
+   ],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/android-sdk/platforms/android-36/android.jar",
+    "/android-sdk/build-tools/36.0.0/core-lambda-stubs.jar",
+    "/gradle-home/caches/9.5.1/transforms/8b8db5ef499665d6bb3e66353169f256/transformed/android-driver-2.4.0-api.jar",
+    "/work/tasktide/core/model/build/intermediates/compile_library_classes_jar/androidMain/bundleAndroidMainClassesToCompileJar/classes.jar",
+    "/work/tasktide/core/model/build/libs/model-desktop.jar",
+    "/gradle-home/caches/modules-2/files-2.1/app.cash.sqldelight/coroutines-extensions-jvm/2.4.0/6d35cddaebcb73a3d6446141f929bb0b2c3bd62/sqldelight-coroutines-extensions-jvm-2.4.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/app.cash.sqldelight/sqlite-driver/2.4.0/bba6319d69c46427650fd815d337e5de64b291d0/sqlite-driver-2.4.0.jar",
+    "/gradle-home/caches/modules-2/files-2.1/app.cash.sqldelight/jdbc-driver/2.4.0/675c4cf8037ee6ea27336e752ba6ee6dca18ac55/jdbc-driver-2.4.0.jar",
+    "/work/tasktide/data/db/build/classes/kotlin/desktop/main"
+   ],
+   "entries": [
+    {
+     "kind": "kotlin-compilation",
+     "name": "android/main",
+     "sourceSets": [
+      "androidMain",
+      "commonMain"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/main",
+     "sourceSets": [
+      "commonMain",
+      "desktopMain"
+     ],
+     "files": [
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/test",
+     "sourceSets": [
+      "commonTest",
+      "desktopTest"
+     ],
+     "files": [
+      8,
+      4,
+      5,
+      6
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":ui:shared",
+  "name": "shared",
+  "dir": "/work/tasktide/ui/shared",
+  "buildDir": "/work/tasktide/ui/shared/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "com.android.kotlin.multiplatform.library",
+   "org.jetbrains.compose",
+   "org.jetbrains.kotlin.multiplatform",
+   "org.jetbrains.kotlin.plugin.compose",
+   "tasktide.kmp.library"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [
+    {
+     "name": "androidMain",
+     "kotlinDirs": [
+      "/work/tasktide/ui/shared/build/generated/compose/resourceGenerator/kotlin/androidMainResourceCollectors"
+     ],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "commonMain",
+     "kotlinDirs": [
+      "/work/tasktide/ui/shared/build/generated/compose/resourceGenerator/kotlin/commonMainResourceAccessors",
+      "/work/tasktide/ui/shared/build/generated/compose/resourceGenerator/kotlin/commonMainResourceCollectors",
+      "/work/tasktide/ui/shared/build/generated/compose/resourceGenerator/kotlin/commonResClass",
+      "/work/tasktide/ui/shared/src/commonMain/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "commonTest",
+     "kotlinDirs": [],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "desktopDev",
+     "kotlinDirs": [],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "desktopMain",
+     "kotlinDirs": [
+      "/work/tasktide/ui/shared/build/generated/compose/resourceGenerator/kotlin/desktopMainResourceCollectors"
+     ],
+     "resourceDirs": [
+      "/work/tasktide/ui/shared/build/generated/compose/resourceGenerator/assembledResources/desktopMain"
+     ],
+     "dependsOn": [
+      "commonMain"
+     ]
+    },
+    {
+     "name": "desktopTest",
+     "kotlinDirs": [],
+     "resourceDirs": [],
+     "dependsOn": [
+      "commonTest"
+     ]
+    }
+   ],
+   "targets": [
+    {
+     "name": "android",
+     "platformType": "androidJvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "androidMain",
+       "allSourceSets": [
+        "androidMain",
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    },
+    {
+     "name": "desktop",
+     "platformType": "jvm",
+     "compilations": [
+      {
+       "name": "dev",
+       "defaultSourceSet": "desktopDev",
+       "allSourceSets": [
+        "desktopDev"
+       ],
+       "associatedWith": [
+        "main"
+       ]
+      },
+      {
+       "name": "main",
+       "defaultSourceSet": "desktopMain",
+       "allSourceSets": [
+        "commonMain",
+        "desktopMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "test",
+       "defaultSourceSet": "desktopTest",
+       "allSourceSets": [
+        "commonTest",
+        "desktopTest"
+       ],
+       "associatedWith": [
+        "main"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "metadata",
+     "platformType": "common",
+     "compilations": [
+      {
+       "name": "commonMain",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "main",
+       "defaultSourceSet": "commonMain",
+       "allSourceSets": [
+        "commonMain"
+       ],
+       "associatedWith": []
+      }
+     ]
+    }
+   ]
+  },
+  "android": {
+   "kind": "kmp-library",
+   "agpVersion": "Android Gradle Plugin version 9.3.3",
+   "namespace": "sample.tasktide.ui.shared",
+   "compileSdk": "36",
+   "minSdk": "24"
+  },
+  "java": [
+   {
+    "name": "desktopDev",
+    "javaDirs": [],
+    "resourceDirs": []
+   },
+   {
+    "name": "desktopMain",
+    "javaDirs": [],
+    "resourceDirs": []
+   },
+   {
+    "name": "desktopTest",
+    "javaDirs": [],
+    "resourceDirs": []
+   }
+  ],
+  "dependencies": {
+   "projects": [
+    {
+     "configuration": "commonMainApi",
+     "path": ":core:model"
+    }
+   ],
+   "external": [
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.compose.components:components-resources",
+     "version": "1.11.1"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.compose.foundation:foundation",
+     "version": "1.11.1"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.compose.runtime:runtime",
+     "version": "1.11.1"
+    },
+    {
+     "configuration": "commonMainApi",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "commonTestImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    },
+    {
+     "configuration": "desktopDevImplementation",
+     "coordinates": "org.jetbrains.compose.desktop:desktop-jvm-windows-x64",
+     "version": "1.11.1"
+    },
+    {
+     "configuration": "desktopDevImplementation",
+     "coordinates": "org.jetbrains.compose.hot-reload:hot-reload-runtime-api",
+     "version": "1.1.1"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/android-sdk/platforms/android-36/android.jar",
+    "/android-sdk/build-tools/36.0.0/core-lambda-stubs.jar",
+    "/work/tasktide/ui/shared/build/intermediates/compile_r_class_jar/androidMain/generateAndroidMainRFile/R.jar",
+    "/work/tasktide/core/model/build/intermediates/compile_library_classes_jar/androidMain/bundleAndroidMainClassesToCompileJar/classes.jar",
+    "/work/tasktide/ui/shared/build/classes/kotlin/desktop/main",
+    "/work/tasktide/core/model/build/libs/model-desktop.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.compose.desktop/desktop-jvm/1.11.1/1fee826ff9d1fafd500b57a22facfc0236bc14c7/desktop-jvm-1.11.1.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.compose.material/material-desktop/1.11.1/2891a6f3a62dc4c367636a521d1b680a7d6ff6d/material-desktop-1.11.1.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.compose.animation/animation-core-desktop/1.11.1/1bf633ecd1a38a1cf7a41630bc56cba0da9cc25b/animation-core-desktop-1.11.1.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.compose.animation/animation-desktop/1.11.1/f873fb28f1a08d45a4dd20a0130b3da8cadf383c/animation-desktop-1.11.1.jar",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.compose.foundation/foundation-layout-desktop/1.11.1/853fc5d01388da6515ce40b719798914012f6469/foundation-layout-desktop-1.11.1.jar"
+   ],
+   "entries": [
+    {
+     "kind": "kotlin-compilation",
+     "name": "android/main",
+     "sourceSets": [
+      "androidMain",
+      "commonMain"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/dev",
+     "sourceSets": [
+      "desktopDev"
+     ],
+     "files": [
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/main",
+     "sourceSets": [
+      "commonMain",
+      "desktopMain"
+     ],
+     "files": [
+      5,
+      8,
+      9,
+      10
+     ]
+    },
+    {
+     "kind": "kotlin-compilation",
+     "name": "desktop/test",
+     "sourceSets": [
+      "commonTest",
+      "desktopTest"
+     ],
+     "files": [
+      4,
+      5,
+      8,
+      9
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ }
+]

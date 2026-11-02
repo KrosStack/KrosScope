@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "indexLevel": "resolved",
+  "task": "greet a person by name",
+  "level": "recommended",
+  "budget": 2000,
+  "estimator": "o200k_base",
+  "totalTokens": 147,
+  "fragments": [
+    {
+      "artifact": {
+        "repository": "fixed-repository-id",
+        "path": "app/src/main/kotlin/Main.kt"
+      },
+      "range": {
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 10,
+        "endColumn": 1
+      },
+      "node": {
+        "type": "artifact",
+        "ref": {
+          "repository": "fixed-repository-id",
+          "path": "app/src/main/kotlin/Main.kt"
+        }
+      },
+      "rendering": "FILE",
+      "role": "read",
+      "relevance": 0.07826086956521738,
+      "tokens": 35,
+      "text": "package app\n\nimport greet.Greeter\n\nclass Main {\n    private val greeter = Greeter()\n\n    fun run(): String = greeter.greet(\"world\")\n}\n",
+      "sourceBacked": true,
+      "evidenceNote": null
+    },
+    {
+      "artifact": {
+        "repository": "fixed-repository-id",
+        "path": "lib/src/main/kotlin/Greeter.kt"
+      },
+      "range": {
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 6,
+        "endColumn": 1
+      },
+      "node": {
+        "type": "artifact",
+        "ref": {
+          "repository": "fixed-repository-id",
+          "path": "lib/src/main/kotlin/Greeter.kt"
+        }
+      },
+      "rendering": "FILE",
+      "role": "edit",
+      "relevance": 0.28951628082062864,
+      "tokens": 23,
+      "text": "package greet\n\nclass Greeter {\n    fun greet(name: String): String = \"Hello, $name\"\n}\n",
+      "sourceBacked": true,
+      "evidenceNote": null
+    },
+    {
+      "artifact": {
+        "repository": "fixed-repository-id",
+        "path": "lib/src/test/kotlin/GreeterTest.kt"
+      },
+      "range": {
+        "startLine": 1,
+        "startColumn": 1,
+        "endLine": 6,
+        "endColumn": 1
+      },
+      "node": {
+        "type": "artifact",
+        "ref": {
+          "repository": "fixed-repository-id",
+          "path": "lib/src/test/kotlin/GreeterTest.kt"
+        }
+      },
+      "rendering": "FILE",
+      "role": "edit",
+      "relevance": 0.29188311688311686,
+      "tokens": 25,
+      "text": "package greet\n\nclass GreeterTest {\n    fun greetsByName() = Greeter().greet(\"x\")\n}\n",
+      "sourceBacked": true,
+      "evidenceNote": null
+    }
+  ],
+  "boundaries": [],
+  "tests": [],
+  "unresolved": [],
+  "omitted": [
+    {
+      "node": {
+        "type": "symbol",
+        "id": "kscope gradle fixed-repository-id//:app main app/Main#"
+      },
+      "reason": "LEVEL_LIMIT"
+    },
+    {
+      "node": {
+        "type": "symbol",
+        "id": "kscope gradle fixed-repository-id//:app main app/Main#greeter."
+      },
+      "reason": "LEVEL_LIMIT"
+    },
+    {
+      "node": {
+        "type": "symbol",
+        "id": "kscope gradle fixed-repository-id//:app main app/Main#run()."
+      },
+      "reason": "LEVEL_LIMIT"
+    }
+  ],
+  "markdown": "Task: greet a person by name\n\n``` app/src/main/kotlin/Main.kt:1-10 [file]\npackage app\n\nimport greet.Greeter\n\nclass Main {\n    private val greeter = Greeter()\n\n    fun run(): String = greeter.greet(\"world\")\n}\n```\n\n``` lib/src/main/kotlin/Greeter.kt:1-6 [file]\npackage greet\n\nclass Greeter {\n    fun greet(name: String): String = \"Hello, $name\"\n}\n```\n\n``` lib/src/test/kotlin/GreeterTest.kt:1-6 [file]\npackage greet\n\nclass GreeterTest {\n    fun greetsByName() = Greeter().greet(\"x\")\n}\n```\n\n"
+}

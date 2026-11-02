@@ -1,0 +1,57 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "DescribedPlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 8,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": "target.pluginManager",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "java-library",
+                            "expression": "\"java-library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 6,
+                        "startColumn": 9,
+                        "endLine": 6,
+                        "endColumn": 51
+                    }
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 8,
+                "endColumn": 2
+            }
+        }
+    ]
+}

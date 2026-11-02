@@ -1,0 +1,3 @@
+rootProject.name = 'cmp'
+
+include ':ui:shared', ':desktop', ':explicit', ':plain'

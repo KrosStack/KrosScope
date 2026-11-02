@@ -1,0 +1,419 @@
+{
+  "workspaceRoot": "fixtures/reference-workspace",
+  "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+  "module": ":core:legacy",
+  "sourceSet": "main",
+  "language": "java",
+  "completeness": "Every reference from this file to a workspace or generated symbol: type references, qualifiers, constructor and method calls, property/field reads and writes, named arguments, enum entries, supertypes, overrides and resource references. Targets in libraries, the JDK and the Kotlin standard library, and local variables/parameters, are not listed. Imports of workspace symbols are listed separately.",
+  "imports": [
+    {
+      "line": 3,
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      },
+      "import": "sample.tasktide.core.model.Priority"
+    },
+    {
+      "line": 4,
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      },
+      "import": "sample.tasktide.core.model.Task"
+    }
+  ],
+  "edges": [
+    {
+      "line": 12,
+      "column": 9,
+      "text": "this",
+      "kind": "constructor_call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter",
+        "signature": "(java.lang.String)",
+        "kind": "constructor",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 15
+      }
+    },
+    {
+      "line": 16,
+      "column": 14,
+      "text": "separator",
+      "kind": "field_write",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.separator",
+        "kind": "field",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 9
+      }
+    },
+    {
+      "line": 20,
+      "column": 16,
+      "text": "separator",
+      "kind": "field_read",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.separator",
+        "kind": "field",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 9
+      }
+    },
+    {
+      "line": 23,
+      "column": 26,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 24,
+      "column": 21,
+      "text": "getTitle",
+      "kind": "call",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.title",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 24,
+      "column": 34,
+      "text": "separator",
+      "kind": "field_read",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.separator",
+        "kind": "field",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 9
+      }
+    },
+    {
+      "line": 24,
+      "column": 46,
+      "text": "priorityText",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.priorityText",
+        "signature": "(sample.tasktide.core.model.Task)",
+        "kind": "method",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 27
+      }
+    },
+    {
+      "line": 24,
+      "column": 67,
+      "text": "separator",
+      "kind": "field_read",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.separator",
+        "kind": "field",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 9
+      }
+    },
+    {
+      "line": 24,
+      "column": 79,
+      "text": "dueText",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.dueText",
+        "signature": "(sample.tasktide.core.model.Task)",
+        "kind": "method",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 36
+      }
+    },
+    {
+      "line": 27,
+      "column": 32,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 28,
+      "column": 9,
+      "text": "Priority",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Priority",
+        "kind": "enum class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Priority.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 28,
+      "column": 34,
+      "text": "getPriority",
+      "kind": "call",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.priority",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 10
+      }
+    },
+    {
+      "line": 29,
+      "column": 35,
+      "text": "PriorityLabels",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.PriorityLabels",
+        "kind": "object",
+        "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt",
+        "line": 5
+      }
+    },
+    {
+      "line": 29,
+      "column": 50,
+      "text": "UNKNOWN",
+      "kind": "const_access",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.PriorityLabels.UNKNOWN",
+        "kind": "const property",
+        "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 29,
+      "column": 60,
+      "text": "PriorityLabels",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.PriorityLabels",
+        "kind": "object",
+        "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt",
+        "line": 5
+      }
+    },
+    {
+      "line": 29,
+      "column": 75,
+      "text": "INSTANCE",
+      "kind": "object_instance_access",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.PriorityLabels",
+        "kind": "object",
+        "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt",
+        "line": 5
+      }
+    },
+    {
+      "line": 29,
+      "column": 84,
+      "text": "labelFor",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.PriorityLabels.labelFor",
+        "signature": "(sample.tasktide.core.model.Priority)",
+        "kind": "method",
+        "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/PriorityLabels.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 32,
+      "column": 24,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 33,
+      "column": 16,
+      "text": "SlugsKt",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.SlugsKt",
+        "kind": "file facade class",
+        "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/Slugs.kt",
+        "line": 5,
+        "fileFacade": true
+      }
+    },
+    {
+      "line": 33,
+      "column": 24,
+      "text": "slugify",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.slugify",
+        "signature": "(kotlin.String)",
+        "kind": "top-level function",
+        "file": "core/legacy/src/main/kotlin/sample/tasktide/core/legacy/Slugs.kt",
+        "line": 5
+      }
+    },
+    {
+      "line": 33,
+      "column": 37,
+      "text": "getTitle",
+      "kind": "call",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.title",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 8
+      }
+    },
+    {
+      "line": 36,
+      "column": 28,
+      "text": "Task",
+      "kind": "type_reference",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task",
+        "kind": "data class",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 6
+      }
+    },
+    {
+      "line": 37,
+      "column": 27,
+      "text": "getDueAt",
+      "kind": "call",
+      "target": {
+        "module": ":core:model",
+        "sourceSet": "commonMain",
+        "fqName": "sample.tasktide.core.model.Task.dueAt",
+        "kind": "property",
+        "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+        "line": 11
+      }
+    },
+    {
+      "line": 38,
+      "column": 32,
+      "text": "NO_DUE_DATE",
+      "kind": "field_read",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.NO_DUE_DATE",
+        "kind": "field",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/LegacyTaskFormatter.java",
+        "line": 7
+      }
+    },
+    {
+      "line": 38,
+      "column": 46,
+      "text": "DateUtils",
+      "kind": "qualifier",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.DateUtils",
+        "kind": "class",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/DateUtils.java",
+        "line": 7
+      }
+    },
+    {
+      "line": 38,
+      "column": 56,
+      "text": "formatIso",
+      "kind": "call",
+      "target": {
+        "module": ":core:legacy",
+        "sourceSet": "main",
+        "fqName": "sample.tasktide.core.legacy.DateUtils.formatIso",
+        "signature": "(long)",
+        "kind": "static method",
+        "file": "core/legacy/src/main/java/sample/tasktide/core/legacy/DateUtils.java",
+        "line": 13
+      }
+    }
+  ],
+  "declarations": [
+    { "kind": "class", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter", "line": 6 },
+    { "kind": "property", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.NO_DUE_DATE", "line": 7 },
+    { "kind": "property", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.separator", "line": 9 },
+    { "kind": "constructor", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.<init>", "line": 11 },
+    { "kind": "constructor", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.<init>", "line": 15 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.getSeparator", "line": 19 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.format", "line": 23 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.priorityText", "line": 27 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.slug", "line": 32 },
+    { "kind": "function", "fqName": "sample.tasktide.core.legacy.LegacyTaskFormatter.dueText", "line": 36 }
+  ]
+}

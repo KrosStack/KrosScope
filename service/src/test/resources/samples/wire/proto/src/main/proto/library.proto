@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package sample.wire.proto;
+
+enum Genre {
+  GENRE_UNSPECIFIED = 0;
+  FICTION = 1;
+  SCIENCE = 2;
+}
+
+message Book {
+  string title = 1;
+  int32 pages = 2;
+  Genre genre = 3;
+  repeated string authors = 4;
+  Publisher publisher = 5;
+
+  message Publisher {
+    string name = 1;
+  }
+}
+
+message Shelf {
+  repeated Book books = 1;
+  int64 updated_at = 2;
+}

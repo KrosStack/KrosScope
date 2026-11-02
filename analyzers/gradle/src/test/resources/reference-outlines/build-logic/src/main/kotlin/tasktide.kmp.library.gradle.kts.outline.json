@@ -1,0 +1,223 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "org.jetbrains.kotlin.multiplatform",
+                            "expression": "\"org.jetbrains.kotlin.multiplatform\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 45
+                    }
+                },
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.kotlin.multiplatform.library",
+                            "expression": "\"com.android.kotlin.multiplatform.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 3,
+                        "startColumn": 5,
+                        "endLine": 3,
+                        "endColumn": 51
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 4,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "kotlin",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "jvmToolchain",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "17",
+                            "expression": "17"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 9,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 21
+                    }
+                },
+                {
+                    "name": "jvm",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "desktop",
+                            "expression": "\"desktop\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 5,
+                        "endLine": 10,
+                        "endColumn": 19
+                    }
+                },
+                {
+                    "name": "android",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "compileSdk": "36",
+                        "minSdk": "24"
+                    },
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 15,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "compilerOptions",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "add",
+                            "receiver": "freeCompilerArgs",
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "-Xexpect-actual-classes",
+                                    "expression": "\"-Xexpect-actual-classes\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 18,
+                                "startColumn": 9,
+                                "endLine": 18,
+                                "endColumn": 56
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 17,
+                        "startColumn": 5,
+                        "endLine": 19,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "sourceSets",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "dependencies",
+                            "receiver": "commonTest",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "implementation",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "catalog.findLibrary(\"kotlin-test\").get()"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 23,
+                                        "startColumn": 13,
+                                        "endLine": 23,
+                                        "endColumn": 69
+                                    }
+                                },
+                                {
+                                    "name": "implementation",
+                                    "receiver": null,
+                                    "arguments": [
+                                        {
+                                            "name": null,
+                                            "literal": null,
+                                            "expression": "catalog.findLibrary(\"kotlinx-coroutines-test\").get()"
+                                        }
+                                    ],
+                                    "body": [],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 24,
+                                        "startColumn": 13,
+                                        "endLine": 24,
+                                        "endColumn": 81
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 22,
+                                "startColumn": 9,
+                                "endLine": 25,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 21,
+                        "startColumn": 5,
+                        "endLine": 26,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 8,
+                "startColumn": 1,
+                "endLine": 27,
+                "endColumn": 2
+            }
+        }
+    ]
+}

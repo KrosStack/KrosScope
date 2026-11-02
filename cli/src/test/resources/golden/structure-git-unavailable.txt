@@ -1,0 +1,9 @@
+A single Gradle build.
+Inspected 1 directory, 4 levels deep.
+Skipped 0 ignored directories.
+Git ignore rules were not applied: Git is unavailable.
+
+Git
+  Checkout  .
+  This is   the repository
+  Evidence  .git directory

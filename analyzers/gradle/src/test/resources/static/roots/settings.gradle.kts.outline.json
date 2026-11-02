@@ -1,0 +1,57 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "roots",
+                    "expression": "\"roots\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 27
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":wire",
+                    "expression": "\":wire\""
+                },
+                {
+                    "name": null,
+                    "literal": ":db",
+                    "expression": "\":db\""
+                },
+                {
+                    "name": null,
+                    "literal": ":native",
+                    "expression": "\":native\""
+                },
+                {
+                    "name": null,
+                    "literal": ":kmp",
+                    "expression": "\":kmp\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 43
+            }
+        }
+    ]
+}

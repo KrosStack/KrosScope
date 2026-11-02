@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/task_item_padding">
+
+    <TextView
+        android:id="@+id/detail_title"
+        style="@style/TaskTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/detail_summary"
+        style="@style/TaskMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/detail_priority"
+        style="@style/TaskMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/detail_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/task_item_padding" />
+
+    <Button
+        android:id="@+id/toggle_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/task_item_padding"
+        android:text="@string/action_mark_done" />
+
+    <include
+        android:id="@+id/missing"
+        layout="@layout/view_empty_state"
+        android:visibility="gone" />
+</LinearLayout>

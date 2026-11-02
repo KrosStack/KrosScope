@@ -1,0 +1,85 @@
+{
+    "calls": [
+        {
+            "name": "pluginManagement",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "includeBuild",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "build-logic",
+                            "expression": "\"build-logic\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 32
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "conventions",
+                    "expression": "\"conventions\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 5,
+                "endColumn": 33
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":lib",
+                    "expression": "\":lib\""
+                },
+                {
+                    "name": null,
+                    "literal": ":android",
+                    "expression": "\":android\""
+                },
+                {
+                    "name": null,
+                    "literal": ":app",
+                    "expression": "\":app\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 7,
+                "startColumn": 1,
+                "endLine": 7,
+                "endColumn": 36
+            }
+        }
+    ]
+}

@@ -1,0 +1,79 @@
+diff --git a/app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt b/app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt
+index dd216a4..a6df7b0 100644
+--- a/app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt
++++ b/app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt
+@@ -29,6 +29,7 @@ class TaskTideApp : Application(), TaskStoreProvider, SyncEngineProvider, Prefer
+             repository = repository,
+             transport = AppSyncTransport(BuildConfig.SYNC_ENDPOINT, BuildConfig.VERBOSE_LOGGING),
+             deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID),
++            clientVersion = BuildConfig.VERSION_NAME,
+         )
+     }
+ 
+diff --git a/desktop/src/main/kotlin/sample/tasktide/desktop/DesktopModule.kt b/desktop/src/main/kotlin/sample/tasktide/desktop/DesktopModule.kt
+index 2fac917..cb4cece 100644
+--- a/desktop/src/main/kotlin/sample/tasktide/desktop/DesktopModule.kt
++++ b/desktop/src/main/kotlin/sample/tasktide/desktop/DesktopModule.kt
+@@ -11,9 +11,16 @@ import java.io.File
+ class DesktopModule(databaseFile: File = defaultDatabaseFile()) {
+     val repository = TaskRepository(createTaskDatabase(DriverFactory(databaseFile)))
+ 
+-    val syncEngine = SyncEngine(repository, FakeSyncTransport(), deviceId = "desktop-${UuidGenerator().next()}")
++    val syncEngine = SyncEngine(
++        repository,
++        FakeSyncTransport(),
++        deviceId = "desktop-${UuidGenerator().next()}",
++        clientVersion = DESKTOP_VERSION,
++    )
+ }
+ 
++private const val DESKTOP_VERSION = "1.0.0"
++
+ private fun defaultDatabaseFile(): File {
+     val directory = File(System.getProperty("user.home"), ".tasktide").apply { mkdirs() }
+     return File(directory, "tasks.db")
+diff --git a/sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt b/sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt
+index 1025f59..eed3b4c 100644
+--- a/sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt
++++ b/sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt
+@@ -9,6 +9,7 @@ class SyncEngine(
+     private val repository: TaskRepository,
+     private val transport: SyncTransport,
+     private val deviceId: String,
++    private val clientVersion: String,
+ ) {
+     suspend fun sync(): SyncResult {
+         val pending = repository.pending()
+@@ -16,6 +17,7 @@ class SyncEngine(
+             device_id = deviceId,
+             since = repository.lastSyncedAt(),
+             tasks = pending.map(TaskDtoMapper::toDto),
++            client_version = clientVersion,
+         )
+         val response = try {
+             transport.exchange(request)
+diff --git a/sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt b/sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt
+index 9dad33c..9c042ad 100644
+--- a/sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt
++++ b/sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt
+@@ -16,7 +16,7 @@ import kotlin.test.assertIs
+ class SyncEngineTest {
+     private val repository = TaskRepository(createTaskDatabase(DriverFactory()))
+ 
+-    private fun engine(transport: SyncTransport) = SyncEngine(repository, transport, deviceId = "test-device")
++    private fun engine(transport: SyncTransport) = SyncEngine(repository, transport, deviceId = "test-device", clientVersion = "1.0.0")
+ 
+     @Test
+     fun pendingTasksArePushedAndRemoteTasksPulled() = runTest {
+diff --git a/sync/protocol/src/main/proto/sync.proto b/sync/protocol/src/main/proto/sync.proto
+index 935f857..8ab6d7c 100644
+--- a/sync/protocol/src/main/proto/sync.proto
++++ b/sync/protocol/src/main/proto/sync.proto
+@@ -25,6 +25,7 @@ message SyncRequest {
+   string device_id = 1;
+   int64 since = 2;
+   repeated TaskDto tasks = 3;
++  string client_version = 4;
+ }
+ 
+ message SyncResponse {

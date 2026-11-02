@@ -1,0 +1,37 @@
+{
+  "id": "T02",
+  "title": "Report the client version in every sync request",
+  "category": "proto_field_addition",
+  "statement": "The sync server needs to know which app version a device is running so it can handle older clients. Every sync request must carry the version of the client that sends it, on both the Android app and the desktop app. Add a string field `client_version` to the `SyncRequest` message and a constructor parameter `clientVersion` to `SyncEngine`. The Android app reports its version name and the desktop app reports a constant of its own.",
+  "goldFiles": [
+    "app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt",
+    "desktop/src/main/kotlin/sample/tasktide/desktop/DesktopModule.kt",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt",
+    "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt",
+    "sync/protocol/src/main/proto/sync.proto"
+  ],
+  "mayEditFiles": [],
+  "verify": {
+    "gradleTasks": [
+      ":sync:engine:test",
+      ":desktop:compileKotlin",
+      ":app:compileDemoDebugKotlin"
+    ],
+    "timeoutMinutes": 15
+  },
+  "failToPass": [
+    "sample.tasktide.sync.engine.ClientVersionWiringTest#theAndroidAppReportsItsVersion",
+    "sample.tasktide.sync.engine.ClientVersionWiringTest#theDesktopAppReportsItsVersion",
+    "sample.tasktide.sync.engine.SyncEngineTest#everyRequestCarriesTheClientVersion",
+    "sample.tasktide.sync.engine.SyncEngineTest#otherRequestFieldsAreStillFilled",
+    "sample.tasktide.sync.engine.SyncEngineTest#theVersionIsSentWhenNothingIsPending"
+  ],
+  "passToPass": [
+    "sample.tasktide.sync.engine.SyncEngineTest#pendingTasksArePushedAndRemoteTasksPulled",
+    "sample.tasktide.sync.engine.SyncEngineTest#transportFailureLeavesTasksPending",
+    "sample.tasktide.sync.engine.TaskDtoMapperTest#everyPriorityRoundTrips",
+    "sample.tasktide.sync.engine.TaskDtoMapperTest#missingDueDateIsEncodedAsZeroAndDecodedAsNull",
+    "sample.tasktide.sync.engine.TaskDtoMapperTest#tagsAndDoneFlagSurvive",
+    "sample.tasktide.sync.engine.TaskDtoMapperTest#unspecifiedPriorityBecomesNormal"
+  ]
+}

@@ -1,0 +1,346 @@
+[
+ {
+  "schema": 1,
+  "path": ":",
+  "name": "tasktide",
+  "dir": "/work/tasktide",
+  "buildDir": "/work/tasktide/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1",
+   "includedBuilds": [
+    {
+     "name": "build-logic",
+     "dir": "/work/tasktide/build-logic"
+    }
+   ]
+  },
+  "plugins": [],
+  "kotlin": null,
+  "android": null,
+  "java": null,
+  "dependencies": {
+   "projects": [],
+   "external": []
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [],
+   "entries": []
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":sync:engine",
+  "name": "engine",
+  "dir": "/work/tasktide/sync/engine",
+  "buildDir": "/work/tasktide/sync/engine/build",
+  "build": {
+   "name": "tasktide",
+   "rootDir": "/work/tasktide",
+   "included": false,
+   "gradleVersion": "9.5.1"
+  },
+  "plugins": [
+   "java",
+   "java-library",
+   "org.jetbrains.kotlin.jvm",
+   "tasktide.jvm.library"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.4.20",
+   "sourceSets": [
+    {
+     "name": "main",
+     "kotlinDirs": [
+      "/work/tasktide/sync/engine/src/main/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "test",
+     "kotlinDirs": [
+      "/work/tasktide/sync/engine/src/test/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    }
+   ],
+   "targets": [
+    {
+     "name": "",
+     "platformType": "jvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "main",
+       "allSourceSets": [
+        "main"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "test",
+       "defaultSourceSet": "test",
+       "allSourceSets": [
+        "test"
+       ],
+       "associatedWith": [
+        "main"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "android": null,
+  "java": [
+   {
+    "name": "main",
+    "javaDirs": [],
+    "resourceDirs": []
+   },
+   {
+    "name": "test",
+    "javaDirs": [],
+    "resourceDirs": []
+   }
+  ],
+  "dependencies": {
+   "projects": [
+    {
+     "configuration": "api",
+     "path": ":core:model"
+    },
+    {
+     "configuration": "api",
+     "path": ":data:db"
+    },
+    {
+     "configuration": "api",
+     "path": ":sync:protocol"
+    }
+   ],
+   "external": [
+    {
+     "configuration": "api",
+     "coordinates": "org.jetbrains.kotlin:kotlin-stdlib",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "junit:junit",
+     "version": "4.13.2"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-test",
+     "version": "2.4.20"
+    },
+    {
+     "configuration": "testImplementation",
+     "coordinates": "org.jetbrains.kotlinx:kotlinx-coroutines-test",
+     "version": "1.11.0"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/work/tasktide/data/db/build/libs/db-desktop.jar",
+    "/work/tasktide/core/model/build/libs/model-desktop.jar",
+    "/work/tasktide/sync/protocol/build/classes/kotlin/main",
+    "/gradle-home/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/1.11.0/3d57dc678bd8d72a60e7adf0eca5c54e3f4f4b79/kotlinx-coroutines-core-jvm-1.11.0.jar",
+    "/work/tasktide/sync/engine/build/classes/kotlin/main"
+   ],
+   "entries": [
+    {
+     "kind": "java",
+     "name": "main",
+     "sourceSets": [
+      "main"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "java",
+     "name": "test",
+     "sourceSets": [
+      "test"
+     ],
+     "files": [
+      4,
+      0,
+      1,
+      2
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ },
+ {
+  "schema": 1,
+  "path": ":",
+  "name": "build-logic",
+  "dir": "/work/tasktide/build-logic",
+  "buildDir": "/work/tasktide/build-logic/build",
+  "build": {
+   "name": "build-logic",
+   "rootDir": "/work/tasktide/build-logic",
+   "included": true,
+   "gradleVersion": "9.5.1",
+   "includedBuilds": []
+  },
+  "plugins": [
+   "java",
+   "java-gradle-plugin",
+   "java-library",
+   "org.gradle.kotlin.embedded-kotlin",
+   "org.gradle.kotlin.kotlin-dsl",
+   "org.gradle.kotlin.kotlin-dsl.base",
+   "org.gradle.kotlin.kotlin-dsl.compiler-settings",
+   "org.gradle.kotlin.kotlin-dsl.precompiled-script-plugins",
+   "org.jetbrains.kotlin.jvm",
+   "org.jetbrains.kotlin.plugin.assignment",
+   "org.jetbrains.kotlin.plugin.sam.with.receiver"
+  ],
+  "kotlin": {
+   "kgpVersion": "2.3.20",
+   "sourceSets": [
+    {
+     "name": "main",
+     "kotlinDirs": [
+      "/work/tasktide/build-logic/build/generated-sources/kotlin-dsl-accessors/kotlin",
+      "/work/tasktide/build-logic/build/generated-sources/kotlin-dsl-external-plugin-spec-builders/kotlin",
+      "/work/tasktide/build-logic/build/generated-sources/kotlin-dsl-plugins/kotlin",
+      "/work/tasktide/build-logic/src/main/kotlin"
+     ],
+     "resourceDirs": [],
+     "dependsOn": []
+    },
+    {
+     "name": "test",
+     "kotlinDirs": [],
+     "resourceDirs": [],
+     "dependsOn": []
+    }
+   ],
+   "targets": [
+    {
+     "name": "",
+     "platformType": "jvm",
+     "compilations": [
+      {
+       "name": "main",
+       "defaultSourceSet": "main",
+       "allSourceSets": [
+        "main"
+       ],
+       "associatedWith": []
+      },
+      {
+       "name": "test",
+       "defaultSourceSet": "test",
+       "allSourceSets": [
+        "test"
+       ],
+       "associatedWith": [
+        "main"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "android": null,
+  "java": [
+   {
+    "name": "main",
+    "javaDirs": [],
+    "resourceDirs": []
+   },
+   {
+    "name": "test",
+    "javaDirs": [],
+    "resourceDirs": []
+   }
+  ],
+  "dependencies": {
+   "projects": [],
+   "external": [
+    {
+     "configuration": "implementation",
+     "coordinates": "com.android.tools.build:gradle",
+     "version": "9.3.3"
+    },
+    {
+     "configuration": "implementation",
+     "coordinates": "org.jetbrains.kotlin:kotlin-gradle-plugin",
+     "version": "2.4.20"
+    }
+   ]
+  },
+  "generators": {
+   "sqldelightDatabases": [],
+   "wireKotlin": null,
+   "kspProcessors": []
+  },
+  "classpaths": {
+   "files": [
+    "/gradle-home/caches/9.5.1/generated-gradle-jars/gradle-api-9.5.1.jar",
+    "/gradle-home/wrapper/dists/gradle-9.5.1-bin/iq79hdu3mqx29lgffhp8bfmx/gradle-9.5.1/lib/groovy-4.0.29.jar",
+    "/gradle-home/wrapper/dists/gradle-9.5.1-bin/iq79hdu3mqx29lgffhp8bfmx/gradle-9.5.1/lib/groovy-ant-4.0.29.jar",
+    "/gradle-home/wrapper/dists/gradle-9.5.1-bin/iq79hdu3mqx29lgffhp8bfmx/gradle-9.5.1/lib/groovy-astbuilder-4.0.29.jar",
+    "/work/tasktide/build-logic/build/classes/kotlin/main",
+    "/work/tasktide/build-logic/build/resources/main"
+   ],
+   "entries": [
+    {
+     "kind": "java",
+     "name": "main",
+     "sourceSets": [
+      "main"
+     ],
+     "files": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "kind": "java",
+     "name": "test",
+     "sourceSets": [
+      "test"
+     ],
+     "files": [
+      4,
+      5,
+      0,
+      1
+     ]
+    }
+   ]
+  },
+  "errors": {}
+ }
+]

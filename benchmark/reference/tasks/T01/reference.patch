@@ -1,0 +1,53 @@
+diff --git a/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt b/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt
+index 5886f20..900bb7d 100644
+--- a/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt
++++ b/core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt
+@@ -9,6 +9,7 @@ data class Task(
+     val notes: String = "",
+     val priority: Priority = Priority.NORMAL,
+     val dueAt: Long? = null,
++    val remindAt: Long? = null,
+     val done: Boolean = false,
+     val tags: List<String> = emptyList(),
+     val syncState: SyncState = SyncState.Pending,
+diff --git a/data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt b/data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt
+index fbb338a..7230a07 100644
+--- a/data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt
++++ b/data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt
+@@ -12,6 +12,7 @@ object TaskRowMapper {
+         notes = row.notes,
+         priority = Priority.fromLevel(row.priority.toInt()),
+         dueAt = row.due_at,
++        remindAt = row.reminder_at,
+         done = row.done != 0L,
+         tags = tags,
+         syncState = syncStateOf(row.sync_state, row.synced_at),
+@@ -28,6 +29,7 @@ object TaskRowMapper {
+         sync_state = stateName(task.syncState),
+         synced_at = (task.syncState as? SyncState.Synced)?.at,
+         updated_at = task.updatedAt,
++        reminder_at = task.remindAt,
+     )
+ 
+     private fun syncStateOf(name: String, syncedAt: Long?): SyncState = when (name) {
+diff --git a/data/db/src/commonMain/sqldelight/migrations/2.sqm b/data/db/src/commonMain/sqldelight/migrations/2.sqm
+new file mode 100644
+index 0000000..c1b3804
+--- /dev/null
++++ b/data/db/src/commonMain/sqldelight/migrations/2.sqm
+@@ -0,0 +1 @@
++ALTER TABLE TaskRow ADD COLUMN reminder_at INTEGER;
+diff --git a/data/db/src/commonMain/sqldelight/sample/tasktide/data/db/Task.sq b/data/db/src/commonMain/sqldelight/sample/tasktide/data/db/Task.sq
+index 52817b2..39b66b9 100644
+--- a/data/db/src/commonMain/sqldelight/sample/tasktide/data/db/Task.sq
++++ b/data/db/src/commonMain/sqldelight/sample/tasktide/data/db/Task.sq
+@@ -7,7 +7,8 @@ CREATE TABLE TaskRow (
+     done INTEGER NOT NULL DEFAULT 0,
+     sync_state TEXT NOT NULL DEFAULT 'PENDING',
+     synced_at INTEGER,
+-    updated_at INTEGER NOT NULL
++    updated_at INTEGER NOT NULL,
++    reminder_at INTEGER
+ );
+ 
+ CREATE INDEX task_priority_idx ON TaskRow(priority);

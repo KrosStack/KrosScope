@@ -1,0 +1,30 @@
+{
+  "description": "What a build of fixtures/workspace-of-repositories leaves on disk. A test writes these files to stand in for the build; paths are <repository directory>/<path in the repository>.",
+  "outputs": [
+    {
+      "path": "tasktide-kit/text/build/libs/tasktide-text-1.0.0.jar",
+      "kind": "jar",
+      "entries": ["META-INF/MANIFEST.MF", "sample/tasktide/text/Slugs.class"]
+    },
+    {
+      "path": "tasktide-app/client/libs/tasktide-text-1.0.0.jar",
+      "kind": "jar",
+      "entries": ["META-INF/MANIFEST.MF", "sample/tasktide/text/Slugs.class"]
+    },
+    {
+      "path": "tasktide-web/dist/index.html",
+      "kind": "text",
+      "text": "<!doctype html>\n<html lang=\"en\"><head><meta charset=\"UTF-8\" /><title>TaskTide</title><script type=\"module\" src=\"/assets/index.js\"></script></head><body><ul id=\"tasks\"></ul></body></html>\n"
+    },
+    {
+      "path": "tasktide-web/dist/assets/index.js",
+      "kind": "text",
+      "text": "async function a(){return(await fetch(\"/tasks\")).json()}function b(e,t){e.replaceChildren(...t.map(n=>{const r=document.createElement(\"li\");return r.textContent=n.title,r}))}const c=document.getElementById(\"tasks\");c&&a().then(e=>b(c,e));\n//# sourceMappingURL=index.js.map\n"
+    },
+    {
+      "path": "tasktide-web/dist/assets/index.js.map",
+      "kind": "text",
+      "text": "{\"version\":3,\"file\":\"index.js\",\"sources\":[\"../../src/tasks.ts\",\"../../src/main.ts\"],\"names\":[],\"mappings\":\"\"}\n"
+    }
+  ]
+}

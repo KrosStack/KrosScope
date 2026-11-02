@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: TaskTide
+  version: 1.0.0
+paths:
+  /tasks:
+    get:
+      operationId: listTasks
+      tags:
+        - Tasks
+      responses:
+        "200":
+          description: The tasks, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+components:
+  schemas:
+    Task:
+      type: object
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: string
+        title:
+          type: string

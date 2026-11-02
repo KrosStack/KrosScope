@@ -1,0 +1,57 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "deps",
+                    "expression": "\"deps\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 26
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":app",
+                    "expression": "\":app\""
+                },
+                {
+                    "name": null,
+                    "literal": ":core:model",
+                    "expression": "\":core:model\""
+                },
+                {
+                    "name": null,
+                    "literal": ":core:model-api",
+                    "expression": "\":core:model-api\""
+                },
+                {
+                    "name": null,
+                    "literal": ":data",
+                    "expression": "\":data\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 59
+            }
+        }
+    ]
+}

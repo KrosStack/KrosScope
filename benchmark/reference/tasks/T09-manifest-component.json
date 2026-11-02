@@ -1,0 +1,45 @@
+{
+  "id": "T09",
+  "title": "Sync again after the app is updated",
+  "statement": "Background sync only starts again after the phone reboots. It must also start after the app has been updated to a new version, without the user opening it.",
+  "category": "manifest_component_change",
+  "mustEdit": [
+    "sync/service/src/main/AndroidManifest.xml",
+    "sync/service/src/main/kotlin/sample/tasktide/sync/service/BootReceiver.kt"
+  ],
+  "mustRead": [
+    "sync/service/src/main/kotlin/sample/tasktide/sync/service/SyncService.kt",
+    "sync/service/src/main/kotlin/sample/tasktide/sync/service/SyncEngineProvider.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":sync:service",
+      "file": "sync/service/src/main/AndroidManifest.xml",
+      "kind": "manifest.receiver",
+      "name": ".BootReceiver",
+      "line": 12
+    },
+    {
+      "module": ":sync:service",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.sync.service.BootReceiver",
+      "file": "sync/service/src/main/kotlin/sample/tasktide/sync/service/BootReceiver.kt",
+      "line": 7
+    }
+  ],
+  "relationships": [
+    "manifest_component_to_class:006",
+    "manifest_component_to_class:007"
+  ],
+  "changeScope": {
+    "modules": [
+      ":sync:service"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": [],
+  "notes": "There is no unit test for the receiver."
+}

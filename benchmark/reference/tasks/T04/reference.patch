@@ -1,0 +1,50 @@
+diff --git a/feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt b/feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt
+index 734c14b..9d6fdf8 100644
+--- a/feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt
++++ b/feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt
+@@ -30,7 +30,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
+         val adapter = TaskAdapter(onToggle = viewModel::toggleDone, onOpen = ::openDetail)
+         binding.taskList.layoutManager = LinearLayoutManager(requireContext())
+         binding.taskList.adapter = adapter
+-        requireActivity().title = getString(R.string.tasks_title)
++        requireActivity().title = getString(R.string.task_list_title)
+         requireActivity().addMenuProvider(ListMenu(), viewLifecycleOwner, Lifecycle.State.RESUMED)
+ 
+         viewLifecycleOwner.lifecycleScope.launch {
+diff --git a/feature/tasks/src/main/res/navigation/nav_tasks.xml b/feature/tasks/src/main/res/navigation/nav_tasks.xml
+index aa2f963..387dca6 100644
+--- a/feature/tasks/src/main/res/navigation/nav_tasks.xml
++++ b/feature/tasks/src/main/res/navigation/nav_tasks.xml
+@@ -7,7 +7,7 @@
+     <fragment
+         android:id="@+id/taskListFragment"
+         android:name="sample.tasktide.feature.tasks.TaskListFragment"
+-        android:label="@string/tasks_title" />
++        android:label="@string/task_list_title" />
+ 
+     <activity
+         android:id="@+id/taskDetailActivity"
+diff --git a/feature/tasks/src/main/res/values-de/strings.xml b/feature/tasks/src/main/res/values-de/strings.xml
+index df9903d..c3d656f 100644
+--- a/feature/tasks/src/main/res/values-de/strings.xml
++++ b/feature/tasks/src/main/res/values-de/strings.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <string name="tasks_title">Aufgaben</string>
++    <string name="task_list_title">Aufgaben</string>
+     <string name="tasks_empty_title">Nichts zu tun</string>
+     <string name="action_mark_done">Als erledigt markieren</string>
+ </resources>
+diff --git a/feature/tasks/src/main/res/values/strings.xml b/feature/tasks/src/main/res/values/strings.xml
+index 858de6f..71bb5dc 100644
+--- a/feature/tasks/src/main/res/values/strings.xml
++++ b/feature/tasks/src/main/res/values/strings.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <string name="tasks_title">Tasks</string>
++    <string name="task_list_title">Tasks</string>
+     <string name="task_detail_title">Task details</string>
+     <string name="tasks_empty_title">Nothing to do</string>
+     <string name="tasks_empty_hint">Add a task to get started.</string>

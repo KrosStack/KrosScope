@@ -1,0 +1,373 @@
+{
+    "calls": [],
+    "pluginClasses": [
+        {
+            "name": "AndroidLibraryComposePlugin",
+            "apply": [
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "target",
+                            "expression": "target"
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 4,
+                        "startColumn": 1,
+                        "endLine": 14,
+                        "endColumn": 2
+                    },
+                    "typeArguments": [
+                        "Project"
+                    ]
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": "plugin",
+                            "literal": "com.android.library",
+                            "expression": "\"com.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 13,
+                        "endLine": 7,
+                        "endColumn": 50
+                    }
+                },
+                {
+                    "name": "apply",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": "plugin",
+                            "literal": "org.jetbrains.kotlin.plugin.compose",
+                            "expression": "\"org.jetbrains.kotlin.plugin.compose\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 8,
+                        "startColumn": 13,
+                        "endLine": 8,
+                        "endColumn": 66
+                    }
+                },
+                {
+                    "name": "val",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "extension",
+                            "expression": "extension"
+                        },
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "extensions.getByType<LibraryExtension>()"
+                        }
+                    ],
+                    "body": [
+                        {
+                            "name": "getByType",
+                            "receiver": "extensions",
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 10,
+                                "startColumn": 13,
+                                "endLine": 10,
+                                "endColumn": 69
+                            },
+                            "typeArguments": [
+                                "LibraryExtension"
+                            ]
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 13,
+                        "endLine": 10,
+                        "endColumn": 69
+                    }
+                },
+                {
+                    "name": "configureCompose",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": null,
+                            "expression": "extension"
+                        }
+                    ],
+                    "body": [
+                        {
+                            "name": "val",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "this",
+                                    "expression": "this"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 13,
+                                "endLine": 11,
+                                "endColumn": 40
+                            },
+                            "typeArguments": [
+                                "Project"
+                            ]
+                        },
+                        {
+                            "name": "val",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "commonExtension",
+                                    "expression": "commonExtension"
+                                },
+                                {
+                                    "name": null,
+                                    "literal": null,
+                                    "expression": "extension"
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 13,
+                                "endLine": 11,
+                                "endColumn": 40
+                            },
+                            "typeArguments": [
+                                "CommonExtension"
+                            ]
+                        },
+                        {
+                            "name": "apply",
+                            "receiver": "commonExtension",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "apply",
+                                    "receiver": "buildFeatures",
+                                    "arguments": [],
+                                    "body": [],
+                                    "assignments": {
+                                        "compose": "true"
+                                    },
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 13,
+                                        "endLine": 11,
+                                        "endColumn": 40
+                                    }
+                                },
+                                {
+                                    "name": "dependencies",
+                                    "receiver": null,
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "val",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": "bom",
+                                                    "expression": "bom"
+                                                },
+                                                {
+                                                    "name": null,
+                                                    "literal": null,
+                                                    "expression": "libs.findLibrary(\"androidx-compose-bom\").get()"
+                                                }
+                                            ],
+                                            "body": [
+                                                {
+                                                    "name": "get",
+                                                    "receiver": "libs.findLibrary(\"androidx-compose-bom\")",
+                                                    "arguments": [],
+                                                    "body": [],
+                                                    "assignments": {},
+                                                    "range": {
+                                                        "startLine": 11,
+                                                        "startColumn": 13,
+                                                        "endLine": 11,
+                                                        "endColumn": 40
+                                                    }
+                                                }
+                                            ],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 11,
+                                                "startColumn": 13,
+                                                "endLine": 11,
+                                                "endColumn": 40
+                                            }
+                                        },
+                                        {
+                                            "name": "implementation",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": null,
+                                                    "expression": "platform(bom)"
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 11,
+                                                "startColumn": 13,
+                                                "endLine": 11,
+                                                "endColumn": 40
+                                            }
+                                        },
+                                        {
+                                            "name": "debugImplementation",
+                                            "receiver": null,
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": null,
+                                                    "expression": "libs.findLibrary(\"androidx.compose.ui\").get()"
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 11,
+                                                "startColumn": 13,
+                                                "endLine": 11,
+                                                "endColumn": 40
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 13,
+                                        "endLine": 11,
+                                        "endColumn": 40
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 13,
+                                "endLine": 11,
+                                "endColumn": 40
+                            }
+                        },
+                        {
+                            "name": "apply",
+                            "receiver": "commonExtension.buildFeatures",
+                            "arguments": [],
+                            "body": [],
+                            "assignments": {
+                                "viewBinding": "true"
+                            },
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 13,
+                                "endLine": 11,
+                                "endColumn": 40
+                            }
+                        },
+                        {
+                            "name": "apply",
+                            "receiver": "commonExtension.testOptions",
+                            "arguments": [],
+                            "body": [
+                                {
+                                    "name": "all",
+                                    "receiver": "unitTests",
+                                    "arguments": [],
+                                    "body": [
+                                        {
+                                            "name": "systemProperty",
+                                            "receiver": "it",
+                                            "arguments": [
+                                                {
+                                                    "name": null,
+                                                    "literal": "flag",
+                                                    "expression": "\"flag\""
+                                                },
+                                                {
+                                                    "name": null,
+                                                    "literal": "true",
+                                                    "expression": "\"true\""
+                                                }
+                                            ],
+                                            "body": [],
+                                            "assignments": {},
+                                            "range": {
+                                                "startLine": 11,
+                                                "startColumn": 13,
+                                                "endLine": 11,
+                                                "endColumn": 40
+                                            }
+                                        }
+                                    ],
+                                    "assignments": {},
+                                    "range": {
+                                        "startLine": 11,
+                                        "startColumn": 13,
+                                        "endLine": 11,
+                                        "endColumn": 40
+                                    }
+                                }
+                            ],
+                            "assignments": {},
+                            "range": {
+                                "startLine": 11,
+                                "startColumn": 13,
+                                "endLine": 11,
+                                "endColumn": 40
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 13,
+                        "endLine": 11,
+                        "endColumn": 40
+                    },
+                    "inlined": true
+                }
+            ],
+            "range": {
+                "startLine": 4,
+                "startColumn": 1,
+                "endLine": 14,
+                "endColumn": 2
+            }
+        }
+    ]
+}

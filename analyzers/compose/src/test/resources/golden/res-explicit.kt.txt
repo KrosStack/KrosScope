@@ -1,0 +1,17 @@
+package sample.ui.resources
+
+public object Res {
+    public object string
+    public object plurals
+    public object array
+    public object drawable
+    public object font
+    public suspend fun readBytes(path: String): ByteArray = TODO()
+    public fun getUri(path: String): String = TODO()
+}
+
+public val Res.string.priority_low: org.jetbrains.compose.resources.StringResource get() = TODO()
+public val Res.plurals.tasks: org.jetbrains.compose.resources.PluralStringResource get() = TODO()
+public val Res.array.levels: org.jetbrains.compose.resources.StringArrayResource get() = TODO()
+public val Res.drawable.ic_flag: org.jetbrains.compose.resources.DrawableResource get() = TODO()
+public val Res.font.inter: org.jetbrains.compose.resources.FontResource get() = TODO()

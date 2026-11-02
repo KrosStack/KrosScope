@@ -1,0 +1,14 @@
+The localization gate is not passed: only the original statements were measured; add --held-out to measure both.
+
+Original statements: 1 task, gate not passed
+  method                          R@5   R@10  NDCG@10
+  BM25 raw text                 1.000  1.000    0.431
+  BM25 English stopwords        1.000  1.000    0.431
+  Path order                    1.000  1.000    0.387
+  Lexical only                  1.000  1.000    1.000
+  + graph                       1.000  1.000    1.000
+  + source-of-truth projection  1.000  1.000    1.000
+  + category prior              1.000  1.000    1.000
+  KrosScope full                1.000  1.000    1.000
+
+Use --format markdown for the full report, or --format json for the data.

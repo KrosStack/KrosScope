@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package sample.tasktide.sync.v1;
+
+message PushRequest {
+  string device_id = 1;
+  repeated string task_ids = 2;
+}
+
+message PushReply {
+  int32 accepted = 1;
+}
+
+service SyncService {
+  rpc Push(PushRequest) returns (PushReply);
+}

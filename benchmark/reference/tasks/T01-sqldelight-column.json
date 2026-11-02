@@ -1,0 +1,100 @@
+{
+  "id": "T01",
+  "title": "Optional reminder time on tasks",
+  "statement": "Users want to be reminded about a task before it is due. Give every task an optional reminder timestamp that is stored locally and comes back unchanged when the task is read again. People who already have the app installed must keep their existing tasks.",
+  "category": "schema_change_sqldelight",
+  "mustEdit": [
+    "data/db/src/commonMain/sqldelight/sample/tasktide/data/db/Task.sq",
+    "data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt",
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt"
+  ],
+  "mustCreate": [
+    "data/db/src/commonMain/sqldelight/migrations/2.sqm"
+  ],
+  "mustRead": [
+    "data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRepository.kt",
+    "data/db/src/commonMain/sqldelight/migrations/1.sqm",
+    "data/db/src/desktopMain/kotlin/sample/tasktide/data/db/DriverFactory.desktop.kt",
+    "data/db/src/commonTest/kotlin/sample/tasktide/data/db/TaskRowMapperTest.kt",
+    "data/db/src/desktopTest/kotlin/sample/tasktide/data/db/TaskRepositoryTest.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":data:db",
+      "file": "data/db/src/commonMain/sqldelight/sample/tasktide/data/db/Task.sq",
+      "kind": "sq.table",
+      "name": "TaskRow",
+      "line": 1
+    },
+    {
+      "module": ":data:db",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.data.db.TaskRowMapper.toRow",
+      "signature": "(sample.tasktide.core.model.Task)",
+      "file": "data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt",
+      "line": 21
+    },
+    {
+      "module": ":data:db",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.data.db.TaskRowMapper.toTask",
+      "signature": "(sample.tasktide.data.db.TaskRow,kotlin.collections.List)",
+      "file": "data/db/src/commonMain/kotlin/sample/tasktide/data/db/TaskRowMapper.kt",
+      "line": 9
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.core.model.Task",
+      "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+      "line": 6
+    }
+  ],
+  "relationships": [
+    "sq_table_to_consumer:001",
+    "sq_table_to_consumer:002",
+    "sq_table_to_consumer:003",
+    "sq_query_to_consumer:001",
+    "sq_query_to_consumer:002",
+    "sq_query_to_consumer:003",
+    "sq_query_to_consumer:005"
+  ],
+  "changeScope": {
+    "modules": [
+      ":data:db",
+      ":core:model"
+    ],
+    "sourceSets": [
+      "commonMain",
+      "commonTest",
+      "desktopTest"
+    ],
+    "variants": []
+  },
+  "relevantTests": [
+    {
+      "module": ":data:db",
+      "sourceSet": "commonTest",
+      "fqName": "sample.tasktide.data.db.TaskRowMapperTest",
+      "file": "data/db/src/commonTest/kotlin/sample/tasktide/data/db/TaskRowMapperTest.kt"
+    },
+    {
+      "module": ":data:db",
+      "sourceSet": "desktopTest",
+      "fqName": "sample.tasktide.data.db.TaskRepositoryTest",
+      "file": "data/db/src/desktopTest/kotlin/sample/tasktide/data/db/TaskRepositoryTest.kt"
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "commonTest",
+      "fqName": "sample.tasktide.core.model.TaskTest",
+      "file": "core/model/src/commonTest/kotlin/sample/tasktide/core/model/TaskTest.kt"
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "commonTest",
+      "fqName": "sample.tasktide.core.model.TaskBundleTest",
+      "file": "core/model/src/commonTest/kotlin/sample/tasktide/core/model/TaskBundleTest.kt"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "T04",
+  "title": "Rename the task list title string",
+  "statement": "The name of the string used as the task list screen title is misleading because it is also the title of the navigation destination. Rename the resource to a name that says it is the list title, keeping the German translation working, and update everything that uses it.",
+  "category": "resource_rename",
+  "mustEdit": [
+    "feature/tasks/src/main/res/values/strings.xml",
+    "feature/tasks/src/main/res/values-de/strings.xml",
+    "feature/tasks/src/main/res/navigation/nav_tasks.xml",
+    "feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt"
+  ],
+  "mustRead": [
+    "feature/tasks/src/main/res/layout/fragment_task_list.xml",
+    "app/src/main/res/layout/activity_main.xml"
+  ],
+  "symbols": [
+    {
+      "module": ":feature:tasks",
+      "file": "feature/tasks/src/main/res/values/strings.xml",
+      "kind": "android.resource.string",
+      "name": "tasks_title",
+      "line": 3
+    },
+    {
+      "module": ":feature:tasks",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.feature.tasks.TaskListFragment",
+      "file": "feature/tasks/src/main/kotlin/sample/tasktide/feature/tasks/TaskListFragment.kt",
+      "line": 23
+    }
+  ],
+  "relationships": [
+    "resource_to_consumer:032",
+    "resource_to_consumer:033",
+    "layout_class_reference:002"
+  ],
+  "changeScope": {
+    "modules": [
+      ":feature:tasks",
+      ":app"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": []
+  },
+  "relevantTests": [
+    {
+      "module": ":feature:tasks",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.feature.tasks.TaskListViewModelTest",
+      "file": "feature/tasks/src/test/kotlin/sample/tasktide/feature/tasks/TaskListViewModelTest.kt"
+    }
+  ]
+}

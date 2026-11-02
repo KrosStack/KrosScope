@@ -1,0 +1,57 @@
+{
+    "calls": [
+        {
+            "name": "=",
+            "receiver": "rootProject.name",
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": "forms",
+                    "expression": "\"forms\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 1,
+                "endColumn": 27
+            }
+        },
+        {
+            "name": "include",
+            "receiver": null,
+            "arguments": [
+                {
+                    "name": null,
+                    "literal": ":lib",
+                    "expression": "\":lib\""
+                },
+                {
+                    "name": null,
+                    "literal": ":jvmapp",
+                    "expression": "\":jvmapp\""
+                },
+                {
+                    "name": null,
+                    "literal": ":shared",
+                    "expression": "\":shared\""
+                },
+                {
+                    "name": null,
+                    "literal": ":loop",
+                    "expression": "\":loop\""
+                }
+            ],
+            "body": [],
+            "assignments": {},
+            "range": {
+                "startLine": 3,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 47
+            }
+        }
+    ]
+}

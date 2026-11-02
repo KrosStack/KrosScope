@@ -1,0 +1,190 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.library",
+                            "expression": "\"com.android.library\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 30
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "compileSdk",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [],
+                    "assignments": {
+                        "version": "release(36)"
+                    },
+                    "range": {
+                        "startLine": 7,
+                        "startColumn": 5,
+                        "endLine": 9,
+                        "endColumn": 6
+                    }
+                },
+                {
+                    "name": "flavorDimensions",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tier",
+                            "expression": "\"tier\""
+                        },
+                        {
+                            "name": null,
+                            "literal": "store",
+                            "expression": "\"store\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 38
+                    }
+                },
+                {
+                    "name": "productFlavors",
+                    "receiver": null,
+                    "arguments": [],
+                    "body": [
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "free",
+                                    "expression": "\"free\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "dimension": "\"tier\""
+                            },
+                            "range": {
+                                "startLine": 13,
+                                "startColumn": 9,
+                                "endLine": 15,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "paid",
+                                    "expression": "\"paid\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "dimension": "\"tier\""
+                            },
+                            "range": {
+                                "startLine": 16,
+                                "startColumn": 9,
+                                "endLine": 18,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "play",
+                                    "expression": "\"play\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "dimension": "\"store\""
+                            },
+                            "range": {
+                                "startLine": 19,
+                                "startColumn": 9,
+                                "endLine": 21,
+                                "endColumn": 10
+                            }
+                        },
+                        {
+                            "name": "register",
+                            "receiver": null,
+                            "arguments": [
+                                {
+                                    "name": null,
+                                    "literal": "galaxy",
+                                    "expression": "\"galaxy\""
+                                }
+                            ],
+                            "body": [],
+                            "assignments": {
+                                "dimension": "\"store\""
+                            },
+                            "range": {
+                                "startLine": 22,
+                                "startColumn": 9,
+                                "endLine": 24,
+                                "endColumn": 10
+                            }
+                        }
+                    ],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 12,
+                        "startColumn": 5,
+                        "endLine": 25,
+                        "endColumn": 6
+                    }
+                }
+            ],
+            "assignments": {
+                "namespace": "\"sample.multi\""
+            },
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 26,
+                "endColumn": 2
+            }
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+CREATE TABLE TagRow (
+    task_id TEXT NOT NULL REFERENCES TaskRow(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    PRIMARY KEY (task_id, name)
+);
+
+selectAll:
+SELECT * FROM TagRow ORDER BY name;
+
+selectForTask:
+SELECT name FROM TagRow WHERE task_id = ? ORDER BY name;
+
+insert:
+INSERT OR IGNORE INTO TagRow(task_id, name) VALUES (?, ?);
+
+deleteForTask:
+DELETE FROM TagRow WHERE task_id = ?;

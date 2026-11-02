@@ -1,0 +1,2 @@
+rootProject.name = 'shared-libs'
+include ':aliased', ':assigned', ':builtin', ':callback', ':core', ':direct', ':late', ':literal', ':mixed', ':nested', ':ordered', ':provided', ':qualified', ':setter', ':shared', ':snapshot', ':unreadable'

@@ -1,0 +1,13 @@
+diff --git a/core/legacy/src/main/kotlin/sample/tasktide/core/legacy/CsvExporter.kt b/core/legacy/src/main/kotlin/sample/tasktide/core/legacy/CsvExporter.kt
+index f2f8aa1..a44a7f7 100644
+--- a/core/legacy/src/main/kotlin/sample/tasktide/core/legacy/CsvExporter.kt
++++ b/core/legacy/src/main/kotlin/sample/tasktide/core/legacy/CsvExporter.kt
+@@ -7,7 +7,7 @@ class CsvExporter(private val formatter: LegacyTaskFormatter = LegacyTaskFormatt
+         tasks.joinToString(separator = "\n", prefix = "$HEADER\n") { row(it) }
+ 
+     private fun row(task: Task): String {
+-        val due = DateUtils.formatIso(task.dueAt ?: 0L)
++        val due = task.dueAt?.let(DateUtils::formatIso).orEmpty()
+         return listOf(task.title.quoted(), formatter.priorityText(task), due, formatter.slug(task))
+             .joinToString(formatter.separator)
+     }

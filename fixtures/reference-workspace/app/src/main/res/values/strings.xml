@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaskTide</string>
+    <string name="quick_add_label">Add to TaskTide</string>
+    <string name="new_task_hint">What needs doing?</string>
+    <string name="add_task">Add</string>
+    <string name="sync_now">Sync now</string>
+    <string name="open_settings">Settings</string>
+    <string name="sync_status_idle">Up to date</string>
+    <string name="sync_status_running">Syncing…</string>
+    <string name="sync_status_failed">Sync failed</string>
+    <string name="limit_reached">Task limit of %1$d reached</string>
+</resources>

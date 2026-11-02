@@ -1,0 +1,6 @@
+subprojects { apply plugin: 'maven-publish' }
+
+def versionSuffix() {
+    def variant = findProperty('releaseChannel') ?: ''
+    variant == 'RC' ? '-RC' : variant == 'SNAPSHOT' ? '-SNAPSHOT' : ''
+}

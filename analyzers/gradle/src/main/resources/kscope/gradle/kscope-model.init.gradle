@@ -1,0 +1,16 @@
+// Applies the KrosScope model plugin to every project of the build, and only when the activation property names
+// the plugin jar. Without the property this script does nothing.
+initscript {
+    def pluginJar = System.getProperty('kscope.gradle.model.pluginJar')
+    if (pluginJar != null) {
+        dependencies {
+            classpath files(pluginJar)
+        }
+    }
+}
+
+if (System.getProperty('kscope.gradle.model.pluginJar') != null) {
+    gradle.allprojects { project ->
+        project.pluginManager.apply(io.github.krosstack.kscope.gradle.model.KscopeModelPlugin)
+    }
+}

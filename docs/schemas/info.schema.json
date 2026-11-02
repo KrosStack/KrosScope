@@ -1,0 +1,397 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_service_InfoResult",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:info:1",
+    "$defs": {
+        "io_github_krosstack_kscope_service_CoverageEntry": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "evidence": {
+                    "type": "string"
+                },
+                "relation": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "relation",
+                "evidence",
+                "state",
+                "count"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_InfoResult": {
+            "type": "object",
+            "properties": {
+                "artifactsByType": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "coverage": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_CoverageEntry"
+                    }
+                },
+                "diagnostics": {
+                    "type": "integer"
+                },
+                "indexLocation": {
+                    "type": "string"
+                },
+                "indexed": {
+                    "type": "boolean"
+                },
+                "metricsByName": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "repositories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_RepositoryEntry"
+                    }
+                },
+                "searchIndexPopulated": {
+                    "type": "boolean"
+                },
+                "settings": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_SettingsReport"
+                },
+                "structure": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_StructureSummary"
+                },
+                "symbolsByKind": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "toolVersion": {
+                    "type": "string"
+                },
+                "schemaVersion": {
+                    "const": 1
+                },
+                "indexLevel": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": [
+                                "syntax",
+                                "resolved",
+                                "exact"
+                            ]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "toolVersion",
+                "indexLocation",
+                "indexed",
+                "structure",
+                "artifactsByType",
+                "symbolsByKind",
+                "coverage",
+                "diagnostics",
+                "settings",
+                "schemaVersion",
+                "indexLevel"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_RepositoryEntry": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "headRevision": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "directory",
+                "headRevision"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_StructureSummary": {
+            "type": "object",
+            "properties": {
+                "buildRoots": {
+                    "type": "integer"
+                },
+                "modules": {
+                    "type": "integer"
+                },
+                "repositories": {
+                    "type": "integer"
+                },
+                "sourceSets": {
+                    "type": "integer"
+                },
+                "targets": {
+                    "type": "integer"
+                },
+                "variants": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "repositories",
+                "buildRoots",
+                "modules",
+                "sourceSets",
+                "targets",
+                "variants"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_settings_AnalyzersReport": {
+            "type": "object",
+            "properties": {
+                "aidl": {
+                    "type": "boolean"
+                },
+                "androidResources": {
+                    "type": "boolean"
+                },
+                "composeResources": {
+                    "type": "boolean"
+                },
+                "gitHistory": {
+                    "type": "boolean"
+                },
+                "indexState": {
+                    "type": "string"
+                },
+                "nativeBindings": {
+                    "type": "boolean"
+                },
+                "schemas": {
+                    "type": "boolean"
+                },
+                "webBundles": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "androidResources",
+                "aidl",
+                "schemas",
+                "nativeBindings",
+                "gitHistory",
+                "composeResources",
+                "webBundles",
+                "indexState"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_settings_LevelReport": {
+            "type": "object",
+            "properties": {
+                "origin": {
+                    "type": "string"
+                },
+                "trusted": {
+                    "type": "boolean"
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "value",
+                "origin",
+                "trusted"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_settings_ResourcesReport": {
+            "type": "object",
+            "properties": {
+                "workerHeapMib": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_SettingValue"
+                },
+                "workers": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_SettingValue"
+                }
+            },
+            "required": [
+                "workers",
+                "workerHeapMib"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_settings_ScanReport": {
+            "type": "object",
+            "properties": {
+                "exclude": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "generated": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "include": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "indexState": {
+                    "type": "string"
+                },
+                "tests": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "include",
+                "exclude",
+                "tests",
+                "generated",
+                "indexState"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_settings_SettingValue": {
+            "type": "object",
+            "properties": {
+                "origin": {
+                    "type": "string"
+                },
+                "value": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "value",
+                "origin"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_settings_SettingsIssue": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "line": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "message": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "line",
+                "key",
+                "message"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_settings_SettingsReport": {
+            "type": "object",
+            "properties": {
+                "analyzers": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_AnalyzersReport"
+                },
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_SettingsIssue"
+                    }
+                },
+                "file": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "level": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_LevelReport"
+                },
+                "resources": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_ResourcesReport"
+                },
+                "scan": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_settings_ScanReport"
+                },
+                "valid": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "file",
+                "valid",
+                "errors",
+                "resources",
+                "scan",
+                "analyzers"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

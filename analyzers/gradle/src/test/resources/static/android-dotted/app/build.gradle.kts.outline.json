@@ -1,0 +1,94 @@
+{
+    "calls": [
+        {
+            "name": "plugins",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "id",
+                    "receiver": null,
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "com.android.application",
+                            "expression": "\"com.android.application\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 2,
+                        "startColumn": 5,
+                        "endLine": 2,
+                        "endColumn": 34
+                    }
+                }
+            ],
+            "assignments": {},
+            "range": {
+                "startLine": 1,
+                "startColumn": 1,
+                "endLine": 3,
+                "endColumn": 2
+            }
+        },
+        {
+            "name": "android",
+            "receiver": null,
+            "arguments": [],
+            "body": [
+                {
+                    "name": "+=",
+                    "receiver": "flavorDimensions",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "tier",
+                            "expression": "\"tier\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 10,
+                        "startColumn": 5,
+                        "endLine": 10,
+                        "endColumn": 31
+                    }
+                },
+                {
+                    "name": "+=",
+                    "receiver": "flavorDimensions",
+                    "arguments": [
+                        {
+                            "name": null,
+                            "literal": "store",
+                            "expression": "\"store\""
+                        }
+                    ],
+                    "body": [],
+                    "assignments": {},
+                    "range": {
+                        "startLine": 11,
+                        "startColumn": 5,
+                        "endLine": 11,
+                        "endColumn": 32
+                    }
+                }
+            ],
+            "assignments": {
+                "namespace": "\"sample.dotted\"",
+                "buildFeatures.viewBinding": "true",
+                "buildFeatures.buildConfig": "true",
+                "buildFeatures.compose": "false"
+            },
+            "range": {
+                "startLine": 5,
+                "startColumn": 1,
+                "endLine": 12,
+                "endColumn": 2
+            }
+        }
+    ]
+}

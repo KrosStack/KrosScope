@@ -1,0 +1,7 @@
+* text=auto eol=lf
+
+# A freeze file is identified by the SHA-256 of its bytes, so it is stored as it was written.
+benchmark/freezes/*.json -text
+
+*.jar binary
+*.bat text eol=crlf

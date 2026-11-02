@@ -1,0 +1,14 @@
+Indexed 154 files in 9.7 s.
+
+  Level       resolved
+  Files       154
+  Work units  103 redone, 0 reused, 0 removed
+  Problems    0 errors, 0 warnings, 5 notes
+  Index       .kscope
+
+Time by stage
+  Listing files            283 ms
+  Reading the build model   2.0 s
+  Generating API surfaces  266 ms
+  Analysing sources         7.0 s
+  Linking references       146 ms

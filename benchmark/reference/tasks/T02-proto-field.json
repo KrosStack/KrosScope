@@ -1,0 +1,82 @@
+{
+  "id": "T02",
+  "title": "Report the client version in every sync request",
+  "statement": "The sync server needs to know which app version a device is running so it can handle older clients. Every sync request must carry the version of the client that sends it, on both the Android app and the desktop app.",
+  "category": "proto_field_addition",
+  "mustEdit": [
+    "sync/protocol/src/main/proto/sync.proto",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt",
+    "app/src/main/kotlin/sample/tasktide/app/TaskTideApp.kt",
+    "desktop/src/main/kotlin/sample/tasktide/desktop/DesktopModule.kt",
+    "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt"
+  ],
+  "mustRead": [
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/FakeSyncTransport.kt",
+    "app/src/main/kotlin/sample/tasktide/app/AppSyncTransport.kt",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncTransport.kt",
+    "app/build.gradle.kts"
+  ],
+  "symbols": [
+    {
+      "module": ":sync:protocol",
+      "file": "sync/protocol/src/main/proto/sync.proto",
+      "kind": "proto.message",
+      "name": "SyncRequest",
+      "line": 24
+    },
+    {
+      "module": ":sync:engine",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.sync.engine.SyncEngine",
+      "file": "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt",
+      "line": 8
+    },
+    {
+      "module": ":sync:engine",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.sync.engine.SyncEngine.sync",
+      "signature": "()",
+      "file": "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt",
+      "line": 13
+    }
+  ],
+  "relationships": [
+    "proto_message_to_consumer:006",
+    "proto_message_to_consumer:007",
+    "proto_message_to_consumer:008",
+    "proto_message_to_consumer:009",
+    "buildconfig_field_to_consumer:006"
+  ],
+  "changeScope": {
+    "modules": [
+      ":sync:protocol",
+      ":sync:engine",
+      ":app",
+      ":desktop"
+    ],
+    "sourceSets": [
+      "main",
+      "test"
+    ],
+    "variants": [
+      "demoDebug",
+      "demoRelease",
+      "fullDebug",
+      "fullRelease"
+    ]
+  },
+  "relevantTests": [
+    {
+      "module": ":sync:engine",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.sync.engine.SyncEngineTest",
+      "file": "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/SyncEngineTest.kt"
+    },
+    {
+      "module": ":sync:engine",
+      "sourceSet": "test",
+      "fqName": "sample.tasktide.sync.engine.TaskDtoMapperTest",
+      "file": "sync/engine/src/test/kotlin/sample/tasktide/sync/engine/TaskDtoMapperTest.kt"
+    }
+  ]
+}

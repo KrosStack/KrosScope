@@ -1,0 +1,40 @@
+Indexed 7 files in 2 modules: 7 symbols and 7 relationships.
+kscope <version>, index in .kscope
+
+Structure
+  Repositories  1
+  Build roots   1
+  Modules       2
+  Source sets   3
+  Targets       0
+  Variants      0
+
+Files by type (7)
+  kotlin.source        3
+  gradle.build-script  2
+  gradle.settings      1
+  markdown             1
+
+Symbols by kind (7)
+  kotlin.class     3
+  kotlin.function  3
+  kotlin.property  1
+
+Relationships (7)
+  relation    evidence     state  count
+  calls       compiler     exact      4
+  depends-on  build-model  exact      1
+  imports     compiler     exact      1
+  references  compiler     exact      1
+
+Index health
+  Level         resolved
+  Diagnostics   3
+  Search index  populated
+
+Settings
+  File         none
+  Level        resolved (default)
+  Trust        not trusted on this machine
+  Workers      automatic (default)
+  Worker heap  2,048 MiB (default)

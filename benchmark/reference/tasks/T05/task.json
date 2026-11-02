@@ -1,0 +1,44 @@
+{
+  "id": "T05",
+  "title": "Format due dates in the device time zone",
+  "category": "new_expect_actual",
+  "statement": "Due dates are always shown as the UTC calendar day, so people in other regions see the wrong day around midnight. Make the shared code aware of the device's current offset from UTC on every platform and use it when a due date is turned into text.",
+  "goldFiles": [
+    "core/model/src/androidMain/kotlin/sample/tasktide/core/model/Platform.android.kt",
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/IsoDates.kt",
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Platform.kt",
+    "core/model/src/desktopMain/kotlin/sample/tasktide/core/model/Platform.desktop.kt"
+  ],
+  "mayEditFiles": [
+    "core/model/src/commonTest/kotlin/sample/tasktide/core/model/IsoDatesTest.kt"
+  ],
+  "verify": {
+    "gradleTasks": [
+      ":core:model:desktopTest",
+      ":core:model:compileAndroidMain"
+    ],
+    "timeoutMinutes": 15
+  },
+  "failToPass": [
+    "sample.tasktide.core.model.IsoDatesZoneTest#deviceAheadOfUtcMovesLateEveningsToTheNextDay[desktop]",
+    "sample.tasktide.core.model.IsoDatesZoneTest#deviceBehindUtcMovesEarlyMorningsToThePreviousDay[desktop]",
+    "sample.tasktide.core.model.IsoDatesZoneTest#leapDaysAreFormattedInTheDeviceZone[desktop]",
+    "sample.tasktide.core.model.IsoDatesZoneTest#offsetsThatAreNotWholeHoursAreHonoured[desktop]",
+    "sample.tasktide.core.model.IsoDatesZoneTest#theOffsetFollowsTheCurrentDeviceZone[desktop]"
+  ],
+  "passToPass": [
+    "sample.tasktide.core.model.IsoDatesTest#formattedDatesHaveTheIsoShape[desktop]",
+    "sample.tasktide.core.model.IsoDatesTest#theSameInstantAlwaysGivesTheSameText[desktop]",
+    "sample.tasktide.core.model.IsoDatesTest#timestampsTwoDaysApartAreOnDifferentDays[desktop]",
+    "sample.tasktide.core.model.IsoDatesZoneTest#utcDeviceKeepsTheUtcCalendarDay[desktop]",
+    "sample.tasktide.core.model.PriorityTest#levelRoundTrips[desktop]",
+    "sample.tasktide.core.model.PriorityTest#unknownLevelFallsBackToNormal[desktop]",
+    "sample.tasktide.core.model.TaskBundleTest#bundleSurvivesJsonRoundTrip[desktop]",
+    "sample.tasktide.core.model.TaskTest#blankIdIsRejected[desktop]",
+    "sample.tasktide.core.model.TaskTest#newTaskIsPendingAndOpen[desktop]",
+    "sample.tasktide.core.model.TaskTest#toggledFlipsDoneAndRequeuesForSync[desktop]",
+    "sample.tasktide.core.model.UuidGeneratorTest#desktopPlatformIsNotMobile[desktop]",
+    "sample.tasktide.core.model.UuidGeneratorTest#generatedIdsAreUnique[desktop]",
+    "sample.tasktide.core.model.UuidGeneratorTest#generatedTaskIdWrapsGeneratorOutput[desktop]"
+  ]
+}

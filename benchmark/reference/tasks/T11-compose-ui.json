@@ -1,0 +1,55 @@
+{
+  "id": "T11",
+  "title": "Show tags on the shared task card",
+  "statement": "Task cards do not show the tags of a task. Display the tags under the title on every platform that uses the shared card, with a short localisable label. Cards without tags must look as they do today.",
+  "category": "shared_compose_ui_change",
+  "mustEdit": [
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/TaskCard.kt",
+    "ui/shared/src/commonMain/composeResources/values/strings.xml"
+  ],
+  "mustRead": [
+    "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+    "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/PriorityBadge.kt",
+    "app/src/main/kotlin/sample/tasktide/app/NextUpCard.kt",
+    "desktop/src/main/kotlin/sample/tasktide/desktop/DesktopApp.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":ui:shared",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.ui.shared.TaskCard",
+      "signature": "(sample.tasktide.core.model.Task,androidx.compose.ui.Modifier,kotlin.Function0)",
+      "file": "ui/shared/src/commonMain/kotlin/sample/tasktide/ui/shared/TaskCard.kt",
+      "line": 29
+    },
+    {
+      "module": ":core:model",
+      "sourceSet": "commonMain",
+      "fqName": "sample.tasktide.core.model.Task.tags",
+      "file": "core/model/src/commonMain/kotlin/sample/tasktide/core/model/Task.kt",
+      "line": 13
+    }
+  ],
+  "relationships": [
+    "compose_resource_to_consumer:005",
+    "compose_resource_to_consumer:006"
+  ],
+  "changeScope": {
+    "modules": [
+      ":ui:shared",
+      ":app",
+      ":desktop"
+    ],
+    "sourceSets": [
+      "commonMain"
+    ],
+    "variants": [
+      "demoDebug",
+      "demoRelease",
+      "fullDebug",
+      "fullRelease"
+    ]
+  },
+  "relevantTests": [],
+  "notes": "The shared card has no automated UI test; verification is by compiling the Android and desktop consumers."
+}

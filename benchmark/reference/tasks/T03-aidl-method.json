@@ -1,0 +1,74 @@
+{
+  "id": "T03",
+  "title": "Cancel a running sync from the UI",
+  "statement": "While a sync is running the user can only wait. Add a way for the app to cancel a running synchronisation through the background service, and let the app's sync client ask for it. Cancelling when nothing is running must be harmless.",
+  "category": "aidl_method_addition",
+  "mustEdit": [
+    "sync/service/src/main/aidl/sample/tasktide/sync/service/ISyncService.aidl",
+    "sync/service/src/main/kotlin/sample/tasktide/sync/service/SyncService.kt",
+    "app/src/main/kotlin/sample/tasktide/app/SyncServiceClient.kt"
+  ],
+  "mustRead": [
+    "sync/service/src/main/aidl/sample/tasktide/sync/service/ISyncCallback.aidl",
+    "sync/service/src/main/aidl/sample/tasktide/sync/service/SyncStatus.aidl",
+    "sync/service/src/main/kotlin/sample/tasktide/sync/service/SyncStatus.kt",
+    "app/src/main/kotlin/sample/tasktide/app/MainActivity.kt",
+    "sync/engine/src/main/kotlin/sample/tasktide/sync/engine/SyncEngine.kt"
+  ],
+  "symbols": [
+    {
+      "module": ":sync:service",
+      "file": "sync/service/src/main/aidl/sample/tasktide/sync/service/ISyncService.aidl",
+      "kind": "aidl.interface",
+      "name": "ISyncService",
+      "line": 6
+    },
+    {
+      "module": ":sync:service",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.sync.service.SyncService",
+      "file": "sync/service/src/main/kotlin/sample/tasktide/sync/service/SyncService.kt",
+      "line": 15
+    },
+    {
+      "module": ":app",
+      "sourceSet": "main",
+      "fqName": "sample.tasktide.app.SyncServiceClient",
+      "file": "app/src/main/kotlin/sample/tasktide/app/SyncServiceClient.kt",
+      "line": 16
+    }
+  ],
+  "relationships": [
+    "aidl_interface_to_implementer:001",
+    "aidl_interface_to_client:001",
+    "aidl_method_to_override:001",
+    "aidl_method_to_override:002",
+    "aidl_method_to_override:003",
+    "aidl_method_to_override:004",
+    "manifest_component_to_class:006"
+  ],
+  "changeScope": {
+    "modules": [
+      ":sync:service",
+      ":app"
+    ],
+    "sourceSets": [
+      "main"
+    ],
+    "variants": [
+      "demoDebug",
+      "demoRelease",
+      "fullDebug",
+      "fullRelease"
+    ]
+  },
+  "relevantTests": [
+    {
+      "module": ":app",
+      "sourceSet": "androidTest",
+      "fqName": "sample.tasktide.app.MainActivityTest",
+      "file": "app/src/androidTest/kotlin/sample/tasktide/app/MainActivityTest.kt"
+    }
+  ],
+  "notes": "No unit test covers the service; the instrumented test only has to keep compiling."
+}
