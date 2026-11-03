@@ -1,0 +1,10 @@
+.md-typeset .hero {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.md-typeset .hero p {
+  font-size: 1.05rem;
+  max-width: 40rem;
+  margin-inline: auto;
+}

@@ -50,7 +50,7 @@ The evidence class of an edge is the one of the mechanism that established it.
   states `generated-artifact`.
 
 Links between repositories have their own gold data and their own run. The fixture
-[`fixtures/workspace-of-repositories`](../fixtures/workspace-of-repositories/README.md) has six repositories side by
+[`fixtures/workspace-of-repositories`](https://github.com/KrosStack/KrosScope/blob/main/fixtures/workspace-of-repositories/README.md) has six repositories side by
 side, and `benchmark/workspace/gold/relationships.json` lists the 19 links between them in 11 classes, each with the
 evidence class it is expected to carry. `workspace-conformance` scans the fixture at the default level
 (`resolved`), and `WorkspaceLinkConformanceTest` runs the same check: for every class, recall 1.00 and the expected

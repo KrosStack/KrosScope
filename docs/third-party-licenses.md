@@ -1,6 +1,6 @@
 # Third-party licences
 
-KrosScope is licensed under the [Apache License 2.0](../LICENSE). This page lists what its distribution bundles and
+KrosScope is licensed under the [Apache License 2.0](https://github.com/KrosStack/KrosScope/blob/main/LICENSE). This page lists what its distribution bundles and
 what its build uses, with the licence of each component. It follows the licence policy of
 [ADR 0001](decisions/0001-platform-and-licensing.md): Apache-2.0, MIT and BSD for what is distributed, EPL-2.0 in test
 scope only, and anything else needs an ADR. **Every component below is within that policy.**

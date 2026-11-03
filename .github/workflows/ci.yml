@@ -1,11 +1,13 @@
 name: CI
 
-# One Linux run per pull request into main. Changes to documentation and its charts alone start
-# nothing.
-# Windows runs only when asked for, through "Run workflow". The same gate runs before every commit
-# through the pre-commit hook in .githooks, so a run here should confirm a result, not discover one.
+# Two jobs per pull request into main, on separate Linux runners: the tests, and the static checks
+# (compilation with warnings as errors, Detekt and the build's own rules). Changes to documentation
+# and its charts alone start nothing.
+# Windows runs the tests only when asked for, through "Run workflow". The same gate runs before every
+# commit through the pre-commit hook in .githooks, so a run here should confirm a result, not discover
+# one.
 #
-# A push to main, which is what a merge is, starts a short job that compiles and runs the static checks
+# A push to main, which is what a merge is, starts a job that compiles and runs the static checks
 # without the tests, and saves the Gradle cache. Pull request runs read that cache: they download no
 # dependency and compile only what the pull request changed.
 on:
@@ -16,6 +18,10 @@ on:
       - 'docs/**/*.md'
       - 'docs/**/*.svg'
       - 'docs/benchmarks/charts/**'
+      - 'docs/stylesheets/**'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+      - '.github/workflows/docs.yml'
       - 'LICENSE'
       - 'NOTICE'
       - 'licenses/**'
@@ -26,13 +32,17 @@ on:
       - 'docs/**/*.md'
       - 'docs/**/*.svg'
       - 'docs/benchmarks/charts/**'
+      - 'docs/stylesheets/**'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+      - '.github/workflows/docs.yml'
       - 'LICENSE'
       - 'NOTICE'
       - 'licenses/**'
   workflow_dispatch:
     inputs:
       windows:
-        description: Also run the check on Windows
+        description: Also run the tests on Windows
         type: boolean
         default: false
 
@@ -48,7 +58,8 @@ jobs:
     name: warm the cache
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # A first run on an empty cache compiles every module and analyzes it with Detekt.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
 
@@ -67,8 +78,40 @@ jobs:
       - name: Compile and check without the tests
         run: ./gradlew check -x test
 
-  check:
-    name: check (${{ matrix.os }})
+  static-checks:
+    name: static checks
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Make the wrapper executable
+        run: chmod +x gradlew
+
+      - name: Compile and check without the tests
+        run: ./gradlew check -x test
+
+      - name: Keep the reports of a failed run
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports-static-checks
+          path: '**/build/reports/detekt/'
+          retention-days: 3
+          if-no-files-found: ignore
+
+  tests:
+    name: tests (${{ matrix.os }})
     if: github.event_name != 'push'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -93,17 +136,15 @@ jobs:
         if: runner.os != 'Windows'
         run: chmod +x gradlew
 
-      - name: Check
-        run: ./gradlew check
+      - name: Test
+        run: ./gradlew test
         shell: bash
 
       - name: Keep the reports of a failed run
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: reports-${{ matrix.os }}
-          path: |
-            **/build/reports/tests/
-            **/build/reports/detekt/
+          name: reports-tests-${{ matrix.os }}
+          path: '**/build/reports/tests/'
           retention-days: 3
           if-no-files-found: ignore

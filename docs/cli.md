@@ -1,7 +1,7 @@
 # Command-line reference
 
 Every command and option of `kscope`, the `kscope.toml` settings and the environment variables. The
-[README](../README.md) gives the overview; `kscope <command> --help` prints the options of one command.
+[README](https://github.com/KrosStack/KrosScope/blob/main/README.md) gives the overview; `kscope <command> --help` prints the options of one command.
 
 ## Common options
 

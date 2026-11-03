@@ -189,9 +189,9 @@ correct, and 16 of the 183 such references in the three Now in Android files wer
 - **Ahead of both** means strictly better than both baselines on that task set and metric; a tie does not
   count. The [method](../benchmark.md) also compares the full ranking with KrosScope's own lexical-only ranking.
 - **Development and test halves** are split by time. The code is frozen before the test half is scored, once
-  per freeze; the frozen manifests are in [`benchmark/freezes`](../../benchmark/freezes/README.md).
+  per freeze; the frozen manifests are in [`benchmark/freezes`](https://github.com/KrosStack/KrosScope/blob/main/benchmark/freezes/README.md).
 
 Measurements were taken on Windows 11 with JDK 17 unless a page says otherwise. The
 [method](../benchmark.md) defines the metrics and the policy, the
 [development guide](../development.md#running-the-benchmarks) has the commands, and the charts are drawn by
-[`charts/charts.py`](charts/charts.py) from [`charts/data.json`](charts/data.json).
+[`charts/charts.py`](https://github.com/KrosStack/KrosScope/blob/main/docs/benchmarks/charts/charts.py) from [`charts/data.json`](https://github.com/KrosStack/KrosScope/blob/main/docs/benchmarks/charts/data.json).

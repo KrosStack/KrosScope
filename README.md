@@ -4,6 +4,8 @@
 change can affect, and which source to read within a token budget. It runs on your machine, with no network, cloud
 service or language model, and the same inputs always give the same output.
 
+**Documentation:** [krosstack.github.io/KrosScope](https://krosstack.github.io/KrosScope/)
+
 ## Install
 
 You need JDK 17 or newer; Git is recommended.

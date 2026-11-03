@@ -1,0 +1,113 @@
+site_name: KrosScope
+site_url: https://krosstack.github.io/KrosScope/
+site_description: Local code intelligence for Kotlin, Android and Kotlin Multiplatform projects.
+repo_url: https://github.com/KrosStack/KrosScope
+repo_name: KrosStack/KrosScope
+edit_uri: ""
+docs_dir: docs
+strict: true
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+
+extra_css:
+  - stylesheets/extra.css
+
+exclude_docs: |
+  benchmarks/charts/*.py
+  benchmarks/charts/*.json
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - getting-started.md
+      - install.md
+  - CLI reference:
+      - cli.md
+      - JSON result schemas: schemas/README.md
+  - How it works:
+      - architecture.md
+      - support-matrix.md
+      - retrieval-normalization.md
+      - retrieval-vocabulary.md
+      - Design decisions:
+          - decisions/README.md
+          - 'ADR 0001: Platform and licensing': decisions/0001-platform-and-licensing.md
+          - 'ADR 0002: Semantic analysis of Kotlin and Java': decisions/0002-semantic-analysis.md
+          - 'ADR 0003: Build model acquisition': decisions/0003-build-model-acquisition.md
+          - 'ADR 0004: Symbol identity': decisions/0004-symbol-identity.md
+          - 'ADR 0005: Evidence and resolution states': decisions/0005-evidence-and-resolution-states.md
+          - 'ADR 0006: Persistence and incrementality': decisions/0006-persistence-and-incrementality.md
+          - 'ADR 0007: Generated API surfaces': decisions/0007-generated-surfaces.md
+          - 'ADR 0008: Capability registry as the only extension mechanism': decisions/0008-capability-registry.md
+          - 'ADR 0009: Owned AIDL declaration parser': decisions/0009-aidl-declaration-parser.md
+          - 'ADR 0010: Owned SQLDelight table definition reader': decisions/0010-sqldelight-table-definition-reader.md
+          - 'ADR 0011: Deterministic retrieval': decisions/0011-deterministic-retrieval.md
+          - 'ADR 0012: Context package format and budget algorithm': decisions/0012-context-package-and-budget.md
+          - 'ADR 0013: Token estimation': decisions/0013-token-estimation.md
+          - 'ADR 0014: API digests for incremental analysis': decisions/0014-api-digests.md
+          - 'ADR 0015: A resident service, scan levels and a settings file per workspace': decisions/0015-resident-service-and-settings.md
+          - 'ADR 0016: A workspace of several repositories, linked by Maven coordinates': decisions/0016-multi-repository-workspace.md
+          - 'ADR 0017: Ordering on the query path without stored row order': decisions/0017-row-order-dropped.md
+          - 'ADR 0018: Stored trust per workspace for the exact level': decisions/0018-stored-trust-for-exact.md
+          - 'ADR 0019: Installers in shell and PowerShell, and a skill for coding agents': decisions/0019-installers-and-agent-skill.md
+          - 'ADR 0020: Repositories registered anywhere, linked through what they build for each other': decisions/0020-links-through-built-artifacts.md
+          - 'ADR 0021: A read-only map in the browser, served by `serve --map`': decisions/0021-browser-map.md
+  - Benchmarks:
+      - benchmarks/README.md
+      - benchmarks/real-repositories.md
+      - benchmarks/task-levels.md
+      - benchmarks/self-benchmark.md
+      - benchmarks/real-repository-validation.md
+      - benchmarks/performance.md
+      - benchmarks/agent-pilot.md
+      - Methodology: benchmark.md
+  - Contributing:
+      - code-guidelines.md
+      - development.md
+      - roadmap.md
+      - third-party-licenses.md

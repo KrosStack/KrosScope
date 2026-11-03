@@ -38,3 +38,6 @@ local.properties
 
 # Source packages named "build" are not build output
 !**/src/**/build/
+
+# Built documentation site
+site/
