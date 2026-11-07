@@ -1,0 +1,17 @@
+---
+title: "Modules: 0 of 12 nodes, 0 of 15 links"
+config:
+  layout: dagre
+  theme: neutral
+---
+flowchart LR
+  s0["exact: 5 links"]:::aggregate
+  s1["probable: 2 links"]:::aggregate
+  s2["heuristic: 3 links"]:::aggregate
+  s3["unresolved: 3 links"]:::aggregate
+  s4["not_analysed: 2 links"]:::aggregate
+  legend["solid: exact; dashed: probable, heuristic; dotted ?: unresolved, not-analysed; labels: relation; evidence counts; state counts; cycle: dependency cycle"]:::metadata
+  footer["Omitted links: exact=5, probable=2, heuristic=3, unresolved=3, not-analysed=2"]:::metadata
+  classDef reason stroke-dasharray:2 3
+  classDef aggregate stroke-dasharray:6 3
+  classDef metadata fill:#fff,stroke:#999

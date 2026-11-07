@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.service.settings
 
 import io.github.krosstack.kscope.engine.scope.ScanScope
 import io.github.krosstack.kscope.service.ScanLevel
+import java.nio.file.Path
 
 /** The resource settings of a workspace; null means that the settings do not set the value. */
 public data class ResourceSettings(public val workers: Int? = null, public val workerHeapMib: Int? = null)
@@ -26,8 +27,15 @@ public data class WorkspaceSettings(
     public val analyzers: AnalyzerSettings = AnalyzerSettings(),
     public val freshness: FreshnessSettings = FreshnessSettings(),
     public val level: ScanLevel? = null,
+    public val components: Map<String, Boolean> = emptyMap(),
 ) {
     public companion object {
         public val DEFAULTS: WorkspaceSettings = WorkspaceSettings()
+
+        public fun read(root: Path): WorkspaceSettings = when (val reading = SettingsFile(root).read()) {
+            SettingsReading.Absent -> DEFAULTS
+            is SettingsReading.Loaded -> reading.settings
+            is SettingsReading.Invalid -> throw InvalidSettingsException("kscope.toml", reading.issues)
+        }
     }
 }

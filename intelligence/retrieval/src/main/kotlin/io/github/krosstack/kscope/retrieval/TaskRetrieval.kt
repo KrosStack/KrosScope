@@ -23,7 +23,11 @@ public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) 
     private val queries = QueryAnalyzer(search)
     private val facts = AnalysisFacts(this.graph)
 
-    public fun analyze(text: String, stage: RetrievalStage = RetrievalStage.FULL): AnalysisResult {
+    public fun analyze(
+        text: String,
+        stage: RetrievalStage = RetrievalStage.FULL,
+        ml: MlMode = MlMode.ON,
+    ): AnalysisResult {
         val query = queries.analyze(text)
         val symbols = search(query, SearchScope.SYMBOLS, SYMBOL_LIMIT)
         val artifacts = search(query, SearchScope.ARTIFACTS, ARTIFACT_LIMIT)
@@ -36,7 +40,12 @@ public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) 
         val ranked = SymbolRanking(graph).rank(symbols, propagated, stage)
         val edits = files.filter { it.role == FileRole.EDIT }
         val tests = TestSelection(graph).select(edits)
-        return result(query, files, ranked, tests)
+        val semantic = if (stage == RetrievalStage.LEXICAL || ml == MlMode.OFF) {
+            SemanticStatus.OFF
+        } else {
+            SemanticStatus.NOT_INSTALLED
+        }
+        return result(query, files, ranked, tests).copy(semantic = semantic, stage = stage.name.lowercase())
     }
 
     private fun result(

@@ -9,6 +9,8 @@ internal enum class SharedOption {
     DETAIL,
     SECTIONS,
     NO_SERVER,
+    ML,
+    STAGE,
     ;
 
     companion object {

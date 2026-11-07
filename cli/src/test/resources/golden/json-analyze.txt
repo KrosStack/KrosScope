@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "indexLevel": "resolved",
   "query": {
     "text": "greet a person by name",
@@ -742,5 +742,11 @@
     "recommended": 147,
     "deep": 147,
     "full": 147
+  },
+  "semantic": {
+    "state": "not-installed",
+    "provider": null,
+    "model": null,
+    "behindChunks": 0
   }
 }

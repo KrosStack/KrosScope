@@ -15,6 +15,7 @@ They work before or after the command name.
 | `--sections LIST` | `analyze`, `symbol`, `related` only: print just these sections, for example `--sections tests`. |
 | `-q`, `--quiet` | No progress on standard error; errors still appear. |
 | `--no-server` | Answer without a running `kscope serve`. A scan is refused with it while a server runs. |
+| `--no-ml`, `--ml on\|off` | `analyze` only: answer without learned signals when off; JSON `semantic.state` says `off`. `--no-ml` wins. |
 
 Results go to standard output, and progress and errors to standard error.
 

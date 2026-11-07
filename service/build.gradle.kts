@@ -23,6 +23,7 @@ val kotlinWorkerRuntime = configurations.resolvable("kotlinWorkerRuntime") {
 dependencies {
     api(project(":intelligence:retrieval"))
     api(project(":intelligence:context"))
+    implementation(project(":intelligence:semantic"))
     implementation(project(":core:model"))
     implementation(project(":core:spi"))
     implementation(project(":core:engine"))
@@ -61,6 +62,10 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.test {
+    environment("KSCOPE_COMPONENTS_HOME", layout.buildDirectory.dir("kscope-components-home").get().asFile.path)
+    val semanticTestClasspath = sourceSets.test.get().runtimeClasspath
+    inputs.property("semanticComponent", providers.environmentVariable("KSCOPE_SEMANTIC_COMPONENT").orElse("absent"))
+    doFirst { systemProperty("kscope.semantic.test.classpath", semanticTestClasspath.asPath) }
     val workerClasspath = files(kotlinWorkerRuntime)
     inputs.files(workerClasspath).withPropertyName("kotlinWorkerClasspath").withNormalizer(ClasspathNormalizer::class)
     useJUnitPlatform {
@@ -68,4 +73,13 @@ tasks.test {
     }
     systemProperty("kscope.fixture", rootProject.layout.projectDirectory.dir("fixtures/reference-workspace").asFile.path)
     doFirst { systemProperty("kscope.worker.kotlin.classpath", workerClasspath.asPath) }
+}
+
+val testJar = tasks.register<Jar>("testJar") {
+    archiveClassifier = "tests"
+    from(sourceSets.test.map { it.output })
+}
+
+configurations.consumable("testElements") {
+    outgoing.artifact(testJar)
 }

@@ -3,6 +3,11 @@
 `kscope` needs JDK 17 or newer. Git is recommended. Install it once per machine, and then use it from any
 terminal.
 
+The installers bundle no Java runtime; on Windows, the optional semantic worker requires a JDK 17 whose bundled
+Microsoft Visual C++ runtime is 14.40 or newer, for example Temurin 17.0.21 or newer.
+Oracle JDK 17.0.12 bundles an older runtime that can crash ONNX initialization in the child JVM; component installation
+tests the worker and reports this failure while keeping the installation.
+
 On macOS and Linux:
 
 ```shell

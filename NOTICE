@@ -72,3 +72,8 @@ The Kotlin analysis worker (workers/kotlin/lib) is built from the Kotlin compile
 JetBrains s.r.o., which their Maven metadata licenses under the Apache License 2.0, and from Kotlin standard library
 and kotlinx artifacts under the same licence. The compiler artifact embeds further open-source libraries; see
 THIRD-PARTY-LICENSES.md.
+
+--------------------------------------------------------------------------------
+ONNX Runtime 1.31.1 (MIT), in the optional semantic component
+
+Copyright (c) Microsoft Corporation. See licenses/onnxruntime-MIT.txt.

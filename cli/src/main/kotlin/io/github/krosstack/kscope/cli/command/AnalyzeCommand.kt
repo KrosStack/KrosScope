@@ -33,7 +33,10 @@ import io.github.krosstack.kscope.service.ServiceJson
 import io.github.krosstack.kscope.service.leveled
 
 internal class AnalyzeCommand : CliktCommand(name = "analyze") {
-    private val common by RootOptions(SharedOption.PRESENTED_QUERY, FormatGuide.PLAIN_TEXT_TOO)
+    private val common by RootOptions(
+        SharedOption.PRESENTED_QUERY + setOf(SharedOption.ML, SharedOption.STAGE),
+        FormatGuide.PLAIN_TEXT_TOO,
+    )
     private val task by argument(
         "TASK",
         help = "What you want to do in your own words, or the name of a class, function or file to describe. " +
@@ -93,13 +96,13 @@ internal class AnalyzeCommand : CliktCommand(name = "analyze") {
     private fun analyse(options: ResolvedOptions, text: String, listener: ProgressListener) =
         useService(options, OpenOptions(progress = listener)) {
             it.requireIndex()
-            it.leveled(it.analyze(text))
+            it.leveled(it.analyze(text, stage = options.stage, ml = options.ml))
         }
 
     private fun route(options: ResolvedOptions, text: String, listener: ProgressListener): AnalyzeOutcome =
         useService(options, OpenOptions(progress = listener)) {
             it.requireIndex()
-            it.analyzeAs(text, IntentRouting.route(text, reading, options.workspace))
+            it.analyzeAs(text, IntentRouting.route(text, reading, options.workspace), options.ml, options.stage)
         }
 
     private fun validateSections(options: ResolvedOptions, text: String) {

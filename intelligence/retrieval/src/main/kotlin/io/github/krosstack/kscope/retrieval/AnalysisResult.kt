@@ -9,6 +9,8 @@ import io.github.krosstack.kscope.model.Symbol
 import io.github.krosstack.kscope.model.SymbolCategory
 import io.github.krosstack.kscope.model.context.ContextLevel
 import io.github.krosstack.kscope.model.context.TokenCount
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -58,6 +60,7 @@ public data class ChangeScope(
 public data class RiskFact(public val node: NodeRef, public val name: String, public val value: Double)
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 public data class AnalysisResult(
     public val query: AnalyzedQuery,
     public val files: List<RankedFile>,
@@ -73,6 +76,8 @@ public data class AnalysisResult(
     public val boundaryPaths: List<List<Relationship>> = emptyList(),
     public val boundaryPathsTruncated: Boolean = false,
     public val contextEstimates: Map<ContextLevel, TokenCount> = emptyMap(),
+    public val semantic: SemanticStatus = SemanticStatus.NOT_INSTALLED,
+    @EncodeDefault(EncodeDefault.Mode.NEVER) public val stage: String = "full",
 )
 
 @Serializable

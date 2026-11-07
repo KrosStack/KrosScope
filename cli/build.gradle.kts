@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.jna)
     implementation(libs.tomlj)
+    testImplementation(project(path = ":service", configuration = "testElements"))
     add(kotlinWorkerDependencies.name, project(":analyzers:kotlin-worker"))
 }
 
@@ -66,6 +67,9 @@ distributions {
 }
 
 tasks.test {
+    environment("KSCOPE_COMPONENTS_HOME", layout.buildDirectory.dir("kscope-components-home").get().asFile.path)
+    val semanticTestClasspath = sourceSets.test.get().runtimeClasspath
+    doFirst { systemProperty("kscope.semantic.test.classpath", semanticTestClasspath.asPath) }
     val workerClasspath = files(kotlinWorkerRuntime)
     val installed = layout.buildDirectory.dir("install/kscope")
     inputs.files(workerClasspath).withPropertyName("kotlinWorkerClasspath").withNormalizer(ClasspathNormalizer::class)

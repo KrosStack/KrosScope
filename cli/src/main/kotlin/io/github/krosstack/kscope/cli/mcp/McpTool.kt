@@ -46,7 +46,14 @@ internal data class McpTool(
 
     private fun command(values: JsonObject): List<String> {
         val options = fields.filterNot { it.required }.flatMap { field ->
-            values[field.name]?.let { listOf("--${field.name}", (it as JsonPrimitive).content) }.orEmpty()
+            values[field.name]?.let {
+                val value = when {
+                    field.booleanDefault == null -> (it as JsonPrimitive).content
+                    it == JsonPrimitive(false) -> "off"
+                    else -> "on"
+                }
+                listOf("--${field.name}", value)
+            }.orEmpty()
         }
         val text = fields.firstOrNull { it.required }?.let { (values.getValue(it.name) as JsonPrimitive).content }
         val format = when (name) {

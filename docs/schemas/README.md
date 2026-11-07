@@ -1,6 +1,6 @@
 # JSON result schemas
 
-These Draft 2020-12 schemas describe version 1 of the CLI JSON results and benchmark reports.
+These Draft 2020-12 schemas describe version 2 of analysis JSON and version 1 of the other CLI JSON results and benchmark reports.
 They are generated from Kotlin serialization descriptors. Inline identifiers remain JSON scalars;
 sealed values retain their `type` discriminator. Token counts are nonnegative integers.
 

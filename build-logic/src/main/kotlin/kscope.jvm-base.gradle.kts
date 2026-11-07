@@ -127,6 +127,10 @@ val verifyModuleDependencies = tasks.register<VerifyModuleDependencies>("verifyM
     group = "verification"
     description = "Fails when this module declares a project dependency that the module rules do not allow."
     modulePath = ownModulePath
+    runtimeModules = configurations.runtimeClasspath.map { runtime ->
+        runtime.incoming.resolutionResult.allComponents.mapNotNull { it.moduleVersion?.let { "${it.group}:${it.name}" } }
+            .toSet()
+    }
     declaredProjectDependencies = provider {
         configurations.filter { it.name != detektPluginDependencies.name }
             .flatMap { it.dependencies.withType<ProjectDependency>() }.map { it.path }

@@ -560,7 +560,8 @@
                         "exact",
                         "test-relation",
                         "test-reference",
-                        "test-edit"
+                        "test-edit",
+                        "semantic"
                     ]
                 }
             },

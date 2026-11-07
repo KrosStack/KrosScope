@@ -19,6 +19,7 @@ import io.github.krosstack.kscope.cli.command.RelatedCommand
 import io.github.krosstack.kscope.cli.command.ScanCommand
 import io.github.krosstack.kscope.cli.command.SymbolCommand
 import io.github.krosstack.kscope.cli.command.TrustCommand
+import io.github.krosstack.kscope.cli.components.ComponentsCommand
 import io.github.krosstack.kscope.cli.mcp.McpCommand
 import io.github.krosstack.kscope.cli.serve.ServeCommand
 import io.github.krosstack.kscope.cli.service.ServiceCommand
@@ -47,6 +48,7 @@ internal class KscopeCommand(
         )
         if (!execution.serving) {
             subcommands(TrustCommand(), WorkspaceCommand(), DoctorCommand(), BenchmarkCommand())
+            subcommands(ComponentsCommand())
             subcommands(ServeCommand(), serviceCommand(), McpCommand(), SkillCommand())
         }
         versionOption(KrosScope.toolVersion())

@@ -11,9 +11,11 @@ class CommonOptionsHelpTest {
     private val dotWord = Regex("""\bdot\b""")
 
     @Test
-    fun `no command lists no-ml and every command still accepts it`() = inWorkspace { workspace ->
+    fun `root and analyze list ml controls and every command still accepts no ml`() = inWorkspace { workspace ->
         (listOf(emptyList<String>()) + allCommandPaths()).forEach { path ->
-            assertFalse(helpOf(path).contains("--no-ml"), "${path.joinToString(" ")} lists --no-ml")
+            val expected = path.isEmpty() || path == listOf("analyze")
+            assertEquals(expected, helpOf(path).contains("--no-ml"), path.joinToString(" "))
+            assertEquals(expected, helpOf(path).lists("--ml"), path.joinToString(" "))
         }
 
         val before = runKscope("--no-ml", "info", "--structure", "--workspace", workspace.toString())
@@ -92,7 +94,7 @@ class CommonOptionsHelpTest {
             listOf("context") to query,
             listOf("impact") to query,
             listOf("graph") to query,
-            listOf("analyze") to query + listOf("--detail", "--sections"),
+            listOf("analyze") to query + listOf("--detail", "--sections", "--no-ml", "--ml", "--stage"),
             listOf("symbol") to query + listOf("--detail", "--sections"),
             listOf("related") to query + listOf("--detail", "--sections"),
             listOf("info") to listOf("--workspace", "--format", "--no-server"),
@@ -102,6 +104,9 @@ class CommonOptionsHelpTest {
             listOf("service") to listOf("--workspace"),
             listOf("serve") to listOf("--workspace"),
             listOf("trust") to listOf("--workspace"),
+            listOf("components") to listOf("--workspace", "--format"),
+            listOf("components", "list") to listOf("--workspace", "--format"),
+            listOf("components", "status") to listOf("--format"),
         )
 
         allCommandPaths().forEach { path ->
