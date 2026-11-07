@@ -40,6 +40,9 @@ public enum class SignalKind {
 
     @SerialName("test-edit")
     TEST_EDIT,
+
+    @SerialName("semantic")
+    SEMANTIC,
 }
 
 @Serializable

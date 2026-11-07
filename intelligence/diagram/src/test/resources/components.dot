@@ -1,0 +1,22 @@
+digraph diagram {
+  graph [label="Components: 4 of 4 nodes, 12 of 12 links", labelloc=t];
+  rankdir=LR;
+  n1 [label="alpha"];
+  n2 [label="beta"];
+  r1 [label="artifact.missing (3)", shape=box, style=dotted];
+  r2 [label="artifact.not-analysed (2)", shape=box, style=dotted];
+  n1 -> r1 [label="? depends_on; build-model=1; unresolved=1", style=dotted];
+  n1 -> r2 [label="? depends_on; build-model=1; not-analysed=1", style=dotted];
+  n1 -> n2 [label="depends_on:generator-input; build-model=1; exact=1", style=solid];
+  n1 -> n2 [label="depends_on:jvm-library; content=1; exact=1", style=solid];
+  n1 -> n2 [label="depends_on:maven-coordinates; build-model=1; exact=1", style=solid];
+  n1 -> n2 [label="depends_on:native-library; build-model=1; probable=1", style=dashed];
+  n1 -> n2 [label="depends_on:web-bundle; build-model=1; heuristic=1", style=dashed];
+  n2 -> n1 [label="binds:native-library; build-model=1; heuristic=1", style=dashed];
+  n2 -> n1 [label="binds:openapi-route; build-model=1; probable=1", style=dashed];
+  n2 -> r1 [label="? depends_on:jvm-library; build-model=1; unresolved=1", style=dotted];
+  n2 -> r2 [label="? depends_on:native-library; build-model=1; not-analysed=1", style=dotted];
+  n2 -> r1 [label="? depends_on:web-bundle; build-model=1; unresolved=1", style=dotted];
+  legend [label="solid: exact; dashed: probable, heuristic; dotted ?: unresolved, not-analysed; labels: relation; evidence counts; state counts; cycle: dependency cycle", shape=note];
+  footer [label="Omitted links: exact=0, probable=0, heuristic=0, unresolved=0, not-analysed=0", shape=note];
+}

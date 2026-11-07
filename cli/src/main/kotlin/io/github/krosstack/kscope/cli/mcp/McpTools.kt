@@ -23,6 +23,8 @@ internal object McpTools {
             listOf(
                 McpArgument("query", "A task description, symbol name or workspace file."),
                 McpArgument("detail", "How much detail to return.", false, listOf("brief", "standard", "full")),
+                McpArgument("ml", "Use learned signals when installed.", false, booleanDefault = true),
+                McpArgument("stage", "Task retrieval stage; defaults to full.", false, listOf("full", "lexical")),
             ),
         ),
         McpTool(

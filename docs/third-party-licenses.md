@@ -118,3 +118,12 @@ The Analysis API jars themselves contain only `org.jetbrains.kotlin` code.
 JUnit Jupiter's aggregate and params artifacts publish no POM licence element; the licence is that of the JUnit
 artifacts that declare it (`junit-jupiter-api`, `junit-jupiter-engine`, `junit-platform-*`: Eclipse Public License
 v2.0).
+
+## Optional semantic component
+
+The separate semantic archive contains the KrosScope semantic worker, model and SPI jars, Kotlin standard library, kotlinx.serialization, and ONNX Runtime. The main runtime does not link ONNX Runtime. Model weights are a separate download.
+
+| Component | Version | Licence | Where it is used |
+|---|---|---|---|
+| ONNX Runtime Java and bundled CPU natives | 1.31.1 | MIT (licenses/onnxruntime-MIT.txt) | Inference in the semantic child JVM. |
+| CodeRankEmbed | 3c4b60807d71f79b43f3c4363786d9493691f8b1 | MIT | Separate model download; see its model card and LICENSE. |

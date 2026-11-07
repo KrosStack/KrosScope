@@ -6,7 +6,7 @@ import java.nio.file.Files
 import java.util.concurrent.TimeUnit
 
 internal class BackgroundStarter(
-    private val spawner: ProcessSpawner = SystemSpawner,
+    private val spawner: ProcessSpawner = SystemSpawner(),
     private val timeoutNanos: Long = TimeUnit.SECONDS.toNanos(TIMEOUT_SECONDS),
     private val clock: () -> Long = System::nanoTime,
 ) : ServiceStarter {

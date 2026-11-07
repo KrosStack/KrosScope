@@ -14,6 +14,7 @@ internal object SettingsGrammar {
     val GENERATED = SCAN + "generated"
     val TESTS = SCAN + "tests"
     val ANALYZERS = listOf("analyzers")
+    val COMPONENTS = listOf("components")
     val FRESHNESS = listOf("freshness")
     val WATCH = FRESHNESS + "watch"
     val QUIET_SECONDS = FRESHNESS + "quiet-seconds"
@@ -31,7 +32,7 @@ internal object SettingsGrammar {
 
     val BOOLEANS: List<List<String>> = listOf(TESTS, WATCH) + SWITCHES
 
-    val TABLES: List<List<String>> = listOf(RESOURCES, SCAN, ANALYZERS, FRESHNESS)
+    val TABLES: List<List<String>> = listOf(RESOURCES, SCAN, ANALYZERS, FRESHNESS, COMPONENTS)
 
     val VALUES: Set<List<String>> = INTEGERS.keys + PATTERN_LISTS + BOOLEANS + setOf(LEVEL)
 

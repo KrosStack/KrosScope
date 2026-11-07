@@ -12,6 +12,8 @@ import io.github.krosstack.kscope.model.NodeRef
 import io.github.krosstack.kscope.model.Symbol
 import io.github.krosstack.kscope.model.WorkspaceLocations
 import io.github.krosstack.kscope.retrieval.AnalysisResult
+import io.github.krosstack.kscope.retrieval.MlMode
+import io.github.krosstack.kscope.retrieval.RetrievalStage
 import io.github.krosstack.kscope.service.ArtifactKind
 import io.github.krosstack.kscope.service.KrosScope
 import io.github.krosstack.kscope.service.artifactKinds
@@ -51,16 +53,16 @@ internal sealed interface AnalyzeOutcome {
 }
 
 /** Asks the service what [routing] calls for: a card for a name or file, otherwise a task analysis. */
-internal fun KrosScope.analyzeAs(text: String, routing: Routing): AnalyzeOutcome {
+internal fun KrosScope.analyzeAs(text: String, routing: Routing, ml: MlMode, stage: RetrievalStage): AnalyzeOutcome {
     if (routing.reading == Reading.TASK) {
         if (!routing.requested) rejectPathWithoutDirectory(text)
-        return analyzeTask(text, Readings.TASK)
+        return analyzeTask(text, Readings.TASK, ml, stage)
     }
     val card = unitCard(routing.argument)
     return when {
         card != null -> AnalyzeOutcome.Card(card, readingOf(card, text), workspaceLocations())
         routing.requested -> AnalyzeOutcome.NoUnit
-        else -> analyzeTask(text, Readings.taskAfterMiss(text))
+        else -> analyzeTask(text, Readings.taskAfterMiss(text), ml, stage)
     }
 }
 
@@ -72,8 +74,8 @@ private fun KrosScope.rejectPathWithoutDirectory(text: String) {
 private fun readingOf(card: UnitCard, text: String): String =
     if (card.kind == UnitCards.FILE_KIND) Readings.file(text) else Readings.name(text)
 
-private fun KrosScope.analyzeTask(text: String, reading: String): AnalyzeOutcome {
-    val result = analyze(text)
+private fun KrosScope.analyzeTask(text: String, reading: String, ml: MlMode, stage: RetrievalStage): AnalyzeOutcome {
+    val result = analyze(text, stage = stage, ml = ml)
     return AnalyzeOutcome.Task(result, artifactKinds(AnalyzeText.relevantFiles(result)), reading, workspaceLocations())
 }
 

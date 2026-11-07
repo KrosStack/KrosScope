@@ -10,6 +10,7 @@ import io.github.krosstack.kscope.retrieval.GraphQueries
 import io.github.krosstack.kscope.retrieval.GraphResult
 import io.github.krosstack.kscope.retrieval.GraphScope
 import io.github.krosstack.kscope.retrieval.ImpactResult
+import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.retrieval.RelatedResult
 import io.github.krosstack.kscope.retrieval.RetrievalStage
 import io.github.krosstack.kscope.retrieval.SymbolResult
@@ -145,9 +146,10 @@ public class KrosScope private constructor(
         task: String,
         stage: RetrievalStage = RetrievalStage.FULL,
         includeContextEstimates: Boolean = true,
+        ml: MlMode = MlMode.ON,
     ): AnalysisResult {
         memory.load()
-        val result = progress.stage(QueryStages.RANK) { TaskRetrieval(graph(), searchIndex()).analyze(task, stage) }
+        val result = progress.stage(QueryStages.RANK) { TaskRetrieval(graph(), searchIndex()).analyze(task, stage, ml) }
         return if (includeContextEstimates) {
             progress.stage(QueryStages.ESTIMATE) { withContextEstimates(result) }
         } else {

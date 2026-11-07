@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.benchmark.schema
 
 import io.github.krosstack.kscope.model.context.TokenCount
+import io.github.krosstack.kscope.retrieval.AnalysisResult
 import io.github.krosstack.kscope.service.ScanLevel
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.PolymorphicKind
@@ -30,8 +31,9 @@ private class SchemaBuilder {
         val root = reference(descriptor)
         val key = key(descriptor)
         val shape = definitions.getValue(key)
+        val version = if (descriptor.serialName == AnalysisResult.serializer().descriptor.serialName) 2 else 1
         val own = shape.getValue("properties").jsonObject.filterKeys { level == LevelField.NONE || it != "indexLevel" }
-        val properties = own + ("schemaVersion" to obj("const" to JsonPrimitive(1))) + levelProperty(level)
+        val properties = own + ("schemaVersion" to obj("const" to JsonPrimitive(version))) + levelProperty(level)
         val required = shape.getValue("required").jsonArray + JsonPrimitive("schemaVersion") +
             listOf(JsonPrimitive("indexLevel")).filter { level != LevelField.NONE }
         definitions[key] = JsonObject(
@@ -40,7 +42,7 @@ private class SchemaBuilder {
         return JsonObject(
             root + mapOf(
                 "\$schema" to JsonPrimitive("https://json-schema.org/draft/2020-12/schema"),
-                "\$id" to JsonPrimitive("urn:kscope:$name:1"),
+                "\$id" to JsonPrimitive("urn:kscope:$name:$version"),
                 "\$defs" to JsonObject(definitions.toSortedMap()),
             ),
         )

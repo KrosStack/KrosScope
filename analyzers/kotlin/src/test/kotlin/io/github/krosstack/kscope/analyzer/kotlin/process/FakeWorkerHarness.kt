@@ -63,10 +63,25 @@ internal class FakeWorkerHarness : AutoCloseable {
         }
     }
 
+    /**
+     * A worker that was destroyed before its JVM reached `main` (a loaded machine) never wrote its pid and ran nothing,
+     * so it has ended; a pid that was written must belong to a process that is gone once the file settles.
+     */
     fun assertProcessEnded() {
-        val pid = Files.readString(pidFile).toLong()
-        assertFalse(ProcessHandle.of(pid).map { it.isAlive }.orElse(false), "The worker $pid is still running")
+        val deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(AWAIT_SECONDS)
+        var pid = readPid()
+        while (pid == null && System.nanoTime() < deadline) {
+            Thread.sleep(POLL_MILLIS)
+            pid = readPid()
+        }
+        if (pid == null) return
+        while (isAlive(pid) && System.nanoTime() < deadline) Thread.sleep(POLL_MILLIS)
+        assertFalse(isAlive(pid), "The worker $pid is still running")
     }
+
+    private fun readPid(): Long? = if (Files.exists(pidFile)) Files.readString(pidFile).trim().toLongOrNull() else null
+
+    private fun isAlive(pid: Long) = ProcessHandle.of(pid).map { it.isAlive }.orElse(false)
 
     override fun close() {
         opened.forEach(KotlinWorkerProcess::close)
@@ -76,5 +91,6 @@ internal class FakeWorkerHarness : AutoCloseable {
     companion object {
         val PATIENT = WorkerTimeouts(handshake = 1.minutes, response = 1.minutes, shutdown = 10.seconds)
         private const val AWAIT_SECONDS = 10L
+        private const val POLL_MILLIS = 50L
     }
 }

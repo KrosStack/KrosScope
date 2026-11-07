@@ -40,3 +40,4 @@ Status: Accepted · Date: YYYY-MM-DD
 | [0019](0019-installers-and-agent-skill.md) | Installers in shell and PowerShell, and a skill for coding agents | Accepted |
 | [0020](0020-links-through-built-artifacts.md) | Repositories registered anywhere, linked through what they build for each other | Accepted; registration, JAR files, native library loads, OpenAPI and Wire specs, and web bundles implemented |
 | [0021](0021-browser-map.md) | A read-only map in the browser, served by `serve --map` | Accepted |
+| [0022](0022-optional-components.md) | Optional components from a pinned manifest | Proposed |
