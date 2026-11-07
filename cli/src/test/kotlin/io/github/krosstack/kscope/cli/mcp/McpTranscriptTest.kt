@@ -122,7 +122,7 @@ class McpTranscriptTest {
         }
         val optional = when (name) {
             "context" -> listOf("budget")
-            "analyze" -> listOf("detail")
+            "analyze" -> listOf("detail", "ml", "stage")
             else -> emptyList()
         }
         assertEquals(setOf("type", "additionalProperties", "properties", "required"), schema.keys)
@@ -139,7 +139,10 @@ class McpTranscriptTest {
     }
 
     private fun expectedProperty(key: String): JsonObject = buildJsonObject {
-        if (key == "budget") {
+        if (key == "ml") {
+            put("type", "boolean")
+            put("default", true)
+        } else if (key == "budget") {
             put("type", "integer")
             put("minimum", 500)
             put("maximum", 200000)
@@ -147,6 +150,7 @@ class McpTranscriptTest {
             put("type", "string")
             put("maxLength", 20000)
             if (key == "detail") put("enum", JsonArray(listOf("brief", "standard", "full").map(::JsonPrimitive)))
+            if (key == "stage") put("enum", JsonArray(listOf("full", "lexical").map(::JsonPrimitive)))
         }
     }
 }

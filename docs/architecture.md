@@ -42,6 +42,7 @@ core/model            Internal representation: identities, entities, facts, evid
 core/spi              Capability contracts and the analyzer wire protocol.
 core/store            SQLite persistence, FTS index, ownership-based invalidation.
 core/engine           Discovery, scan pipeline, incremental update, linking, verification.
+components/semantic-worker Optional child JVM for embeddings; ONNX Runtime never joins the main runtime.
 analyzers/kotlin        Client adapter for the Kotlin/Java analyzer worker.
 analyzers/kotlin-worker Out-of-process worker: Kotlin Analysis API (Kotlin + Java + build scripts).
 analyzers/gradle        Build-model providers: static, and Gradle Tooling API behind a trust gate.
@@ -65,6 +66,7 @@ Dependency rules (enforced by the build):
 - `analyzers/*` and `intelligence/*` depend on `core/model` and `core/spi` only, never on each other, on
   `core/store` or on `core/engine`.
 - `core/engine` depends on `core/model`, `core/spi`, `core/store`.
+- `components/semantic-worker` depends on `core/model` and `core/spi` only. ONNX Runtime is confined to that module.
 - `service` is the only module that sees everything except `cli` and `benchmark`. Product frontends depend on
   `service`. The CLI also depends on `benchmark` for `kscope benchmark`; evaluation code and disposable lexical
   baselines live in `benchmark`, which reads the graph through `service`, `core/model` and `core/spi`.
@@ -347,6 +349,11 @@ line-delimited JSON protocol carrying the same fact model as in-process producer
 - every worker is given its source sets with all modules they refer to, so each source set is analysed against
   the same modules whatever the number of workers and the index is byte for byte the same;
 - version-matched analyzer bundles and third-party indexers can be added without changing the core.
+
+The optional semantic component follows this process boundary. Its archive contains `lib/`, `native/<platform>/`
+and `licenses/`; its separate model download is installed at `model/`. ONNX Runtime never joins the main runtime
+classpath. On Windows, the child JVM needs a maintained JDK with Visual C++ runtime 14.40 or newer; older JDKs can
+shadow the system runtime and [crash ONNX initialization](https://github.com/microsoft/onnxruntime/issues/24287).
 
 The worker also answers a request that needs no analysis: the **API digest** of a Kotlin source.
 

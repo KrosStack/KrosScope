@@ -14,7 +14,7 @@ class HelpTextTest {
         val names = commands.map { it.commandName }
         val expected = listOf(
             "scan", "update", "context", "analyze", "info", "symbol", "impact", "related", "graph", "trust",
-            "workspace", "doctor", "benchmark", "serve", "service", "mcp", "skill",
+            "workspace", "doctor", "benchmark", "components", "serve", "service", "mcp", "skill",
         )
         assertEquals(expected, names)
         (listOf(root) + commands).forEach { command ->

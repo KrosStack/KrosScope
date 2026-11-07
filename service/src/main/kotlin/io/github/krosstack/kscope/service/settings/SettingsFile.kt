@@ -87,6 +87,9 @@ internal class SettingsFile(root: Path) {
             quietSeconds = toml.getLong(SettingsGrammar.QUIET_SECONDS)?.toInt() ?: FreshnessSettings.DEFAULT_QUIET,
         ),
         level = toml.getString(SettingsGrammar.LEVEL)?.let(ScanLevel::parse),
+        components = toml.getTable("components")?.keySet()?.sorted()?.associateWith {
+            toml.getBoolean(listOf("components", it)) == true
+        }.orEmpty(),
     )
 
     private fun patternsOf(toml: TomlParseResult, path: List<String>): List<String> {

@@ -1,7 +1,7 @@
 {
     "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_AnalysisResult",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "urn:kscope:analysis:1",
+    "$id": "urn:kscope:analysis:2",
     "$defs": {
         "io_github_krosstack_kscope_model_ArtifactRef": {
             "type": "object",
@@ -663,6 +663,12 @@
                 "scope": {
                     "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_ChangeScope"
                 },
+                "semantic": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_SemanticStatus"
+                },
+                "stage": {
+                    "type": "string"
+                },
                 "symbols": {
                     "type": "array",
                     "items": {
@@ -682,7 +688,7 @@
                     }
                 },
                 "schemaVersion": {
-                    "const": 1
+                    "const": 2
                 },
                 "indexLevel": {
                     "type": "string",
@@ -921,6 +927,50 @@
             ],
             "additionalProperties": false
         },
+        "io_github_krosstack_kscope_retrieval_SemanticStatus": {
+            "type": "object",
+            "properties": {
+                "behindChunks": {
+                    "type": "integer"
+                },
+                "model": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_spi_embedding_ModelIdentity"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "provider": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "not-installed",
+                        "disabled",
+                        "used",
+                        "behind",
+                        "worker-unavailable",
+                        "static-fallback"
+                    ]
+                }
+            },
+            "required": [
+                "state"
+            ],
+            "additionalProperties": false
+        },
         "io_github_krosstack_kscope_retrieval_SignalContribution": {
             "type": "object",
             "properties": {
@@ -938,13 +988,42 @@
                         "exact",
                         "test-relation",
                         "test-reference",
-                        "test-edit"
+                        "test-edit",
+                        "semantic"
                     ]
                 }
             },
             "required": [
                 "signal",
                 "score"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_spi_embedding_ModelIdentity": {
+            "type": "object",
+            "properties": {
+                "chunkBuilderVersion": {
+                    "type": "integer"
+                },
+                "dimensions": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "quantization": {
+                    "type": "string"
+                },
+                "revision": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "revision",
+                "dimensions",
+                "quantization",
+                "chunkBuilderVersion"
             ],
             "additionalProperties": false
         }

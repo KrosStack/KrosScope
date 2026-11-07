@@ -18,12 +18,16 @@ ones listed for it here.
 | `--sections LIST` | Prints only these sections, a comma-separated list. Text and markdown only. | All | `analyze`, `symbol`, `related` |
 | `--task-file FILE` | Reads the task from a UTF-8 file; see [Text encodings](#text-encodings). | None | `analyze`, `context` |
 | `--no-server` | Answers without the server that [`serve`](#serve) or the [service](#service) runs for the workspace. | Off | `scan`, `context`, `analyze`, `info`, `symbol`, `impact`, `related`, `graph`, `mcp` |
+| `--no-ml`, `--ml on\|off` | Answers without learned signals when off; the JSON `semantic.state` says `off`. | `on` | `analyze` |
 | `--version`, `-h`, `--help` | Print the version, or the help of the tool or a command, and exit. | | |
 
-`--detail` and `--sections` on any other command, or with `--format json`, exit with 2. `--no-ml` is still accepted
-and does nothing: analysis is always deterministic and local. It is kept for old scripts.
+`--detail` and `--sections` on any other command, or with `--format json`, exit with 2. `--no-ml` wins over
+`--ml on` wherever they appear. With no learned provider installed, turning ML off changes only the JSON semantic
+status; rankings, context estimates and text output stay the same. `context` does not expose this control.
 
 ## Output formats
+
+The JSON of `analyze` carries `schemaVersion` 2 and a `semantic` object; its `state` is `off`, `not-installed`, `disabled`, `used`, `behind`, `worker-unavailable` or `static-fallback`. The other results stay at version 1.
 
 | Format | For | Notes |
 |---|---|---|
@@ -261,6 +265,51 @@ that the build files of the workspace name.
 
 `workspace` and `workspace artifacts` are not offered through a server, the service or `kscope mcp`.
 
+## `components`
+
+Installs optional, versioned components in your user directory, or removes or lists them. This release ships no
+components; `list` is empty until a later release adds entries to its pinned manifest.
+
+```
+kscope components install NAME [--yes] [--from DIR|FILE]
+kscope components remove NAME
+kscope components list [--format text|json]
+kscope components status [--format text|json]
+```
+
+| Option | What it does | Default |
+|---|---|---|
+| `NAME` | A component named in this release's manifest (`install`), or installed on this machine (`remove`). | Required |
+| `--yes` | Approves installation without prompting. Required when standard input is not a terminal. | Off |
+| `--from DIR\|FILE` | Reads pinned files from their relative paths in DIR, or one ZIP FILE for a component with exactly one applicable archive. Uses no network. | Manifest HTTPS URLs |
+| `--format text\|json` | Lists manifest entries or installed components as text or JSON. | `text` |
+
+- **Before downloading,** `install` prints the component's name, version, licence, total size and URLs, then asks
+  `Download? [y/N]`. Non-terminal input without `--yes` exits with 2 after showing that information.
+- **Verification.** Files must match the manifest's byte counts and SHA-256 hashes. Mirrors are tried in order.
+  ZIP entries are checked for escapes and written as plain files, so an archive can never create a link.
+  Expanded bytes are limited to eight times the archive size. Failure discards
+  staging and leaves an existing installation intact. Archives are removed after extraction.
+- **Semantic self-test.** Installing `semantic` or `semantic-model` tests the worker when both are installed. `install`
+  starts the installed worker, requires its handshake and one small embedding within the provider's existing
+  deadlines, then stops it. The result line says `Semantic worker answered.` on success. On failure, installed files
+  are kept, the command exits with 1, and the result includes the reason and the Windows requirement: a JDK 17 whose
+  bundled Microsoft Visual C++ runtime is 14.40 or newer, for example Temurin 17.0.21 or newer. `list` and `status`
+  show the installed component with its failed self-test as problem text; reinstalling or running `doctor` retries it.
+- **Where files live.** `~/.kscope/components/NAME/VERSION/`, overridden by `KSCOPE_COMPONENTS_HOME` (or the
+  `kscope.components.home` Java property, which wins). Only directories carrying a matching `kscope-component.json`
+  marker can be replaced or removed; links are not followed.
+- **Listing.** `list` shows each manifest entry's name, version, licence, platform download size and state:
+  `installed`, `not installed`, `disabled by workspace`, `other version installed: X` or `unsupported platform`.
+  `status` shows installed components with their directories and whether their versions match this release's
+  manifest, including components that this release no longer lists.
+- **Workspace switches.** In `kscope.toml`, `[components]` with `NAME = false` disables that component for the
+  workspace. Values must be booleans; nested or malformed keys are refused. Disabling does not delete installed files.
+- **Network.** Installation is explicit; analysis does not fetch components. See
+  [ADR 0022](decisions/0022-optional-components.md), which amends ADR 0020's network consequence.
+
+`components` is not offered through a server, the service or `kscope mcp`.
+
 ## `context`
 
 Compiles the files and declarations worth reading for a task from the index and the current files, cut to a token
@@ -300,7 +349,7 @@ The text format summarizes what was chosen, `--format markdown` prints the conte
 Answers two kinds of question, and its first line says which one it understood.
 
 ```
-kscope analyze [TASK] [--task-file FILE] [--as task|symbol]
+kscope analyze [TASK] [--task-file FILE] [--as task|symbol] [--stage full|lexical]
 ```
 
 - **A task,** in your own words: the files, modules and tests it is likely to touch, ranked by how well the task
@@ -314,6 +363,10 @@ kscope analyze [TASK] [--task-file FILE] [--as task|symbol]
 | `--task-file FILE` | Reads the task from a UTF-8 file. | |
 | `--as task` | Analyzes the argument as a task. | Guessed |
 | `--as symbol` | Looks the argument up as a name. It never falls back; with no match it prints `Nothing in the index is named ...`. | Guessed |
+| `--stage full\|lexical` | Selects task retrieval. `lexical` returns the lexical ranking before structural fusion or semantic signals; `full` runs the complete pipeline. Applies to task analysis and name fallback. | `full` |
+
+Task-analysis JSON includes `stage: "lexical"` only for lexical analysis; full analysis omits `stage`. Lexical
+analysis reports `semantic.state` as `"off"`, including with `--ml on`. Text, JSON and context estimates use the selected ranking.
 
 ### Task or name
 
@@ -597,7 +650,7 @@ You choose workspaces with `add` and `remove` (kept in `service.toml`) and start
 | Subcommand | What it does | Exit code |
 |---|---|---|
 | `run [--log]` | Runs in the foreground until `kscope service stop` or Ctrl+C, printing state changes on standard error. `--log` writes them to `service.log` instead. Refused if a service of yours runs. | 0 after a stop, 1 when refused |
-| `start` | Runs `run --log` as a process of its own, with the Java and `kscope` you ran, independent of your terminal, and returns when it runs. After 30 seconds without that it ends it, prints `The service did not start; see <service.log>.` and exits with 1. A `memory-mib` in `service.toml` becomes the maximum heap at the next `start`. | 0, 1 when it does not run in time |
+| `start` | Runs `run --log` as a process of its own, with the Java and `kscope` you ran, detached from the console on Windows or in its own session on Linux and macOS when `setsid` is on `PATH`, and returns when it runs. Without `setsid`, Linux and macOS redirect streams through a shell and keep the caller's session, but ignore hangup when `nohup` is on `PATH`. After 30 seconds without that it ends it, prints `The service did not start; see <service.log>.` and exits with 1. A `memory-mib` in `service.toml` becomes the maximum heap at the next `start`. | 0, 1 when it does not run in time |
 | `stop` | Every workspace server finishes its request and closes, and the process ends. | 0, 1 when it does not answer |
 | `status` | Says whether it runs, what it does with each workspace and whether it starts with your session. | 0 when it runs, 1 when not |
 | `page` | Prints the address of the [status page](#status-page). | 0, 1 when it does not run or answer |
@@ -661,7 +714,8 @@ and does not start the service now. Run it again after `kscope` or Java moved, o
 The service started this way has the environment of your session, not of your shell, so `KSCOPE_WORKERS`,
 `KSCOPE_WORKER_HEAP` and `KSCOPE_GRADLE_JAVA_HOME` from a shell profile do not reach it. `uninstall` leaves
 `service.toml` and `service.log`. `install` and `uninstall` are the only commands that register or remove anything with
-the operating system. This is implemented but not yet verified on a real session of any of the three systems.
+the operating system. Windows `start` has been verified to survive closing its launching console; Windows startup at
+login remains unverified. Session startup is implemented but not yet verified on a real session on Linux or macOS.
 
 ### The files of the service
 
@@ -743,7 +797,7 @@ not start the server in the workspace directory needs `--workspace`.
 | Tool | Arguments | What the agent gets |
 |---|---|---|
 | `context` | `task`; `budget` (500 to 200,000 tokens, optional) | The source worth reading for the task, as Markdown. |
-| `analyze` | `query`; `detail` (`brief`, `standard` or `full`, optional) | The files, modules and tests a task touches, or the card of one name or file. |
+| `analyze` | `query`; `detail` (`brief`, `standard` or `full`, optional); `ml` (boolean, optional, default `true`), forwarded as `--ml on\|off`; `stage` (`full` or `lexical`, optional, default `full`), forwarded as `--stage full\|lexical` | The files, modules and tests a task touches, or the card of one name or file. |
 | `symbol` | `name` | The declarations that match a name. |
 | `impact` | `node` | What a change to a symbol, file or module can affect. |
 | `related` | `node` | The files and symbols closest to a node. |
@@ -802,10 +856,13 @@ and every install writes the version that matches it. The [installers](install.m
 ## `doctor`
 
 Checks the JDK and its compiler (17 or newer), the Kotlin analysis worker, Git, the Android SDK directory and the
-index, and reports the text encodings in use: `kscope doctor`.
+index, and reports the running JDK's vendor and full version and the text encodings in use: `kscope doctor`.
 
 - It runs `git --version` and never runs workspace build code. The worker and SDK checks look at installation paths;
-  they do not start the worker or validate an SDK platform.
+  they do not start the Kotlin worker or validate an SDK platform. When the semantic worker and model are installed,
+  an additional line reports the same bounded handshake and small-embedding self-test used by `components install`,
+  including the failure reason and JDK requirement when it fails, with installation and JDK paths in the reason shown
+  as `<components>` and `<jdk>`.
 - A missing optional component shows as `missing` with a remedy and the exit code stays 0. An unreadable index or
   another I/O failure exits with 1. The JSON result holds no environment or installation paths.
 

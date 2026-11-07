@@ -1,0 +1,48 @@
+digraph diagram {
+  graph [label="Modules: 12 of 12 nodes, 14 of 15 links", labelloc=t];
+  rankdir=LR;
+  n1 [label=":module0"];
+  n2 [label=":module1"];
+  n3 [label=":module2"];
+  n4 [label=":module3"];
+  n5 [label=":module4"];
+  n6 [label=":module5"];
+  n7 [label=":module6"];
+  n8 [label=":module7"];
+  n9 [label=":module8"];
+  n10 [label=":module9"];
+  subgraph cluster_g1 {
+    label="alpha";
+    n1;
+    n2;
+    n3;
+    n4;
+    n5;
+  }
+  subgraph cluster_g2 {
+    label="beta";
+    n6;
+    n7;
+    n8;
+    n9;
+    n10;
+  }
+  r1 [label="artifact.missing (3)", shape=box, style=dotted];
+  r2 [label="artifact.not-analysed (2)", shape=box, style=dotted];
+  n1 -> n2 [label="depends_on [cycle]; build-model=1,convention=1; exact=1,heuristic=1", style=dashed];
+  n1 -> n6 [label="depends_on:maven-coordinates; build-model=1; exact=1", style=solid];
+  n2 -> n1 [label="depends_on [cycle]; build-model=1; exact=1", style=solid];
+  n2 -> n3 [label="depends_on; build-model=1; probable=1", style=dashed];
+  n2 -> n7 [label="depends_on:jvm-library; content=1; exact=1", style=solid];
+  n3 -> n4 [label="depends_on; build-model=1; heuristic=1", style=dashed];
+  n3 -> n8 [label="depends_on:native-library; build-model=1; probable=1", style=dashed];
+  n4 -> r1 [label="? depends_on; build-model=1; unresolved=1", style=dotted];
+  n4 -> n9 [label="depends_on:web-bundle; build-model=1; heuristic=1", style=dashed];
+  n5 -> r2 [label="? depends_on; build-model=1; not-analysed=1", style=dotted];
+  n5 -> n10 [label="depends_on:generator-input; build-model=1; exact=1", style=solid];
+  n6 -> r1 [label="? depends_on:jvm-library; build-model=1; unresolved=1", style=dotted];
+  n7 -> r2 [label="? depends_on:native-library; build-model=1; not-analysed=1", style=dotted];
+  n8 -> r1 [label="? depends_on:web-bundle; build-model=1; unresolved=1", style=dotted];
+  legend [label="solid: exact; dashed: probable, heuristic; dotted ?: unresolved, not-analysed; labels: relation; evidence counts; state counts; cycle: dependency cycle", shape=note];
+  footer [label="Omitted links: exact=0, probable=0, heuristic=0, unresolved=0, not-analysed=0", shape=note];
+}

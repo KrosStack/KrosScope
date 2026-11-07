@@ -1,11 +1,14 @@
 package io.github.krosstack.kscope.conventions
 
 internal object ModuleDependencyRules {
+    val confinements = mapOf("com.microsoft.onnxruntime:onnxruntime" to ":components:semantic-worker")
+
     private val rules = listOf(
         rule(":core:model"),
         rule(":core:spi", ":core:model"),
         rule(":core:store", ":core:model", ":core:spi"),
         rule(":core:engine", ":core:model", ":core:spi", ":core:store"),
+        rule(":components:semantic-worker", ":core:model", ":core:spi"),
         rule(":analyzers:gradle", ":core:model", ":core:spi", ":analyzers:gradle-model-plugin"),
         rule(":analyzers:kotlin", ":core:model", ":core:spi", ":analyzers:kotlin-worker"),
         rule(":analyzers:*", ":core:model", ":core:spi"),

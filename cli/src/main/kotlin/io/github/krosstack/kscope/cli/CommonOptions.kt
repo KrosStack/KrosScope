@@ -13,6 +13,8 @@ import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
 import io.github.krosstack.kscope.cli.progress.ProgressMode
 import io.github.krosstack.kscope.cli.text.format.DetailLevel
+import io.github.krosstack.kscope.retrieval.MlMode
+import io.github.krosstack.kscope.retrieval.RetrievalStage
 import java.nio.file.Path
 
 internal enum class OutputFormat { TEXT, JSON, MARKDOWN, DOT }
@@ -27,9 +29,21 @@ internal class RootOptions(
 ) : OptionGroup(COMMON_OPTIONS) {
     val noMl: Boolean by option(
         "--no-ml",
-        help = "Accepted for compatibility; analysis is always deterministic and local.",
-        hidden = true,
+        help = "Answers without learned signals; the `semantic` object of the JSON says `off`",
+        hidden = hides(SharedOption.ML),
     ).flag()
+
+    val ml: MlMode? by option(
+        "--ml",
+        help = "Use learned signals when installed: on or off. --no-ml wins when both are given.",
+        hidden = hides(SharedOption.ML),
+    ).choice("on" to MlMode.ON, "off" to MlMode.OFF)
+
+    val stage: RetrievalStage? by option(
+        "--stage",
+        help = "Choose task retrieval: full runs the pipeline, lexical uses lexical ranking alone. Defaults to full.",
+        hidden = hides(SharedOption.STAGE),
+    ).choice("full" to RetrievalStage.FULL, "lexical" to RetrievalStage.LEXICAL)
 
     val workspace: Path? by option(
         "--workspace",
@@ -86,6 +100,9 @@ internal class RootOptions(
         hidden = hides(SharedOption.NO_SERVER),
     ).flag()
 
+    fun mlMode(inherited: RootOptions?): MlMode =
+        if (noMl || inherited?.noMl == true) MlMode.OFF else ml ?: inherited?.ml ?: MlMode.ON
+
     private fun hides(option: SharedOption) = option !in shown
 
     private companion object {
@@ -108,13 +125,15 @@ internal data class ResolvedOptions(
     val detail: DetailLevel = DetailLevel.STANDARD,
     val sections: Set<String>? = null,
     val noServer: Boolean = false,
+    val ml: MlMode = MlMode.ON,
+    val stage: RetrievalStage = RetrievalStage.FULL,
 )
 
 /** The `--detail` and `--sections` the user gave, the ones after the command name winning. */
 private class Presentation(own: RootOptions, inherited: RootOptions?) {
-    val detail: DetailLevel? = own.detail ?: inherited?.detail
+    val detail: DetailLevel = own.detail ?: inherited?.detail ?: DetailLevel.STANDARD
     val sections: Set<String>? = (own.sections ?: inherited?.sections)?.map { it.trim().lowercase() }?.toSet()
-    val given: Boolean get() = detail != null || sections != null
+    val given: Boolean = own.detail != null || inherited?.detail != null || sections != null
 }
 
 /**
@@ -149,9 +168,11 @@ private fun CliktCommand.resolveWithin(
         progress = own.progress ?: group.progress,
         quiet = own.quiet || group.quiet,
         environment = group.environment,
-        detail = shown.detail ?: DetailLevel.STANDARD,
+        detail = shown.detail,
         sections = shown.sections,
         noServer = own.noServer || group.noServer,
+        ml = if (own.noMl) MlMode.OFF else own.ml ?: group.ml,
+        stage = own.stage ?: group.stage,
     )
     if (shown.given) requirePresentation(presentation, resolved.format)
     return resolved
@@ -167,8 +188,10 @@ private fun RootOptions.mergedWith(
     progress = progress ?: inherited?.progress ?: ProgressMode.AUTO,
     quiet = quiet || inherited?.quiet == true,
     environment = environment,
-    detail = shown.detail ?: DetailLevel.STANDARD,
+    detail = shown.detail,
     sections = shown.sections,
+    ml = mlMode(inherited),
+    stage = stage ?: inherited?.stage ?: RetrievalStage.FULL,
 )
 
 private fun requirePresentation(supported: Boolean, format: OutputFormat) {

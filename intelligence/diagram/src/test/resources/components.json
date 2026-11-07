@@ -1,0 +1,194 @@
+{
+    "kind": "COMPONENTS",
+    "title": "Components: 4 of 4 nodes, 12 of 12 links",
+    "nodes": [
+        {
+            "id": "n1",
+            "label": "alpha",
+            "kind": "repository",
+            "group": null
+        },
+        {
+            "id": "n2",
+            "label": "beta",
+            "kind": "repository",
+            "group": null
+        }
+    ],
+    "groups": [],
+    "edges": [
+        {
+            "from": "n1",
+            "to": "r1",
+            "label": "depends_on; build-model=1; unresolved=1",
+            "weakest": "UNRESOLVED",
+            "byState": {
+                "UNRESOLVED": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "r2",
+            "label": "depends_on; build-model=1; not-analysed=1",
+            "weakest": "NOT_ANALYSED",
+            "byState": {
+                "NOT_ANALYSED": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n2",
+            "label": "depends_on:generator-input; build-model=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n2",
+            "label": "depends_on:jvm-library; content=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "CONTENT": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n2",
+            "label": "depends_on:maven-coordinates; build-model=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n2",
+            "label": "depends_on:native-library; build-model=1; probable=1",
+            "weakest": "PROBABLE",
+            "byState": {
+                "PROBABLE": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n2",
+            "label": "depends_on:web-bundle; build-model=1; heuristic=1",
+            "weakest": "HEURISTIC",
+            "byState": {
+                "HEURISTIC": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n2",
+            "to": "n1",
+            "label": "binds:native-library; build-model=1; heuristic=1",
+            "weakest": "HEURISTIC",
+            "byState": {
+                "HEURISTIC": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n2",
+            "to": "n1",
+            "label": "binds:openapi-route; build-model=1; probable=1",
+            "weakest": "PROBABLE",
+            "byState": {
+                "PROBABLE": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n2",
+            "to": "r1",
+            "label": "depends_on:jvm-library; build-model=1; unresolved=1",
+            "weakest": "UNRESOLVED",
+            "byState": {
+                "UNRESOLVED": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n2",
+            "to": "r2",
+            "label": "depends_on:native-library; build-model=1; not-analysed=1",
+            "weakest": "NOT_ANALYSED",
+            "byState": {
+                "NOT_ANALYSED": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        },
+        {
+            "from": "n2",
+            "to": "r1",
+            "label": "depends_on:web-bundle; build-model=1; unresolved=1",
+            "weakest": "UNRESOLVED",
+            "byState": {
+                "UNRESOLVED": 1
+            },
+            "byEvidence": {
+                "BUILD_MODEL": 1
+            }
+        }
+    ],
+    "reasons": [
+        {
+            "id": "r1",
+            "reason": "artifact.missing",
+            "count": 3
+        },
+        {
+            "id": "r2",
+            "reason": "artifact.not-analysed",
+            "count": 2
+        }
+    ],
+    "omitted": {
+        "nodes": 0,
+        "linksByState": {
+            "EXACT": 0,
+            "PROBABLE": 0,
+            "HEURISTIC": 0,
+            "UNRESOLVED": 0,
+            "NOT_ANALYSED": 0
+        }
+    },
+    "legend": [
+        "solid: exact",
+        "dashed: probable, heuristic",
+        "dotted ?: unresolved, not-analysed",
+        "labels: relation; evidence counts; state counts",
+        "cycle: dependency cycle"
+    ]
+}

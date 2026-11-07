@@ -15,9 +15,12 @@ import io.github.krosstack.kscope.cli.text.DoctorText
 import io.github.krosstack.kscope.cli.textContext
 import io.github.krosstack.kscope.service.KrosScope
 import io.github.krosstack.kscope.service.ServiceJson
+import io.github.krosstack.kscope.service.components.ComponentDirectory
 import io.github.krosstack.kscope.service.doctor
 
-internal class DoctorCommand : CliktCommand(name = "doctor") {
+internal class DoctorCommand(
+    private val directory: ComponentDirectory = ComponentDirectory.resolve(System::getProperty, System::getenv),
+) : CliktCommand(name = "doctor") {
     private val common by RootOptions(
         setOf(SharedOption.WORKSPACE, SharedOption.FORMAT),
         FormatGuide.TEXT_OR_JSON,
@@ -35,7 +38,7 @@ internal class DoctorCommand : CliktCommand(name = "doctor") {
     override fun run() {
         val options = resolve(common)
         requireNoDot(options.format)
-        val result = guarded { KrosScope.open(options.workspace).use { it.doctor() } }
+        val result = guarded { KrosScope.open(options.workspace).use { it.doctor(directory) } }
         val rendered = if (options.format == OutputFormat.JSON) {
             ServiceJson.encode(result)
         } else {

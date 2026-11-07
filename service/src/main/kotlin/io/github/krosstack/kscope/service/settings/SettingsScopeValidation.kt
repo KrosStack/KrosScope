@@ -33,7 +33,9 @@ internal class SettingsScopeValidation(private val toml: TomlParseResult, privat
         }
     }
 
-    private fun switchIssues(): List<SettingsIssue> = SettingsGrammar.BOOLEANS.filter { it in present }
+    private fun switchIssues(): List<SettingsIssue> = present.filter {
+        it in SettingsGrammar.BOOLEANS || (it.size == 2 && it.first() == "components")
+    }
         .filter { toml.get(it) !is Boolean }
         .map { issueAt(it, "must be true or false") }
 

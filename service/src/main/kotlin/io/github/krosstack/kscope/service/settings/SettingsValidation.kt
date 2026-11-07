@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.service.settings
 
 import io.github.krosstack.kscope.service.ScanLevel
+import io.github.krosstack.kscope.service.components.InstalledComponent
 import org.tomlj.TomlParseResult
 import org.tomlj.TomlTable
 
@@ -15,9 +16,12 @@ internal class SettingsValidation(private val toml: TomlParseResult) {
     }
 
     private fun unknownKeys(): List<SettingsIssue> {
-        val unknown = present.filter { it !in SettingsGrammar.KNOWN }
+        val unknown = present.filter { it !in SettingsGrammar.KNOWN && !componentSwitch(it) }
         return unknown.filterNot { isInsideReported(it, unknown) }.map { issueAt(it, unknownMessage(it)) }
     }
+
+    private fun componentSwitch(path: List<String>): Boolean = path.size == 2 && path.first() == "components" &&
+        InstalledComponent.validSegment(path.last())
 
     private fun isInsideReported(path: List<String>, unknown: List<List<String>>): Boolean =
         (1 until path.size).any { path.take(it) in unknown || path.take(it) in SettingsGrammar.VALUES }

@@ -1,5 +1,8 @@
 package io.github.krosstack.kscope.service
 
+import io.github.krosstack.kscope.service.components.ComponentDirectory
+import io.github.krosstack.kscope.service.components.ComponentManifest
+import io.github.krosstack.kscope.service.semantic.WorkerSelfTest
 import kotlinx.serialization.Serializable
 import java.io.File
 import java.io.IOException
@@ -14,18 +17,21 @@ public data class DoctorCheck(public val name: String, public val available: Boo
 @Serializable
 public data class DoctorResult(public val checks: List<DoctorCheck>, public val diagnostics: List<String>)
 
-public fun KrosScope.doctor(): DoctorResult {
+public fun KrosScope.doctor(
+    directory: ComponentDirectory = ComponentDirectory.resolve(System::getProperty, System::getenv),
+    manifest: ComponentManifest = ComponentManifest.shipped(),
+): DoctorResult {
     val checks = listOf(
         DoctorCheck(
             "jdk",
             Runtime.version().feature() >= REQUIRED_JAVA && ToolProvider.getSystemJavaCompiler() != null,
-            "Java ${Runtime.version().feature()}; JDK 17 or newer required",
+            "${System.getProperty("java.vendor")} ${Runtime.version()}; JDK 17 or newer required",
         ),
         DoctorCheck("worker", workerAvailable(), "Kotlin worker classpath or installation"),
         DoctorCheck("git", gitAvailable(), "Git executable"),
         DoctorCheck("index", info().indexed, "Workspace index"),
         DoctorCheck("android-sdk", androidSdkAvailable(), "Android SDK directory"),
-    )
+    ) + listOfNotNull(WorkerSelfTest(directory, manifest).check())
     return DoctorResult(checks, checks.filterNot { it.available }.map { "${it.name}: unavailable" })
 }
 

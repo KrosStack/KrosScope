@@ -15,7 +15,7 @@ class SettingsFileKeyTest {
 
     @Test
     fun `an unknown key or table is refused and names its valid siblings`() {
-        val top = "unknown key (valid keys: format, level, resources, scan, analyzers, freshness)"
+        val top = "unknown key (valid keys: format, level, resources, scan, analyzers, freshness, components)"
         val nested = "unknown key (valid keys: workers, worker-heap-mib)"
         listOf(
             Rejection("colour = 1\n", 1, "colour", top),
