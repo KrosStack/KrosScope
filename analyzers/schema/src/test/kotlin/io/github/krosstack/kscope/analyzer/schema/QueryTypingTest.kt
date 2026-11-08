@@ -29,6 +29,13 @@ class QueryTypingTest {
     }
 
     @Test
+    fun `SQLite row identifiers and change counts are single non-null Long values`() {
+        listOf("last_insert_rowid", "changes", "total_changes").forEach { function ->
+            assertEquals("single Long", shapeOf("", "SELECT $function()").resultText(), function)
+        }
+    }
+
+    @Test
     fun `the columns of the optional side of an outer join can be null`() {
         val schema = "CREATE TABLE a (id INTEGER NOT NULL, tag TEXT NOT NULL);" +
             "\nCREATE TABLE b (id INTEGER NOT NULL, name TEXT NOT NULL);"

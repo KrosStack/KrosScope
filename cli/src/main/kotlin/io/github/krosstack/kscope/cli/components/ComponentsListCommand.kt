@@ -9,6 +9,7 @@ import io.github.krosstack.kscope.cli.RootOptions
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.service.components.ComponentDirectory
 import io.github.krosstack.kscope.service.components.ComponentManifest
@@ -36,6 +37,6 @@ internal class ComponentsListCommand(
         }
         val platform = ComponentPlatform.current(System.getProperty("os.name"), System.getProperty("os.arch"))
         val rows = manifest.listing(directory, platform, WorkspaceSettings.read(options.workspace))
-        echo(ComponentsText.render(rows, options.format == OutputFormat.JSON, platform))
+        echoResult(ComponentsText.render(rows, options.format == OutputFormat.JSON, platform), options.format)
     }
 }

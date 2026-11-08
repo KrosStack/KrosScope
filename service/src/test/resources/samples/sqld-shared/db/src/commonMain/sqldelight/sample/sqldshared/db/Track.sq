@@ -1,0 +1,15 @@
+CREATE TABLE track (
+    id INTEGER NOT NULL PRIMARY KEY,
+    album_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    length_seconds INTEGER NOT NULL
+);
+
+insertTrack:
+INSERT INTO track(album_id, title, length_seconds) VALUES (?, ?, ?);
+
+lastInsertRowId:
+SELECT last_insert_rowid();
+
+summary:
+SELECT count(*) AS total, max(length_seconds) AS newest FROM track;

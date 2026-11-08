@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.text.format.Column
 import io.github.krosstack.kscope.cli.text.format.NodeLabels
 import io.github.krosstack.kscope.cli.text.format.Table
@@ -36,13 +37,11 @@ internal fun <T> KrosScope.answerAbout(query: String, ask: (String) -> T): NodeA
 /** Prints the candidates of an ambiguous name and ends the command with the usage exit code. */
 internal fun CliktCommand.reportAmbiguity(ambiguous: NodeAnswer.Ambiguous, format: OutputFormat): Nothing {
     val resolution = ambiguous.resolution
-    echo(
-        if (format == OutputFormat.JSON) {
-            ServiceJson.encode(resolution, ambiguous.level)
-        } else {
-            ambiguityText(resolution)
-        },
-    )
+    if (format == OutputFormat.JSON) {
+        echoResult(ServiceJson.encode(resolution, ambiguous.level), format)
+    } else {
+        echo(ambiguityText(resolution))
+    }
     throw ProgramResult(ExitCodes.USAGE)
 }
 

@@ -1,0 +1,17 @@
+CREATE TABLE album (
+    id INTEGER NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    released_at INTEGER NOT NULL
+);
+
+insertAlbum:
+INSERT INTO album(title, released_at) VALUES (?, ?);
+
+lastInsertRowId:
+SELECT last_insert_rowid();
+
+summary:
+SELECT count(*) AS total, max(released_at) AS newest FROM album;
+
+titleCodepoints:
+SELECT unicode(title) AS codepoint FROM album;

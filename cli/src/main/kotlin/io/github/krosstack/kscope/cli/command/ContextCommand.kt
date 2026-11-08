@@ -20,6 +20,7 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireIndex
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.resolve
@@ -95,12 +96,13 @@ internal class ContextCommand : CliktCommand(name = "context") {
         }
         val located = answer.value
         val result = located.value
-        echo(
+        echoResult(
             when (options.format) {
                 OutputFormat.JSON -> ServiceJson.encode(result, answer.level)
                 OutputFormat.MARKDOWN -> result.markdown
                 else -> ContextText.render(result, textContext(options, located.locations))
             },
+            options.format,
         )
     }
 

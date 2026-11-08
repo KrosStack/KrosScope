@@ -176,14 +176,14 @@ internal class StubSymbols(
             certainty = draft.certainty,
             attributes = draft.typeSource?.let { mapOf(TYPE_SOURCE_ATTRIBUTE to it.value) }.orEmpty(),
         )
-        if (truth != null && truth.direct) relationships += generates(truth.source, draft.id)
+        if (truth != null && truth.direct) relationships += generates(truth.source, draft)
     }
 
-    private fun generates(source: SymbolId, generated: SymbolId) = Relationship(
+    private fun generates(source: SymbolId, generated: Draft) = Relationship(
         from = NodeRef.OfSymbol(source),
         kind = RelationKind.GENERATES,
         subKind = null,
-        resolution = Resolution.Resolved(NodeRef.OfSymbol(generated), Certainty.EXACT),
+        resolution = Resolution.Resolved(NodeRef.OfSymbol(generated.id), generated.certainty),
         evidenceClass = EvidenceClass.CONVENTION,
         site = null,
         scope = scope,

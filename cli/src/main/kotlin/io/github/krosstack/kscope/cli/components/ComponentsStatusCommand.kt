@@ -9,6 +9,7 @@ import io.github.krosstack.kscope.cli.RootOptions
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.service.components.ComponentDirectory
 import io.github.krosstack.kscope.service.components.ComponentManifest
@@ -31,6 +32,6 @@ internal class ComponentsStatusCommand(
         if (format !in setOf(OutputFormat.TEXT, OutputFormat.JSON)) {
             throw UsageError("Use --format text or json", statusCode = 2)
         }
-        echo(ComponentsText.render(directory.installed(), manifest, format == OutputFormat.JSON))
+        echoResult(ComponentsText.render(directory.installed(), manifest, format == OutputFormat.JSON), format)
     }
 }

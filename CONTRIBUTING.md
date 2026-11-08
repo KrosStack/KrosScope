@@ -103,6 +103,11 @@ The [benchmark methodology](docs/benchmark.md) is the policy. Its core rules:
    `kscope-<version>.zip`, `kscope-<version>.tar.gz`, their `SHA256SUMS`, and the changelog section as notes.
    Running it again by hand with the same tag replaces the archives and notes.
 
+Run *Publish components* on `main` in `KrosStack/KrosScope` with a `YYYY.MM` or `YYYY.MM.N` version.
+It publishes the runtime ZIP and `SHA256SUMS` under `components-<version>` without changing the latest CLI release.
+Upload the separate int8 model files (`LICENSE`, `model.json`, `model.onnx`, `tokenizer.json`) to that same release.
+Pin their sizes and SHA-256 hashes in the component manifest only after all assets are published; existing assets are immutable.
+
 ## Documentation
 
 Public documentation is the [README](README.md), the [changelog](CHANGELOG.md) and the `docs` directory, whose

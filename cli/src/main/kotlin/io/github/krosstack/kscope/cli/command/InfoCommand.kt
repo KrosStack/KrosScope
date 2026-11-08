@@ -19,6 +19,7 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireIndex
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.resolve
@@ -68,7 +69,7 @@ internal class InfoCommand : CliktCommand(name = "info") {
         if (structure) {
             val session = currentContext.parent?.obj as? CliSession
             session?.execution?.refuseStructure(this)
-            echo(renderStructure(options))
+            echoResult(renderStructure(options), options.format)
             return
         }
         forward(options)
@@ -78,7 +79,10 @@ internal class InfoCommand : CliktCommand(name = "info") {
                 it.info()
             }
         }
-        echo(render(result.copy(indexLocation = ClientPaths.indexLocation(options.workspace)), options))
+        echoResult(
+            render(result.copy(indexLocation = ClientPaths.indexLocation(options.workspace)), options),
+            options.format,
+        )
     }
 
     private fun renderStructure(options: ResolvedOptions): String {

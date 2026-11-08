@@ -1,7 +1,6 @@
 package io.github.krosstack.kscope.analyzer.schema
 
 import io.github.krosstack.kscope.analyzer.schema.proto.WireKotlinSynthesizer
-import io.github.krosstack.kscope.model.Certainty
 import io.github.krosstack.kscope.model.EvidenceClass
 import io.github.krosstack.kscope.model.Fact
 import io.github.krosstack.kscope.model.NodeRef
@@ -97,7 +96,9 @@ class WireKotlinSynthesizerTest {
 
     @Test
     fun `GENERATES relationships join messages, fields, enums and constants to their classes`() {
-        val generated = run().first.facts().relationships().filter { it.kind == RelationKind.GENERATES }
+        val facts = run().first.facts()
+        val symbols = facts.symbols().associateBy { it.id }
+        val generated = facts.relationships().filter { it.kind == RelationKind.GENERATES }
         val described = generated.map { Render.relationship(it).replace(":lib@main:", "") }
         listOf(
             "proto/sample/library/Book# -> sample/library/wire/Book#",
@@ -105,7 +106,11 @@ class WireKotlinSynthesizerTest {
             "proto/sample/library/Genre# -> sample/library/wire/Genre#",
             "proto/sample/library/Genre#FICTION. -> sample/library/wire/Genre#FICTION.",
         ).forEach { edge -> assertTrue("GENERATES/ $edge CONVENTION" in described, "$edge in $described") }
-        assertTrue(generated.all { (it.resolution as Resolution.Resolved).certainty == Certainty.EXACT })
+        generated.forEach { edge ->
+            val resolution = edge.resolution as Resolution.Resolved
+            val symbol = symbols.getValue((resolution.target as NodeRef.OfSymbol).id)
+            assertEquals(symbol.certainty, resolution.certainty, symbol.qualifiedName)
+        }
         assertEquals(
             1 + 11 + 1 + 1 + 1 + 2,
             generated.size,

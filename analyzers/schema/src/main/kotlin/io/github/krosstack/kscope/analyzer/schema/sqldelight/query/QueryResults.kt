@@ -68,7 +68,7 @@ internal class QueryResults(private val scope: QueryScope) {
     private fun callType(call: SqlExpression.Call): ColumnType {
         val argument = call.arguments.firstOrNull()?.let(::typeOf)
         return when (call.function) {
-            "COUNT", "LENGTH", "RANDOM", "INSTR" -> long
+            "COUNT", "LENGTH", "RANDOM", "INSTR", "LAST_INSERT_ROWID", "CHANGES", "TOTAL_CHANGES" -> long
             "MAX", "MIN", "SUM" -> argument?.nullable() ?: unknown
             "AVG" -> double.nullable()
             "TOTAL" -> double

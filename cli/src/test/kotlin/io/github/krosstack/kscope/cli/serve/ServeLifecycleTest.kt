@@ -121,6 +121,29 @@ class ServeLifecycleTest {
         }
     }
 
+    @Test
+    fun `a request is recorded as ended before its exit response is sent`() = inScannedWorkspace { root ->
+        val clock = AtomicLong(TimeUnit.SECONDS.toNanos(1))
+        val settings = ServeSettings(
+            clock = clock::get,
+            onRequest = { clock.set(TimeUnit.SECONDS.toNanos(2)) },
+            beforeExitResponse = { clock.set(TimeUnit.SECONDS.toNanos(3)) },
+        )
+        val server = ServeServer.open(root, settings)
+        val executor = Executors.newSingleThreadExecutor()
+        try {
+            val running = executor.submit { server.run() }
+            assertEquals(0, server.query(listOf("info", "--quiet")).exitCode)
+            server.requestStop()
+            running.get(5, TimeUnit.SECONDS)
+            assertEquals(TimeUnit.SECONDS.toNanos(2), server.lastRequestAt)
+        } finally {
+            server.requestStop()
+            executor.shutdownNow()
+            server.close()
+        }
+    }
+
     private fun withServiceHome(block: (Path) -> Unit) {
         val home = Files.createTempDirectory("kscope-service-home")
         val previous = System.getProperty(MachineDirectory.PROPERTY)

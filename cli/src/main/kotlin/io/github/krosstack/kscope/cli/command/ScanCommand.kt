@@ -18,6 +18,7 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.scanService
@@ -76,7 +77,10 @@ internal class ScanCommand(name: String = "scan", compatibilityAlias: Boolean = 
                 scanService(options, openOptions(asked, listener), rebuild, verify)
             }
         }
-        echo(render(result.copy(indexLocation = ClientPaths.indexLocation(options.workspace)), options))
+        echoResult(
+            render(result.copy(indexLocation = ClientPaths.indexLocation(options.workspace)), options),
+            options.format,
+        )
         if (result.verification?.matches == false) throw ProgramResult(ExitCodes.VERIFICATION_MISMATCH)
     }
 

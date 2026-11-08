@@ -17,6 +17,7 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireIndex
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.requireSections
@@ -80,7 +81,7 @@ internal class AnalyzeCommand : CliktCommand(name = "analyze") {
             if (reading == Reading.SYMBOL) throw UsageError(JSON_NEEDS_TASK)
             forward(options)
             val result = guarded { withProgress(options) { listener -> analyse(options, text, listener) } }
-            echo(ServiceJson.encode(result.value, result.level))
+            echoResult(ServiceJson.encode(result.value, result.level), options.format)
             return
         }
         forward(options)

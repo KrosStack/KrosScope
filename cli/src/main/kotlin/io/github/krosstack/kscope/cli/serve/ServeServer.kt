@@ -33,6 +33,7 @@ internal class ServeServer private constructor(
     private val mapServer = mapHost?.let { MapServer.open(randomToken(), it) }
     val mapUrl: String? get() = mapServer?.url
     private val hosted = settings.hosted
+    private val beforeExitResponse = settings.beforeExitResponse
     val releases = ServeReleases(hosted)
     val loaded: Boolean get() = requests.loaded
     val indexed: Boolean get() = requests.indexed
@@ -119,8 +120,12 @@ internal class ServeServer private constructor(
                 val request = connection.request
                 connections.receivedRequest()
                 val output = ServeOutput(client.getOutputStream().bufferedWriter(Charsets.UTF_8))
-                answer(request, output)
+                val code = answer(request, output)
+                // A client acts as soon as it reads the exit response, so the end of its request is
+                // recorded before that response is sent.
                 connections.receivedRequest()
+                beforeExitResponse()
+                output.send(ServeResponse("exit", exitCode = code))
             } catch (_: java.io.IOException) {
                 Unit
             } catch (_: SerializationException) {
@@ -131,11 +136,10 @@ internal class ServeServer private constructor(
         }
     }
 
-    private fun answer(request: ServeRequest, output: ServeOutput) {
+    private fun answer(request: ServeRequest, output: ServeOutput): Int {
         output.send(ServeResponse("hello"))
         val compatible = request.toolVersion == metadata.toolVersion && request.protocol == metadata.protocol
-        val code = if (request.action == "command" && !compatible) ExitCodes.FAILURE else dispatch(request, output)
-        output.send(ServeResponse("exit", exitCode = code))
+        return if (request.action == "command" && !compatible) ExitCodes.FAILURE else dispatch(request, output)
     }
 
     private fun authenticated(token: String): Boolean = MessageDigest.isEqual(

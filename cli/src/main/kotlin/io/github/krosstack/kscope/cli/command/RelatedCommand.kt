@@ -13,6 +13,7 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.reportAmbiguity
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.requireSections
@@ -60,12 +61,13 @@ internal class RelatedCommand : CliktCommand(name = "related") {
         when (answer) {
             is NodeAnswer.Ambiguous -> reportAmbiguity(answer, options.format)
 
-            is NodeAnswer.Found -> echo(
+            is NodeAnswer.Found -> echoResult(
                 if (options.format == OutputFormat.JSON) {
                     ServiceJson.encode(answer.value, answer.level)
                 } else {
                     RelatedText.render(answer.value, node, textContext(options, answer.locations))
                 },
+                options.format,
             )
         }
     }

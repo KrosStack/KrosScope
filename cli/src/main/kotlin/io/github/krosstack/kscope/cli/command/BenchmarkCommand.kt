@@ -19,6 +19,7 @@ import io.github.krosstack.kscope.cli.RootOptions
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.text.BenchmarkText
@@ -90,12 +91,13 @@ internal class BenchmarkCommand : CliktCommand(name = "benchmark") {
                 Files.writeString(it.resolve("localization.md"), report)
             }
         }
-        echo(
+        echoResult(
             when (options.format) {
                 OutputFormat.JSON -> json
                 OutputFormat.MARKDOWN -> report
                 else -> BenchmarkText.render(result, textContext(options))
             },
+            options.format,
         )
         if (!result.gatePassed) throw ProgramResult(ExitCodes.FAILURE)
     }
