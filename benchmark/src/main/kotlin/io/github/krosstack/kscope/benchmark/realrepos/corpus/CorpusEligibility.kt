@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.benchmark.realrepos.corpus
 
 import io.github.krosstack.kscope.model.RepoPath
 import io.github.krosstack.kscope.spi.ArtifactCandidate
+import java.nio.charset.CharacterCodingException
 
 internal data class CorpusCommit(
     val hash: String,
@@ -57,12 +58,17 @@ internal class CorpusEligibilityReader(private val git: CorpusGit) {
         ) {
             return false
         }
-        val before = git.read("show", "${commit.parent}:${change.before}")
-        val after = git.read("show", "${commit.hash}:${change.after}")
-        return if (detector.supportsHorizontalFormatting(change.before)) {
-            CorpusFormatting.normalForm(before) == CorpusFormatting.normalForm(after)
-        } else {
-            before == after
+        val before = git.readBytes("show", "${commit.parent}:${change.before}")
+        val after = git.readBytes("show", "${commit.hash}:${change.after}")
+        return try {
+            if (detector.supportsHorizontalFormatting(change.before)) {
+                CorpusFormatting.normalForm(before.decodeToString(throwOnInvalidSequence = true)) ==
+                    CorpusFormatting.normalForm(after.decodeToString(throwOnInvalidSequence = true))
+            } else {
+                before.contentEquals(after)
+            }
+        } catch (_: CharacterCodingException) {
+            before.contentEquals(after)
         }
     }
 

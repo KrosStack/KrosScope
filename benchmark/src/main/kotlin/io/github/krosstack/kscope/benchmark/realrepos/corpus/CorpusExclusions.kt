@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.benchmark.realrepos.corpus
 
 internal object CorpusExclusions {
     const val MISSING_PARENT = "missing-parent"
+    const val UNDECODABLE_COMMIT = "undecodable-commit"
     const val BOT = "bot"
     const val FORMATTING = "formatting"
     const val NO_PARENT_SOURCE_FILES = "no-parent-source-files"
@@ -14,6 +15,7 @@ internal object CorpusExclusions {
 
     val reasons: Set<String> = setOf(
         MISSING_PARENT,
+        UNDECODABLE_COMMIT,
         BOT,
         FORMATTING,
         NO_PARENT_SOURCE_FILES,

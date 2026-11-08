@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.service.semantic
 
 import io.github.krosstack.kscope.model.KscopeJson
+import io.github.krosstack.kscope.service.components.ComponentPlatform
 import io.github.krosstack.kscope.spi.embedding.ModelIdentity
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -9,7 +10,6 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.LinkOption.NOFOLLOW_LINKS
 import java.nio.file.Path
-import java.util.Locale
 import kotlin.io.path.readText
 
 internal class ComponentLayout(
@@ -56,15 +56,8 @@ internal class ComponentLayout(
     ) { "Missing or malformed model field: $field" }
 
     private fun platform(): String {
-        val os = System.getProperty("os.name").lowercase(Locale.ROOT)
-        val architecture = System.getProperty("os.arch").lowercase(Locale.ROOT)
-        val arm = architecture in setOf("aarch64", "arm64")
-        require(arm || architecture in setOf("amd64", "x86_64")) { "Unsupported semantic component architecture" }
-        return when {
-            os.startsWith("windows") && !arm -> "windows-x64"
-            os.startsWith("linux") -> if (arm) "linux-aarch64" else "linux-x64"
-            os.startsWith("mac") && arm -> "macos-arm64"
-            else -> error("Unsupported semantic component platform")
-        }
+        val platform = ComponentPlatform.current(System.getProperty("os.name"), System.getProperty("os.arch"))
+        check(platform in ComponentPlatform.semanticPlatforms) { "Unsupported semantic component platform" }
+        return platform
     }
 }

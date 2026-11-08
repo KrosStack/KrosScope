@@ -267,8 +267,9 @@ that the build files of the workspace name.
 
 ## `components`
 
-Installs optional, versioned components in your user directory, or removes or lists them. This release ships no
-components; `list` is empty until a later release adds entries to its pinned manifest.
+Installs optional, versioned components in your user directory, or removes or lists them. Install the embedding runtime
+with `kscope components install semantic --yes` and the CodeRankEmbed model with `kscope components install semantic-model --yes`.
+Both support Windows x64, Linux x64, Linux aarch64 and macOS arm64.
 
 ```
 kscope components install NAME [--yes] [--from DIR|FILE]
