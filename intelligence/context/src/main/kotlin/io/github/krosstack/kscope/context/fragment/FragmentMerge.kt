@@ -7,12 +7,14 @@ import io.github.krosstack.kscope.model.NodeRef
 import io.github.krosstack.kscope.model.TextRange
 import io.github.krosstack.kscope.model.context.ContextFragment
 import io.github.krosstack.kscope.model.context.ContextRendering
+import io.github.krosstack.kscope.model.context.TokenCount
 
 internal class FragmentMerge(
     private val graph: ContextGraph,
     private val documents: SourceDocuments,
     private val costs: FragmentCosts,
 ) {
+    private val mergedSources = mutableMapOf<MergedSourceKey, Pair<String, TokenCount>>()
     private val order = compareBy<ContextFragment> { graph.module(it.artifact) }
         .thenBy { graph.locations.pathOf(it.artifact) }
         .thenBy { it.range?.startLine ?: 0 }.thenBy { it.range?.startColumn ?: 0 }
@@ -88,8 +90,12 @@ internal class FragmentMerge(
         val second = requireNotNull(right.range)
         val end = if (compareValuesBy(second, first, TextRange::endLine, TextRange::endColumn) > 0) second else first
         val range = TextRange(first.startLine, first.startColumn, end.endLine, end.endColumn)
-        val text = requireNotNull(document.slice(range))
         val artifact = graph.artifacts.getValue(left.artifact)
+        val key = MergedSourceKey(document, artifact.contentHash, range, left.rendering)
+        val (text, tokens) = mergedSources.getOrPut(key) {
+            val text = requireNotNull(document.slice(range))
+            text to costs.count(artifact.contentHash, range, left.rendering, text)
+        }
         return left.copy(
             node = NodeRef.OfArtifact(left.artifact),
             range = range,
@@ -99,7 +105,7 @@ internal class FragmentMerge(
                 left.relevance + right.relevance
             },
             text = text,
-            tokens = costs.count(artifact.contentHash, range, left.rendering, text),
+            tokens = tokens,
         )
     }
 }

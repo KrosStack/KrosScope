@@ -19,6 +19,7 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.reportAmbiguity
 import io.github.krosstack.kscope.cli.requireIndex
 import io.github.krosstack.kscope.cli.resolve
@@ -85,7 +86,11 @@ internal class GraphCommand : CliktCommand(name = "graph") {
         val answer = guarded { withProgress(options) { listener -> query(options, listener) } }
         when (answer) {
             is NodeAnswer.Ambiguous -> reportAmbiguity(answer, options.format)
-            is NodeAnswer.Found -> echo(render(answer.value, answer.level, options, answer.locations))
+
+            is NodeAnswer.Found -> echoResult(
+                render(answer.value, answer.level, options, answer.locations),
+                if (options.format == OutputFormat.MARKDOWN) OutputFormat.DOT else options.format,
+            )
         }
     }
 

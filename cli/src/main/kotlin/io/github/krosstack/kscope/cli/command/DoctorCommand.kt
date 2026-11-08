@@ -9,6 +9,7 @@ import io.github.krosstack.kscope.cli.RootOptions
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.text.DoctorText
@@ -44,6 +45,6 @@ internal class DoctorCommand(
         } else {
             DoctorText.render(result, options.environment.encodings, textContext(options))
         }
-        echo(rendered)
+        echoResult(rendered, options.format)
     }
 }

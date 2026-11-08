@@ -1,0 +1,127 @@
+name: Publish components
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Component version (YYYY.MM or YYYY.MM.N, for example 2026.11)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-components-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      VERSION: ${{ inputs.version }}
+      TAG: components-${{ inputs.version }}
+    steps:
+      - name: Check the version and branch
+        env:
+          RELEASE_REF: ${{ github.ref }}
+        run: |
+          [[ $VERSION =~ ^[0-9]{4}\.(0[1-9]|1[0-2])(\.[0-9]+)?$ ]] || {
+            echo "::error::Expected a component version YYYY.MM or YYYY.MM.N."
+            exit 1
+          }
+          [[ $RELEASE_REF == refs/heads/main ]] || {
+            echo "::error::Run this workflow on main."
+            exit 1
+          }
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Make the wrapper executable
+        run: chmod +x gradlew
+
+      - name: Check and build the runtime
+        run: ./gradlew --console=plain :components:semantic-worker:check :components:semantic-worker:distZip
+
+      - name: Check the archive and prepare the assets and notes
+        run: |
+          archives=(components/semantic-worker/build/distributions/*.zip)
+          [[ ${#archives[@]} == 1 && -f ${archives[0]} ]]
+          archive=${archives[0]}
+          bash .github/scripts/check-components-archive.sh "$archive"
+          mkdir release
+          cp "$archive" release/
+          name=${archive##*/}
+          (cd release && sha256sum "$name" > SHA256SUMS)
+          size=$(stat -c %s "$archive")
+          sha256=$(sha256sum "$archive" | cut -d ' ' -f 1)
+          cat > notes.md <<EOF
+          Semantic runtime: \`$name\` ($size bytes), SHA-256: \`$sha256\`.
+
+          The model files are an int8 export of nomic-ai/CodeRankEmbed at revision 3c4b60807d71f79b43f3c4363786d9493691f8b1 (MIT), ONNX opset 17, dynamic int8 per-channel with reduced range on MatMul weights, ONNX Runtime 1.31.1. They are attached to this same release separately and checked by SHA-256 at install.
+          EOF
+
+      - name: Create or verify the component tag
+        run: |
+          commit=$(git rev-parse HEAD)
+          if git show-ref --verify --quiet "refs/tags/$TAG"; then
+            tagged=$(git rev-parse "refs/tags/$TAG^{commit}")
+            [[ $tagged == "$commit" ]] || {
+              echo "::error::Tag $TAG points to $tagged, not the dispatched main commit $commit."
+              exit 1
+            }
+          else
+            git tag "$TAG" "$commit"
+            git push origin "refs/tags/$TAG"
+          fi
+
+      - name: Publish immutable runtime assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          release_id=$(gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            --jq ".[] | select(.tag_name == \"$TAG\") | .id")
+          if [[ -z $release_id ]]; then
+            gh release create "$TAG" release/* --verify-tag --latest=false \
+              --title "KrosScope components $VERSION" --notes-file notes.md
+          else
+            assets=$(gh api --paginate "repos/$GITHUB_REPOSITORY/releases/$release_id/assets?per_page=100" --jq '.[].name')
+            downloaded=$(mktemp -d)
+            trap 'rm -rf "$downloaded"' EXIT
+            missing=()
+            for file in release/*; do
+              name=${file##*/}
+              if grep -Fxq "$name" <<< "$assets"; then
+                gh release download "$TAG" --pattern "$name" --dir "$downloaded"
+                expected=$(sha256sum "$file" | cut -d ' ' -f 1)
+                actual=$(sha256sum "$downloaded/$name" | cut -d ' ' -f 1)
+                [[ $actual == "$expected" ]] || {
+                  echo "::error::Asset $name differs from the published SHA-256; pinned assets are immutable."
+                  exit 1
+                }
+                echo "Skipping identical asset: $name"
+              else
+                missing+=("$file")
+              fi
+            done
+            if (( ${#missing[@]} )); then
+              gh release upload "$TAG" "${missing[@]}"
+            fi
+            if [[ $(gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" --jq .draft) == true ]]; then
+              gh release edit "$TAG" --draft=false --latest=false
+            fi
+          fi
+          echo "Published [$TAG]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$TAG)." >> "$GITHUB_STEP_SUMMARY"

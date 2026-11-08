@@ -36,7 +36,8 @@ distributions {
     main {
         distributionBaseName = "semantic-worker"
         contents {
-            exclude("bin/**")
+            into("/")
+            exclude("semantic-worker", "semantic-worker.bat")
             into("native") { from(nativeLibraries) }
             into("licenses") { from(repositoryRoot.dir("licenses")) }
             from(repositoryRoot.file("LICENSE"), repositoryRoot.file("NOTICE"))

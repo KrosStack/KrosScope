@@ -20,6 +20,8 @@ private const val TRANSACTER = "app.cash.sqldelight.Transacter"
 private const val SQL_DRIVER = "app.cash.sqldelight.db.SqlDriver"
 private const val SQL_SCHEMA = "app.cash.sqldelight.db.SqlSchema<app.cash.sqldelight.db.QueryResult.Value<Unit>>"
 
+private fun StubClass.rowShape() = constructor.orEmpty().map { it.name to it.type }
+
 /** A stub file planned for a `.sq` file or a database, in the source set whose `Placement` it names. */
 internal class PlannedStub(val placement: Placement, val virtualPath: String, val file: StubFile)
 
@@ -32,22 +34,50 @@ internal class SqlDelightPlan(private val sources: List<SqSource>) {
     private val tableClasses = TableClasses(sources)
     private val schemas: Map<String?, SqlSchema> =
         sources.groupBy { it.database?.name }.mapValues { (_, group) -> SqlSchema(group.flatMap { it.tables }) }
+    private val queriesBySource = sources.associateWith(::queriesOf)
+    private val rowClassOwners = sources.sortedBy { it.artifact.ref.path.value }.flatMap { source ->
+        queriesBySource.getValue(source).mapNotNull { it.rowClass }.map { rowClass ->
+            rowClassKey(source, rowClass.name) to rowClass
+        }
+    }.distinctBy { it.first }.toMap()
 
     fun stubs(): List<PlannedStub> = sources.mapNotNull(::fileStub) + databaseStubs()
 
     private fun fileStub(source: SqSource): PlannedStub? {
-        val analyzer = QueryAnalyzer(schemas.getValue(source.database?.name))
-        val queryStubs = SqlDelightQueryStubs(tableClasses, source.packageName)
-        val queries = source.file.queries.map { statement ->
-            val label = checkNotNull(statement.label)
-            queryStubs.of(label, analyzer.shapeOf(statement), source.ids.queryId(source.path.baseName, label))
-        }
+        val queries = queriesBySource.getValue(source)
         val classes = source.tables.filter { it.columns.isNotEmpty() }.map { tableClass(source, it) } +
-            queries.mapNotNull { it.rowClass } + listOfNotNull(queriesClass(source, queries))
+            ownedRowClasses(source) + listOfNotNull(queriesClass(source, queries))
         val virtualPath = "sqldelight/${source.artifact.ref.path.value.replace('/', '_')}.kt"
         val file = classes.takeIf { it.isNotEmpty() }?.let { StubFile(source.packageName, it) }
         return file?.let { PlannedStub(source.placement, virtualPath, it) }
     }
+
+    private fun queriesOf(source: SqSource): List<QueryStubs> {
+        val analyzer = QueryAnalyzer(schemas.getValue(source.database?.name))
+        val queryStubs = SqlDelightQueryStubs(tableClasses, source.packageName)
+        return source.file.queries.map { statement ->
+            val label = checkNotNull(statement.label)
+            queryStubs.of(label, analyzer.shapeOf(statement), source.ids.queryId(source.path.baseName, label))
+        }
+    }
+
+    private fun ownedRowClasses(source: SqSource): List<StubClass> =
+        queriesBySource.getValue(source).mapNotNull { it.rowClass }.filter { rowClass ->
+            rowClassOwners.getValue(rowClassKey(source, rowClass.name)) === rowClass
+        }
+
+    private fun functionsOf(source: SqSource, query: QueryStubs): List<StubFunction> {
+        val rowClass = query.rowClass ?: return query.functions
+        val owner = rowClassOwners.getValue(rowClassKey(source, rowClass.name))
+        return if (rowClass === owner || rowClass.rowShape() == owner.rowShape()) {
+            query.functions
+        } else {
+            query.functions.map { it.copy(certainty = Certainty.HEURISTIC) }
+        }
+    }
+
+    private fun rowClassKey(source: SqSource, name: String) =
+        Triple(source.placement.sourceSet?.id, source.packageName, name)
 
     private fun tableClass(source: SqSource, table: SqlTable) = StubClass(
         name = SqlDelightNaming.tableClass(table.name),
@@ -65,7 +95,7 @@ internal class SqlDelightPlan(private val sources: List<SqSource>) {
     )
 
     private fun queriesClass(source: SqSource, queries: List<QueryStubs>): StubClass? =
-        queries.flatMap { it.functions }.takeIf { it.isNotEmpty() }?.let { functions ->
+        queries.flatMap { functionsOf(source, it) }.takeIf { it.isNotEmpty() }?.let { functions ->
             StubClass(
                 name = SqlDelightNaming.queriesClass(source.path.baseName),
                 form = StubForm.CLASS,

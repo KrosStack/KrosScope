@@ -13,4 +13,5 @@ internal data class ServeSettings(
     val watch: WatchSettings = WatchSettings(),
     val hosted: Boolean = false,
     val onLoadChange: (Boolean) -> Unit = {},
+    val beforeExitResponse: () -> Unit = {},
 )
