@@ -1,1 +1,60 @@
-{"schemaVersion":1,"components":[]}
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "name": "semantic",
+      "version": "2026.11",
+      "licence": "Apache-2.0",
+      "licenceFile": "LICENSE",
+      "description": "Isolated semantic embedding runtime",
+      "platforms": ["windows-x64", "linux-x64", "linux-aarch64", "macos-arm64"],
+      "files": [
+        {
+          "path": "semantic-worker-0.1.0.zip",
+          "platform": "any",
+          "urls": ["https://github.com/KrosStack/KrosScope/releases/download/components-2026.11/semantic-worker-0.1.0.zip"],
+          "size": 94200270,
+          "sha256": "cea010ee8ea691a5b750bdea483cac27969b6f431d3e8a4ea5b13d2866385bfd"
+        }
+      ]
+    },
+    {
+      "name": "semantic-model",
+      "version": "2026.11",
+      "licence": "MIT",
+      "licenceFile": "model/LICENSE",
+      "description": "CodeRankEmbed int8 model",
+      "platforms": ["windows-x64", "linux-x64", "linux-aarch64", "macos-arm64"],
+      "files": [
+        {
+          "path": "model/LICENSE",
+          "platform": "any",
+          "urls": ["https://github.com/KrosStack/KrosScope/releases/download/components-2026.11/LICENSE"],
+          "size": 1294,
+          "sha256": "58d4a1cade32c779c9ce632d06d7115dc8adec34ea300beadf9c6fbaeced8c3f"
+        },
+        {
+          "path": "model/model.json",
+          "platform": "any",
+          "urls": ["https://github.com/KrosStack/KrosScope/releases/download/components-2026.11/model.json"],
+          "size": 588,
+          "sha256": "9fd4222004b18e2e4cc0e4e5eb4055e58118bbc976c652c5c9654131440cbbc4"
+        },
+        {
+          "path": "model/model.onnx",
+          "platform": "any",
+          "urls": ["https://github.com/KrosStack/KrosScope/releases/download/components-2026.11/model.onnx"],
+          "size": 210877074,
+          "sha256": "99704fb95a7cdbcabb25d8b4eaaab788f0420cb9254cc50172ea103d014758f2"
+        },
+        {
+          "path": "model/tokenizer.json",
+          "platform": "any",
+          "urls": ["https://github.com/KrosStack/KrosScope/releases/download/components-2026.11/tokenizer.json"],
+          "size": 711649,
+          "sha256": "91f1def9b9391fdabe028cd3f3fcc4efd34e5d1f08c3bf2de513ebb5911a1854"
+        }
+      ]
+    }
+  ]
+}

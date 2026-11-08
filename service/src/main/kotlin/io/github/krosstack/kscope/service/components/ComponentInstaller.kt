@@ -23,6 +23,7 @@ public class ComponentInstaller(
 ) {
     public fun install(entry: ComponentEntry, platform: String, source: InstallSource): InstallResult {
         ComponentManifest.validate(entry)
+        if (!entry.supports(platform)) return InstallResult.Unavailable(entry.name, "Unsupported platform")
         val files = entry.files.filter { it.platform == "any" || it.platform == platform }
         return try {
             directory.exclusively(entry.name) {
@@ -30,8 +31,6 @@ public class ComponentInstaller(
                 try {
                     directory.recover(entry.name)
                     when {
-                        files.isEmpty() -> InstallResult.Unavailable(entry.name, "Unsupported platform")
-
                         source is InstallSource.Archive && !source.accepts(files) ->
                             InstallResult.Unavailable(entry.name, "An archive source requires one ZIP file")
 

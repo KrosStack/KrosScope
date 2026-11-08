@@ -20,10 +20,10 @@ public fun ComponentManifest.listing(
         val versions = versionsByName[entry.name].orEmpty()
         val installed = installed(entry.name, versions) ?: versions.firstOrNull()
         val state = when {
+            !entry.supports(platform) -> ComponentState.UNSUPPORTED
             installed?.problem?.startsWith(WorkerSelfTest.FAILURE_PREFIX) == true -> ComponentState.SELF_TEST_FAILED
             installed?.problem != null -> ComponentState.CORRUPT
             settings.components[entry.name] == false -> ComponentState.DISABLED
-            entry.files.none { it.platform == "any" || it.platform == platform } -> ComponentState.UNSUPPORTED
             installed == null -> ComponentState.NOT_INSTALLED
             installed.version == entry.version -> ComponentState.INSTALLED
             else -> ComponentState.OTHER_VERSION

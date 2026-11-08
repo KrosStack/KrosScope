@@ -10,4 +10,8 @@ public data class ComponentEntry(
     public val licenceFile: String,
     public val description: String,
     public val files: List<ComponentFile>,
-)
+    public val platforms: List<String>? = null,
+) {
+    internal fun supports(platform: String): Boolean =
+        (platforms == null || platform in platforms) && files.any { it.platform == "any" || it.platform == platform }
+}

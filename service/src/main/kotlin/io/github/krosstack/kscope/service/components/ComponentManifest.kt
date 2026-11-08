@@ -31,6 +31,11 @@ public data class ComponentManifest(public val schemaVersion: Int, public val co
             require(entry.files.isNotEmpty())
             require(entry.files.map { file -> file.path.lowercase() }.distinct().size == entry.files.size)
             entry.files.forEach(::validate)
+            entry.platforms?.let { platforms ->
+                require(platforms.isNotEmpty() && platforms.distinct().size == platforms.size)
+                require(platforms.all { it != "any" && it in ComponentPlatform.supported && entry.supports(it) })
+                require(entry.files.all { it.platform == "any" || it.platform in platforms })
+            }
         }
 
         public fun shipped(): ComponentManifest = read(

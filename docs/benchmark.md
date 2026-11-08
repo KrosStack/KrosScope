@@ -326,6 +326,7 @@ The real-repository benchmark derives tasks from the pinned histories of Now in 
 It inspects at most 400 recent non-merge commits per repository and selects up to 60 eligible tasks. A task is
 eligible under these rules:
 
+- Commits with non-UTF-8 metadata or paths are excluded as `undecodable-commit`.
 - A task must change one to eight source files that exist at its parent revision.
 - Bot commits, identified whitespace-only or code-formatting changes and pure renames are excluded.
 - New or copied files are omitted from gold; existing changed files in the same commit remain eligible.
@@ -335,6 +336,9 @@ eligible under these rules:
 - Ancillary changes outside the source-file eligibility set are allowed.
 - Source eligibility uses a dedicated artifact detector; it does not narrow the readable-text corpus used by
   BM25 baselines.
+
+Git text is decoded strictly as UTF-8, with log output requested in UTF-8. Source blobs that cannot be decoded
+are compared as bytes without whitespace normalization; BM25 continues to count undecodable files as binary.
 
 The task statement and the gold:
 

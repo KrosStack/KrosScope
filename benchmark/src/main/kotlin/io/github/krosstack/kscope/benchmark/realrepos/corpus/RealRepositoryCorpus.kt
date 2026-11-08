@@ -4,6 +4,8 @@ import io.github.krosstack.kscope.benchmark.realrepos.RealCommitTask
 import io.github.krosstack.kscope.benchmark.realrepos.RealRepositoryManifest
 import io.github.krosstack.kscope.benchmark.realrepos.RealRepositorySpec
 import io.github.krosstack.kscope.benchmark.realrepos.RealSplit
+import java.io.IOException
+import java.nio.charset.CharacterCodingException
 import java.nio.file.Path
 
 internal object RealRepositoryCorpus {
@@ -13,7 +15,11 @@ internal object RealRepositoryCorpus {
         val ordered = repositories.sortedBy { it.id }
         val exclusions = sortedMapOf<String, Map<String, Int>>()
         val tasks = ordered.flatMap { repository ->
-            val result = candidates(repository)
+            val result = try {
+                candidates(repository)
+            } catch (failure: IOException) {
+                throw IOException("Repository ${repository.id} at ${repository.head}: ${failure.message}", failure)
+            }
             val recent = result.first.sortedWith(compareBy<RealCommitTask> { it.committedAt }.thenBy { it.commit })
                 .takeLast(limit)
             val skipped = CorpusExclusions.SELECTION_LIMIT to result.first.size - recent.size
@@ -30,31 +36,38 @@ internal object RealRepositoryCorpus {
         val git = CorpusGit(Path.of(repository.checkout))
         val eligibility = CorpusEligibilityReader(git)
         val exclusions = mutableMapOf<String, Int>()
-        val tasks = history(git, repository.head).mapNotNull { commit ->
-            val result = eligibility.inspect(commit)
-            val statement = CorpusStatement.clean(commit.message, result.statementPaths)
-            val reason = result.exclusion ?: if (statement.isBlank()) CorpusExclusions.EMPTY_STATEMENT else null
-            if (reason != null) {
+        val tasks = history(git, repository.head).mapNotNull { fields ->
+            try {
+                val commit = commit(fields)
+                val result = eligibility.inspect(commit)
+                val statement = CorpusStatement.clean(commit.message, result.statementPaths)
+                val reason = result.exclusion ?: if (statement.isBlank()) CorpusExclusions.EMPTY_STATEMENT else null
+                if (reason != null) {
+                    exclusions[reason] = exclusions.getOrDefault(reason, 0) + 1
+                    null
+                } else {
+                    RealCommitTask(
+                        "${repository.id}:${commit.hash}",
+                        repository.id,
+                        checkNotNull(commit.parent),
+                        commit.hash,
+                        commit.timestamp,
+                        statement,
+                        result.files,
+                        RealSplit.TEST,
+                    )
+                }
+            } catch (_: CharacterCodingException) {
+                val reason = CorpusExclusions.UNDECODABLE_COMMIT
                 exclusions[reason] = exclusions.getOrDefault(reason, 0) + 1
                 null
-            } else {
-                RealCommitTask(
-                    "${repository.id}:${commit.hash}",
-                    repository.id,
-                    checkNotNull(commit.parent),
-                    commit.hash,
-                    commit.timestamp,
-                    statement,
-                    result.files,
-                    RealSplit.TEST,
-                )
             }
         }
         return tasks to exclusions.toSortedMap()
     }
 
-    private fun history(git: CorpusGit, head: String): List<CorpusCommit> {
-        val fields = git.read(
+    private fun history(git: CorpusGit, head: String): List<List<ByteArray>> {
+        val fields = git.readFields(
             "log",
             "--no-merges",
             "--max-count=$HISTORY_LIMIT",
@@ -62,17 +75,20 @@ internal object RealRepositoryCorpus {
             "--format=%H%x00%P%x00%ct%x00%an <%ae> %cn <%ce>%x00%B",
             head,
             "--",
-        ).split('\u0000').dropLast(1)
+        )
         check(fields.size % HISTORY_FIELDS == 0) { "Unexpected Git history record shape" }
-        return fields.chunked(HISTORY_FIELDS).map { values ->
-            CorpusCommit(
-                values[HASH_FIELD],
-                values[PARENT_FIELD].takeIf { it.isNotBlank() },
-                values[TIME_FIELD].toLong(),
-                values[AUTHORS_FIELD],
-                values[MESSAGE_FIELD],
-            )
-        }
+        return fields.chunked(HISTORY_FIELDS)
+    }
+
+    private fun commit(fields: List<ByteArray>): CorpusCommit {
+        val values = fields.map { it.decodeToString(throwOnInvalidSequence = true) }
+        return CorpusCommit(
+            values[HASH_FIELD],
+            values[PARENT_FIELD].takeIf { it.isNotBlank() },
+            values[TIME_FIELD].toLong(),
+            values[AUTHORS_FIELD],
+            values[MESSAGE_FIELD],
+        )
     }
 
     private const val DEFAULT_LIMIT = 60
@@ -87,7 +103,7 @@ internal object RealRepositoryCorpus {
     private const val POLICY = "Inspect the 400 most recent reachable non-merge commits at each pinned HEAD; " +
         "select recent eligible commits by committer timestamp and SHA. Require 1-8 existing changed source files " +
         "at the parent, including deletions and parent paths of renames. New/copied files are omitted from gold. " +
-        "Reject unavailable parents, bots, source type changes, pure renames, " +
+        "Reject unavailable parents, undecodable UTF-8 metadata or paths, bots, source type changes, pure renames, " +
         "conservative horizontal-whitespace-only and explicitly code-formatter-labelled changes. " +
         "Ancillary non-source edits are allowed. " +
         "Gold comes from the parent Git tree and is never reduced by what the index contains; " +
