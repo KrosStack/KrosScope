@@ -11,9 +11,9 @@ class CommonOptionsHelpTest {
     private val dotWord = Regex("""\bdot\b""")
 
     @Test
-    fun `root and analyze list ml controls and every command still accepts no ml`() = inWorkspace { workspace ->
+    fun `root analyze context and scan list ml controls and every command accepts no ml`() = inWorkspace { workspace ->
         (listOf(emptyList<String>()) + allCommandPaths()).forEach { path ->
-            val expected = path.isEmpty() || path == listOf("analyze")
+            val expected = path.isEmpty() || path.first() in setOf("analyze", "context", "scan", "update")
             assertEquals(expected, helpOf(path).contains("--no-ml"), path.joinToString(" "))
             assertEquals(expected, helpOf(path).lists("--ml"), path.joinToString(" "))
         }
@@ -89,9 +89,9 @@ class CommonOptionsHelpTest {
     fun `each command lists only the common options that it honours`() {
         val query = listOf("--workspace", "--format", "--progress", "--quiet", "--no-server")
         val expected = mapOf(
-            listOf("scan") to listOf("--workspace", "--format", "--progress", "--quiet"),
-            listOf("update") to listOf("--workspace", "--format", "--progress", "--quiet"),
-            listOf("context") to query,
+            listOf("scan") to listOf("--workspace", "--format", "--progress", "--quiet", "--no-ml", "--ml"),
+            listOf("update") to listOf("--workspace", "--format", "--progress", "--quiet", "--no-ml", "--ml"),
+            listOf("context") to query + listOf("--no-ml", "--ml"),
             listOf("impact") to query,
             listOf("graph") to query,
             listOf("analyze") to query + listOf("--detail", "--sections", "--no-ml", "--ml", "--stage"),

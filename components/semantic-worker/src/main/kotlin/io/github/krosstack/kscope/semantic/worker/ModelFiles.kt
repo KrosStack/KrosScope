@@ -7,7 +7,8 @@ import kotlin.io.path.inputStream
 import kotlin.io.path.readText
 
 internal class ModelFiles(directory: Path) {
-    val descriptor: ModelDescriptor = KscopeJson.decodeFromString(directory.resolve("model.json").readText())
+    private val descriptorText = directory.resolve("model.json").readText()
+    val descriptor: ModelDescriptor = KscopeJson.decodeFromString(descriptorText)
     val model: Path = directory.resolve("model.onnx")
     val tokenizer: Path = directory.resolve("tokenizer.json")
 
@@ -28,4 +29,6 @@ internal class ModelFiles(directory: Path) {
             check(digest.digest().toHexString() == expected) { "Model checksum mismatch: $name" }
         }
     }
+
+    fun pipelineIdentity(device: String) = descriptor.pipelineIdentity(device, descriptorText)
 }

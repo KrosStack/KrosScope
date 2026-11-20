@@ -27,7 +27,7 @@ class ProducerRequestMappingTest {
     @Test
     fun `the producer declares what it consumes and for which ownership it produces`() {
         val descriptor = KotlinAnalyzerProducer().descriptor
-        assertEquals(ProducerRef("kscope.analyzer.kotlin", "0.1.0"), descriptor.producer)
+        assertEquals(ProducerRef("kscope.analyzer.kotlin", "0.1.1"), descriptor.producer)
         assertEquals(setOf("kotlin.source", "java.source"), descriptor.consumes.map { it.id }.toSet())
         assertEquals(OwnershipKind.SOURCE_SET, descriptor.granularity)
         val capabilities = setOf(
@@ -97,7 +97,7 @@ class ProducerRequestMappingTest {
         val request = fixture.requestFor(listOf(fixture.app, fixture.lib))
         val batches = fixture.run(fixture.producerWith("ok"), request)
         assertEquals(2, batches.size)
-        assertTrue(batches.all { it.producer == ProducerRef("kscope.analyzer.kotlin", "0.1.0") })
+        assertTrue(batches.all { it.producer == ProducerRef("kscope.analyzer.kotlin", "0.1.1") })
         assertTrue(batches.none { it.producer.version == FakeBatches.FAKE_VERSION })
     }
 

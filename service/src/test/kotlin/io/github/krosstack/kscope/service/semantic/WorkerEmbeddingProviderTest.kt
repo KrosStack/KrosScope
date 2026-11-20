@@ -53,6 +53,12 @@ class WorkerEmbeddingProviderTest {
     }
 
     @Test
+    fun `a handshake that is never answered stops the child process`(@TempDir directory: Path) {
+        assertFailsWith<IOException> { provider(directory, "child", batchTimeout = 1.seconds) }
+        assertStopped(directory)
+    }
+
+    @Test
     fun `close ends the child and prevents another exchange`(@TempDir directory: Path) {
         val provider = provider(directory)
         provider.close()
@@ -104,8 +110,7 @@ class WorkerEmbeddingProviderTest {
             directory.resolve("pid").toString(),
             mode,
         ),
-        batchTimeout,
-        100.milliseconds,
+        WorkerDeadlines(batch = batchTimeout, query = 100.milliseconds, startup = batchTimeout),
     )
 
     private fun assertStopped(directory: Path) {

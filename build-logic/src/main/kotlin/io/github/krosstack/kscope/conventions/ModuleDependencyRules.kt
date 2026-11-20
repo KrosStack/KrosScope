@@ -15,7 +15,7 @@ internal object ModuleDependencyRules {
         rule(":intelligence:*", ":core:model", ":core:spi"),
         rule(":service", ":core:*", ":analyzers:*", ":intelligence:*"),
         rule(":cli", ":service", ":benchmark", ":analyzers:kotlin-worker"),
-        rule(":benchmark", ":service", ":core:model", ":core:spi", ":analyzers:kotlin-worker"),
+        rule(":benchmark", ":service", ":core:model", ":core:spi", ":analyzers:kotlin-worker", ":intelligence:semantic"),
         rule(":tools:detekt-rules"),
     )
 

@@ -26,17 +26,19 @@ internal class ServeRequests(
     private val onRequest: (ServeRequest) -> Unit,
     scanRunner: ScanRunner,
     private val onQueued: () -> Unit,
-    onLoadChange: (Boolean) -> Unit = {},
+    settings: ServeSettings = ServeSettings(),
 ) : AutoCloseable {
     val service = ServeServices(
         workspace,
         scanRunner,
-        onLoadChange,
-        beforeScan = {
-            watch?.scanStarted()
-            map?.scanStarted()
-        },
-        afterScan = { map?.scanFinished() },
+        ServeServices.ScanHooks(
+            before = {
+                watch?.scanStarted()
+                map?.scanStarted()
+            },
+            after = { map?.scanFinished() },
+        ),
+        settings,
     )
     private val requests = AtomicInteger()
     val count: Int get() = requests.get()
@@ -73,7 +75,8 @@ internal class ServeRequests(
 
     fun update(): Int = Writer.nullWriter().buffered().use { sink ->
         val request = ServeRequest(
-            arguments = listOf("scan", "--quiet", "--progress", "never") + service.automaticLevelArguments(),
+            arguments = listOf("scan", "--quiet", "--progress", "never") + service.automaticLevelArguments() +
+                service.semantic.automaticScanArguments(),
             directory = workspace.toString(),
         )
         runCommand(request, ServeOutput(sink))

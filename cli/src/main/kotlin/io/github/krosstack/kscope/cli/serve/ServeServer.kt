@@ -107,11 +107,11 @@ internal class ServeServer private constructor(
     private fun updateBetweenRequests() {
         if (releases.takeRequested()) requests.release()
         mapHost?.tick(requests.service)
-        val state = watchState ?: return
-        if (state.eligibilityCheckWanted) {
+        val state = watchState
+        if (state != null && state.eligibilityCheckWanted) {
             runCatching { requests.refreshEligibility(state) }.onFailure { state.setTrusted(true) }
         }
-        if (state.updateWanted) requests.runUpdate(state)
+        if (state?.updateWanted == true) requests.runUpdate(state) else requests.service.semantic.advance()
     }
 
     private fun serve(connection: PendingConnection) {
@@ -151,6 +151,7 @@ internal class ServeServer private constructor(
         "status" -> {
             watchState?.let { output.write(it.status() + "\n", false) }
             mapUrl?.let { output.write("Map: $it\n", false) }
+            requests.service.semantic.notice()?.let { output.write("$it\n", false) }
             0
         }
 
@@ -192,7 +193,7 @@ internal class ServeServer private constructor(
             try {
                 val listener = ServerSocket().also { socket = it }
                 listener.bind(InetSocketAddress(InetAddress.getByName("127.0.0.1"), 0), ServeConnections.MAX_WAITING)
-                val requests = ServeRequests(root, settings.onRequest, scanRunner, onQueued, settings.onLoadChange)
+                val requests = ServeRequests(root, settings.onRequest, scanRunner, onQueued, settings)
                 val opened = ServeServer(root, lock, listener, settings, requests).also { server = it }
                 opened.metadata.write(root)
                 opened.requests.warm()

@@ -1,5 +1,7 @@
 package io.github.krosstack.kscope.benchmark
 
+import io.github.krosstack.kscope.benchmark.realrepos.context.runSemanticContextCommand
+import io.github.krosstack.kscope.benchmark.realrepos.semantic.runSemanticCommand
 import io.github.krosstack.kscope.benchmark.run.ConformanceResult
 import io.github.krosstack.kscope.benchmark.run.ConformanceRun
 import io.github.krosstack.kscope.benchmark.run.LevelComparison
@@ -7,6 +9,7 @@ import io.github.krosstack.kscope.benchmark.run.MarkdownReport
 import io.github.krosstack.kscope.benchmark.run.ScanMode
 import io.github.krosstack.kscope.benchmark.run.checkGate
 import io.github.krosstack.kscope.benchmark.run.gateSelection
+import io.github.krosstack.kscope.benchmark.semantic.cost.runSemanticCostCommand
 import io.github.krosstack.kscope.model.KscopeJson
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -51,21 +54,28 @@ internal class ConformanceOptions(val modes: List<ScanMode>, val out: Path, val 
     }
 }
 
-private val REAL_REPOSITORY_COMMANDS =
-    setOf("real-repos-prepare", "real-repos-run", "real-repos-report", "real-repos-import")
+private val commands: Map<String, (List<String>, (String) -> Unit) -> Int> = mapOf(
+    "localization" to ::runLocalizationCommand,
+    "reclassify-localization" to ::runReclassifyLocalizationCommand,
+    "context-benchmark" to ::runContextBenchmarkCommand,
+    "real-repos-prepare" to ::runRealRepositoryCommand,
+    "real-repos-run" to ::runRealRepositoryCommand,
+    "real-repos-report" to ::runRealRepositoryCommand,
+    "real-repos-import" to ::runRealRepositoryCommand,
+    "real-repos-semantic" to ::runSemanticCommand,
+    "real-repos-context-semantic" to ::runSemanticContextCommand,
+    "semantic-cost" to ::runSemanticCostCommand,
+    "schemas" to ::runSchemasCommand,
+    "workspace-conformance" to ::runWorkspaceConformanceCommand,
+    "workspace-tasks" to ::runWorkspaceTasksCommand,
+    "agent-tasks-validate" to ::runAgentCommand,
+    "agent-run" to ::runAgentCommand,
+    "agent-report" to ::runAgentCommand,
+)
 
 /** Runs the command; the exit code is 0 when the gate is met, 1 when it is not and 2 for a usage error. */
-internal fun runCommand(args: List<String>, print: (String) -> Unit): Int = when (args.firstOrNull()) {
-    "localization" -> runLocalizationCommand(args, print)
-    "reclassify-localization" -> runReclassifyLocalizationCommand(args, print)
-    "context-benchmark" -> runContextBenchmarkCommand(args, print)
-    in REAL_REPOSITORY_COMMANDS -> runRealRepositoryCommand(args, print)
-    "schemas" -> runSchemasCommand(args, print)
-    "workspace-conformance" -> runWorkspaceConformanceCommand(args, print)
-    "workspace-tasks" -> runWorkspaceTasksCommand(args, print)
-    "agent-tasks-validate", "agent-run", "agent-report" -> runAgentCommand(args, print)
-    else -> runConformanceCommand(args, print)
-}
+internal fun runCommand(args: List<String>, print: (String) -> Unit): Int =
+    (commands[args.firstOrNull()] ?: ::runConformanceCommand)(args, print)
 
 private fun runConformanceCommand(args: List<String>, print: (String) -> Unit): Int {
     val options = ConformanceOptions.parse(args)

@@ -12,6 +12,21 @@ dependencies {
     implementation(libs.onnxruntime)
 }
 
+val cudaRuntime = configurations.resolvable("cudaRuntime")
+dependencies { add(cudaRuntime.name, libs.onnxruntimeGpu) }
+
+val cudaNatives = tasks.register<Sync>("extractCudaNatives") {
+    from(cudaRuntime.map { files -> files.map { zipTree(it) } }) {
+        include("ai/onnxruntime/native/win-x64/*.dll", "ai/onnxruntime/native/linux-x64/*.so")
+        eachFile {
+            val platform = if (relativePath.segments[3] == "win-x64") "windows-x64" else "linux-x64"
+            path = "$platform/$name"
+        }
+        includeEmptyDirs = false
+    }
+    into(layout.buildDirectory.dir("cuda-native"))
+}
+
 val nativeLibraries = tasks.register<Sync>("extractNatives") {
     val runtime = configurations.runtimeClasspath
     from(runtime.map { files -> files.filter { it.name.startsWith("onnxruntime-") }.map { zipTree(it) } }) {
@@ -44,6 +59,52 @@ distributions {
             from(repositoryRoot.file("docs/third-party-licenses.md")) { rename { "THIRD-PARTY-LICENSES.md" } }
         }
     }
+    create("cuda") {
+        distributionBaseName = "semantic-worker-cuda"
+        contents {
+            into("/")
+            into("lib") {
+                from(tasks.jar)
+                from(configurations.runtimeClasspath) { exclude("onnxruntime-*.jar") }
+                from(cudaRuntime)
+            }
+            into("native") { from(cudaNatives) }
+            into("licenses") { from(repositoryRoot.dir("licenses")) }
+            from(repositoryRoot.file("LICENSE"), repositoryRoot.file("NOTICE"))
+            from(repositoryRoot.file("docs/third-party-licenses.md")) { rename { "THIRD-PARTY-LICENSES.md" } }
+        }
+    }
+}
+
+tasks.named<Zip>("cudaDistZip") {
+    destinationDirectory = layout.buildDirectory.dir("cuda-distributions")
+}
+
+tasks.register<Test>("cudaIntegrationTest") {
+    description = "Compares optional CUDA inference with CPU float inference in child JVMs."
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
+    filter { includeTestsMatching("*CudaIntegrationTest") }
+}
+
+tasks.withType<Test>().configureEach {
+    dependsOn(tasks.named("cudaDistZip"))
+    val cudaArchive = tasks.named<Zip>("cudaDistZip").flatMap { it.archiveFile }
+    inputs.file(cudaArchive).withPropertyName("cudaArchive").withPathSensitivity(PathSensitivity.NONE)
+    systemProperty("kscope.semantic.cuda.archive", cudaArchive.get().asFile.path)
+    val cpuClasspath = sourceSets.main.get().runtimeClasspath
+    val gpuClasspath = files(sourceSets.main.get().output, cpuClasspath.filterNot { it.name.startsWith("onnxruntime-") }, cudaRuntime)
+    doFirst {
+        systemProperty("kscope.semantic.cpu.classpath", cpuClasspath.asPath)
+        systemProperty("kscope.semantic.cuda.classpath", gpuClasspath.asPath)
+    }
+    listOf("libraries", "model", "cpuModel", "javaHome").forEach { key ->
+        val property = "kscope.semantic.cuda.$key"
+        val value = providers.systemProperty(property)
+        inputs.property(property, value.orElse("absent"))
+        value.orNull?.let { systemProperty(property, it) }
+    }
 }
 
 tasks.test {
@@ -53,4 +114,5 @@ tasks.test {
     systemProperty("kscope.semantic.archive", archive.get().asFile.path)
     val model = providers.environmentVariable("KSCOPE_SEMANTIC_MODEL")
     inputs.property("semanticModel", model.orElse("absent"))
+    environment("KSCOPE_SEMANTIC_MODEL", model.orElse("").get())
 }

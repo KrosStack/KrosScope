@@ -25,7 +25,7 @@ public class GradleStaticProvider(
     private val kotlinScripts: ScriptOutliner,
     private val groovyScripts: ScriptOutliner = GroovyScriptOutliner(),
 ) : BuildModelProvider {
-    override val producer: ProducerRef = ProducerRef("kscope.build.gradle.static", "1")
+    override val producer: ProducerRef = ProducerRef("kscope.build.gradle.static", "4")
 
     override val requiresTrust: Boolean = false
 

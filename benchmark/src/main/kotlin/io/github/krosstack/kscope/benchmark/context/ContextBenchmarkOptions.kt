@@ -1,25 +1,43 @@
 package io.github.krosstack.kscope.benchmark.context
 
+import io.github.krosstack.kscope.benchmark.context.identity.ContextBenchmarkSelection
 import io.github.krosstack.kscope.context.TokenEstimators
 import io.github.krosstack.kscope.model.context.TokenCount
 import io.github.krosstack.kscope.spi.context.TokenEstimator
 
 public class ContextBenchmarkOptions(
     public val budgets: List<TokenCount> = ContextBenchmarkBudgets.values,
-    public val methods: List<ContextBenchmarkMethod> = DEFAULT_METHODS,
+    public val selection: ContextBenchmarkSelection,
     public val estimator: TokenEstimator = TokenEstimators.create(),
     public val progress: (ContextProgressEvent) -> Unit = {},
     public val checkpoints: ContextTaskCheckpoints? = null,
 ) {
+    public constructor(
+        budgets: List<TokenCount> = ContextBenchmarkBudgets.values,
+        methods: List<ContextBenchmarkMethod> = DEFAULT_METHODS,
+        estimator: TokenEstimator = TokenEstimators.create(),
+        progress: (ContextProgressEvent) -> Unit = {},
+        checkpoints: ContextTaskCheckpoints? = null,
+    ) : this(budgets, ContextBenchmarkSelection(methods), estimator, progress, checkpoints)
+
+    public val methods: List<ContextBenchmarkMethod> get() = selection.methods
+
     init {
         require(budgets.isNotEmpty() && budgets.all { it.value > 0 }) { "Benchmark budgets must be positive." }
         require(budgets.distinct().size == budgets.size) { "Benchmark budgets must be unique." }
-        require(methods.isNotEmpty() && methods.distinct().size == methods.size) { "Benchmark methods must be unique." }
     }
 
     public companion object {
         public val DEFAULT_METHODS: List<ContextBenchmarkMethod> = listOf(
             ContextBenchmarkMethod.FULL_COMPILER,
+            ContextBenchmarkMethod.LEXICAL_COMPILER,
+            ContextBenchmarkMethod.BM25_RAW,
+            ContextBenchmarkMethod.BM25_ENGLISH,
+            ContextBenchmarkMethod.PATH_ORDER,
+        )
+        public val SEMANTIC_METHODS: List<ContextBenchmarkMethod> = listOf(
+            ContextBenchmarkMethod.FULL_COMPILER,
+            ContextBenchmarkMethod.FULL_SEMANTIC_COMPILER,
             ContextBenchmarkMethod.LEXICAL_COMPILER,
             ContextBenchmarkMethod.BM25_RAW,
             ContextBenchmarkMethod.BM25_ENGLISH,

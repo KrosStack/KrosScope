@@ -9,7 +9,7 @@ import io.github.krosstack.kscope.model.SourceSetId
  */
 internal class GroupGraph(groups: List<SourceSetGroup>, allSourceSets: List<SourceSet>) {
     private val groupBySourceSet: Map<SourceSetId, SourceSetGroup> =
-        groups.flatMap { group -> group.members.map { it.id to group } }.toMap()
+        groups.flatMap { group -> group.ids.map { it to group } }.toMap()
     private val parents: Map<SourceSetId, List<SourceSetId>> = allSourceSets.associate { it.id to it.dependsOn }
 
     fun groupOf(id: SourceSetId): SourceSetGroup? = groupBySourceSet[id]

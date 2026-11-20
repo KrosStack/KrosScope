@@ -1,43 +1,38 @@
 package io.github.krosstack.kscope.semantic.chunk
 
-import io.github.krosstack.kscope.model.NodeRef
-import io.github.krosstack.kscope.model.Symbol
-
 internal class ChunkGroups(private val text: ChunkText) {
-    fun merge(chunks: List<Chunk>, symbols: List<Symbol>): List<Chunk> {
-        val containers = symbols.associate { NodeRef.OfSymbol(it.id) to it.container }
-        val small = chunks.filter { it.kind == ChunkKind.DECLARATION && text.small(it.text) }
-        val groups = small.groupBy { it.artifact to containers[it.nodes.single()] }.values.flatMap { siblings ->
-            partition(siblings).map { members ->
-                if (members.size == 1) {
-                    members.single()
-                } else {
-                    text.chunk(
-                        ChunkKind.GROUP,
-                        members.joinToString("\n\n") { it.text },
-                        members.flatMap { it.nodes },
-                        members.first().artifact,
-                    )
-                }
-            }
+    fun merge(siblings: Sequence<Chunk>): Sequence<Chunk> = partition(siblings).map { members ->
+        if (members.size == 1) {
+            members.single()
+        } else {
+            text.chunk(
+                ChunkKind.GROUP,
+                members.joinToString("\n\n") { it.text },
+                members.flatMap { it.nodes },
+                members.first().artifact,
+            )
         }
-        val merged = small.toSet()
-        return chunks.filterNot { it in merged } + groups
     }
 
-    private fun partition(siblings: List<Chunk>): List<List<Chunk>> {
-        val groups = mutableListOf<List<Chunk>>()
+    private fun partition(siblings: Sequence<Chunk>): Sequence<List<Chunk>> = sequence {
         var pending = emptyList<Chunk>()
         for (chunk in siblings) {
+            if (chunk.kind != ChunkKind.DECLARATION || !text.small(chunk.text)) {
+                yield(listOf(chunk))
+                continue
+            }
             val combined = (pending + chunk).joinToString("\n\n") { it.text }
-            if (pending.size == MAX_MEMBERS || text.capped(combined) != combined) {
-                groups += pending
+            if (pending.isNotEmpty() && text.capped(combined) != combined) {
+                yield(pending)
                 pending = emptyList()
             }
             pending += chunk
+            if (pending.size == MAX_MEMBERS) {
+                yield(pending)
+                pending = emptyList()
+            }
         }
-        if (pending.isNotEmpty()) groups += pending
-        return groups
+        if (pending.isNotEmpty()) yield(pending)
     }
 
     private companion object {

@@ -29,7 +29,7 @@ internal class ProtoDeclarations(private val file: ProtoFile, private val ids: P
         val id = ids.typeId(path)
         val own = made(header(id, ProtoKinds.message, path, null, "message ${message.name}"), message.place, container)
         val oneOfs = message.oneOfs.map { oneOf ->
-            val memberId = ids.memberId(path, oneOf.name)
+            val memberId = ids.oneOfId(path, oneOf.name)
             made(header(memberId, ProtoKinds.oneOf, path, oneOf.name, "oneof ${oneOf.name}"), oneOf.place, id)
         }
         val fields = message.fields.map { field -> fieldSymbol(field, path, id) }

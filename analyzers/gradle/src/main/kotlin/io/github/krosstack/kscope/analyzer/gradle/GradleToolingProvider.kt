@@ -45,7 +45,7 @@ public class GradleToolingProvider internal constructor(
     public constructor(indexDirectory: Path, factsFrom: BuildModelProvider? = null) :
         this(indexDirectory, factsFrom, GradleJavaHome.fromEnvironment(), ToolingApiFetcher())
 
-    override val producer: ProducerRef = ProducerRef("kscope.build.gradle.tooling", "1")
+    override val producer: ProducerRef = ProducerRef("kscope.build.gradle.tooling", "2")
 
     override val requiresTrust: Boolean = true
 

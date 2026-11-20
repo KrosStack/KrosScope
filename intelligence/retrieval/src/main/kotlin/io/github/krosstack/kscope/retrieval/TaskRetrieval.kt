@@ -1,14 +1,18 @@
 package io.github.krosstack.kscope.retrieval
 
+import io.github.krosstack.kscope.model.ArtifactRef
 import io.github.krosstack.kscope.model.NodeRef
 import io.github.krosstack.kscope.model.Relationship
 import io.github.krosstack.kscope.model.Resolution
+import io.github.krosstack.kscope.model.SymbolId
 import io.github.krosstack.kscope.retrieval.analysis.AnalysisFacts
 import io.github.krosstack.kscope.retrieval.analysis.BoundaryPaths
 import io.github.krosstack.kscope.retrieval.analysis.ImpactAnalysis
 import io.github.krosstack.kscope.retrieval.analysis.QueryAnalyzer
 import io.github.krosstack.kscope.retrieval.analysis.TestSelection
+import io.github.krosstack.kscope.retrieval.ranking.FileRankFusion
 import io.github.krosstack.kscope.retrieval.ranking.FileRanking
+import io.github.krosstack.kscope.retrieval.ranking.FusedAnalysisFiles
 import io.github.krosstack.kscope.retrieval.ranking.GraphRanking
 import io.github.krosstack.kscope.retrieval.ranking.LexicalSeeds
 import io.github.krosstack.kscope.retrieval.ranking.SymbolRanking
@@ -47,6 +51,16 @@ public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) 
         }
         return result(query, files, ranked, tests).copy(semantic = semantic, stage = stage.name.lowercase())
     }
+
+    public fun withFileRanking(result: AnalysisResult, fused: List<FileRankFusion.Match>): AnalysisResult {
+        val files = FusedAnalysisFiles.build(result.files, fused)
+        val selected = files.map { it.artifact }.toSet()
+        val symbols = result.symbols.filter { canonicalFile(it.symbol.id) in selected }
+        val tests = TestSelection(graph).select(files.filter { it.role == FileRole.EDIT })
+        return result(result.query, files, symbols, tests).copy(semantic = result.semantic, stage = result.stage)
+    }
+
+    public fun canonicalFile(symbol: SymbolId): ArtifactRef? = graph.file(NodeRef.OfSymbol(symbol))
 
     private fun result(
         query: AnalyzedQuery,

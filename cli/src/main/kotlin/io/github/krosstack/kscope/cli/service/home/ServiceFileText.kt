@@ -16,6 +16,7 @@ internal object ServiceFileText {
         }
         limits.idleMinutes?.let { appendLine("${ServiceFileLimits.IDLE_KEY} = $it") }
         limits.memoryMib?.let { appendLine("${ServiceFileLimits.MEMORY_KEY} = $it") }
+        limits.workerMemoryMib?.let { appendLine("${ServiceFileLimits.WORKER_MEMORY_KEY} = $it") }
     }
 
     private fun quoted(value: String): String = buildString {

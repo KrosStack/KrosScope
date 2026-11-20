@@ -12,25 +12,32 @@ import io.github.krosstack.kscope.model.context.ContextFragment
 import io.github.krosstack.kscope.model.context.ContextOmission
 import io.github.krosstack.kscope.model.context.ContextOmissionReason
 import io.github.krosstack.kscope.model.context.ContextPackage
+import io.github.krosstack.kscope.retrieval.SemanticStatus
 
 /** The result of `context` for a person: what was chosen and what it costs. The package is `--format markdown`. */
 internal object ContextText {
     private const val ROWS_SHOWN = 15
     private const val TASK_WIDTH = 100
 
-    fun render(result: ContextPackage, context: TextContext): String {
+    fun render(result: ContextPackage, context: TextContext, semantic: SemanticStatus? = null): String {
         val document = TextDocument(context)
-        if (result.fragments.isEmpty()) empty(result, document) else describe(result, context, document)
+        val details = details(result) + SemanticAnalyzeText.status(semantic)
+        if (result.fragments.isEmpty()) empty(details, document) else describe(result, context, document, details)
         return document.toString()
     }
 
-    private fun empty(result: ContextPackage, document: TextDocument) {
-        document.conclusion("No source fits this task and budget.", Tone.WARNING).line().fields(details(result))
+    private fun empty(details: List<Pair<String, String>>, document: TextDocument) {
+        document.conclusion("No source fits this task and budget.", Tone.WARNING).line().fields(details)
     }
 
-    private fun describe(result: ContextPackage, context: TextContext, document: TextDocument) {
+    private fun describe(
+        result: ContextPackage,
+        context: TextContext,
+        document: TextDocument,
+        details: List<Pair<String, String>>,
+    ) {
         document.conclusion(conclusion(result), Tone.GOOD)
-        document.line().fields(details(result))
+        document.line().fields(details)
         val columns = listOf(
             Column("tokens", Align.RIGHT),
             Column("role"),

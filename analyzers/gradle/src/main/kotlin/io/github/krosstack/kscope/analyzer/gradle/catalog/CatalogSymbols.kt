@@ -17,14 +17,14 @@ import io.github.krosstack.kscope.model.Visibility
 
 /**
  * The symbols of version catalog entries: unit is the build root that holds the catalog, the source set is
- * not applicable, and the descriptor is `gradle/catalog/<catalog>/<section>/<alias>.`.
+ * not applicable, and the descriptor is `gradle/catalog/<repository-relative file>/<section>/<alias>.`.
  */
 internal object CatalogSymbols {
     private const val NOT_APPLICABLE = "."
 
     fun idOf(registered: RegisteredCatalog, entry: CatalogEntry): SymbolId {
         val descriptor = SymbolDescriptor().namespace("gradle").namespace("catalog")
-            .namespace(registered.catalog.name).namespace(entry.section.key).term(entry.accessor)
+            .namespace(registered.catalog.artifact.path.value).namespace(entry.section.key).term(entry.accessor)
         return SymbolIdentity(SymbolEcosystem.GRADLE, registered.owner.value, NOT_APPLICABLE, descriptor).toSymbolId()
     }
 

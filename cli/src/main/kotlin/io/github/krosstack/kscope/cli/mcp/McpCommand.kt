@@ -10,6 +10,7 @@ import io.github.krosstack.kscope.cli.RootOptions
 import io.github.krosstack.kscope.cli.help.SharedOption
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.serve.ServeSettings
+import io.github.krosstack.kscope.cli.service.home.ServiceDirectory
 
 internal class McpCommand : CliktCommand(name = "mcp") {
     private val common by RootOptions(setOf(SharedOption.WORKSPACE, SharedOption.NO_SERVER))
@@ -41,6 +42,12 @@ internal class McpCommand : CliktCommand(name = "mcp") {
             System.out.writer(Charsets.UTF_8).buffered(),
             System.err.writer(Charsets.UTF_8).buffered(),
         )
-        McpSession(options.workspace, streams, McpSettings(options.noServer, ServeSettings(watchEnabled = watch))).run()
+        val directory = ServiceDirectory.of(this)
+        val serve = ServeSettings(
+            watchEnabled = watch,
+            workerMemoryMib = { directory.file.workerMemoryMib() },
+            ml = options.ml,
+        )
+        McpSession(options.workspace, streams, McpSettings(options.noServer, serve)).run()
     }
 }

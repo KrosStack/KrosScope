@@ -155,7 +155,7 @@ public class KotlinAnalyzerProducer private constructor(
 
     private companion object {
         const val PRODUCER_ID = "kscope.analyzer.kotlin"
-        const val PRODUCER_VERSION = "0.1.0"
+        const val PRODUCER_VERSION = "0.1.1"
         val MEMORY_SIGNS = listOf("out-of-memory", "did not answer")
 
         val DESCRIPTOR = ProducerDescriptor(

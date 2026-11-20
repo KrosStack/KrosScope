@@ -22,12 +22,16 @@ internal object ProtoKinds {
 
 /**
  * The ids of the symbols of a proto file: `proto/<package>/<Type>#<member>.` in the module and source set of the file.
- * A nested type adds a type segment. The Wire synthesizer uses the same ids for the sources of truth it points at.
+ * A nested type adds a type segment, and a oneof is `<Type>#oneof:<name>.` so it never meets a field of its name.
+ * The Wire synthesizer uses the same ids for the sources of truth it points at.
  */
 internal class ProtoIdentities(private val identity: IdentityFactory, private val packageName: String) {
     fun typeId(path: List<String>): SymbolId = identity.idOf(typeDescriptor(path))
 
     fun memberId(path: List<String>, member: String): SymbolId = identity.idOf(typeDescriptor(path).term(member))
+
+    fun oneOfId(path: List<String>, name: String): SymbolId =
+        identity.idOf(typeDescriptor(path).meta(ONEOF_SEGMENT).term(name))
 
     fun qualifiedName(path: List<String>, member: String? = null): String =
         (listOf(packageName).filter { it.isNotEmpty() } + path + listOfNotNull(member)).joinToString(".")
@@ -39,5 +43,6 @@ internal class ProtoIdentities(private val identity: IdentityFactory, private va
 
     private companion object {
         const val NAMESPACE = "proto"
+        const val ONEOF_SEGMENT = "oneof"
     }
 }

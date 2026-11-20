@@ -41,6 +41,9 @@ internal class SettingsSource(
     /** The level that the settings of the scan that runs now ask for; null when they say nothing. */
     fun requestedLevel(): ScanLevel? = (prepared ?: lenient()).level
 
+    /** Which optional components the settings of the scan that runs now enable or disable, known as for [scope]. */
+    val componentFlags: Map<String, Boolean> get() = (prepared ?: lenient()).components
+
     /** Whether the user trusted this workspace on this machine to run its own build. */
     fun isTrusted(): Boolean = trust.isTrusted(root)
 

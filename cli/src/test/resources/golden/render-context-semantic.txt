@@ -1,0 +1,17 @@
+2 fragments from 2 files: 60 tokens of a budget of 500.
+
+  Task              anchor
+  Level             recommended
+  Token count by    o200k_base
+  Semantic ranking  used
+
+Fragments (2)
+  tokens  role  shown as  where
+      11  edit  file      lib/docs/anchor-0.md:1-3
+      11  read  file      lib/docs/anchor-1.md:1-3
+
+Left out (2)
+  1 without source in the workspace
+  1 beyond the chosen level
+
+This is a summary. Use --format markdown for the context to paste into a prompt, or --format json for all data.

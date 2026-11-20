@@ -4,7 +4,6 @@ import io.github.krosstack.kscope.analyzer.android.AndroidArtifactTypes
 import io.github.krosstack.kscope.analyzer.android.ResourceLocations
 import io.github.krosstack.kscope.analyzer.android.note
 import io.github.krosstack.kscope.analyzer.android.rclass.JavaNames
-import io.github.krosstack.kscope.analyzer.android.rclass.StubHost
 import io.github.krosstack.kscope.model.Artifact
 import io.github.krosstack.kscope.model.DiagnosticSeverity
 import io.github.krosstack.kscope.model.Fact
@@ -27,17 +26,17 @@ import java.io.IOException
 
 internal const val VIEW_BINDING_FEATURE = "android.buildFeatures.viewBinding"
 
-private class ReadFile(val sourceSet: SourceSet, val name: String, val layout: ReadLayout)
+private class ReadFile(val sourceSet: SourceSet, val name: String, val layout: ReadLayout, val qualifiers: String?)
 
 /**
  * Makes the Java stub of the binding class of each layout of the modules that turn view binding on, from the naming
  * rules of the Android Gradle plugin, so that `ActivityMainBinding.inflate(...)` and `binding.title` bind. All the
- * configurations of a layout make one class. The unit is the module: the stubs depend on its layouts and its build
- * definition only.
+ * configurations of a layout in one source set make one class there. The unit is the module: the stubs depend on its
+ * layouts and its build definition only.
  */
 internal class ViewBindingSynthesizer : SurfaceSynthesizer {
     override val descriptor = ProducerDescriptor(
-        producer = ProducerRef("kscope.android.view-binding", "0.1.0"),
+        producer = ProducerRef("kscope.android.view-binding", "0.1.1"),
         consumes = setOf(AndroidArtifactTypes.layout),
         capabilities = setOf(AnalyzerCapability.DECLARATIONS),
         granularity = OwnershipKind.MODULE,
@@ -61,16 +60,25 @@ internal class ViewBindingSynthesizer : SurfaceSynthesizer {
 
     private fun outcomeOf(module: Module, unit: AnalysisUnit, request: ProduceRequest): Outcome {
         val namespace = module.androidNamespace?.takeIf(JavaNames::isPackage)
-        val host = StubHost.of(request.model.sourceSets.filter { it.module == module.id }, request.model.targets)
-        if (namespace == null || host == null) return Outcome(listOf(unusable(module)), emptyList())
+        if (namespace == null) return Outcome(listOf(unusable(module)), emptyList())
         val files = unit.artifacts.mapNotNull { readFile(it, request) }
         val bindable = files.mapNotNull { file ->
-            (file.layout as? ReadLayout.Bindable)?.let { LayoutFile(file.sourceSet, file.name, it.views) }
+            (file.layout as? ReadLayout.Bindable)?.let {
+                LayoutFile(file.sourceSet, file.name, it.views, file.qualifiers)
+            }
         }
-        val plan = BindingPlanner(module, namespace, host).plan(bindable)
-        val skipped = files.map { it.name }.distinct().size - plan.classes.size
-        val facts = plan.classes.flatMap { BindingFacts(plan, it).facts() } + notes(module, plan, skipped)
-        return Outcome(facts, plan.classes.map { sourceOf(plan, it) })
+        val known = bindable.map { it.name }
+            .filter { JavaNames.isIdentifier(BindingNames.classNameOf(it)) }.toSet()
+        val variants = request.model.variants.filter { it.module == module.id }
+        val plans = bindable.groupBy { it.sourceSet }.entries.sortedBy { it.key.id.value }.map { (host, layouts) ->
+            BindingPlanner(module, namespace, host, variants).plan(layouts, known, bindable)
+        }
+        val classes = plans.flatMap { it.classes }
+        val skipped = files.map { it.sourceSet.id to it.name }.distinct().size - classes.size
+        val facts = plans.flatMap { plan -> plan.classes.flatMap { BindingFacts(plan, it).facts() } } +
+            notes(module, classes, skipped)
+        val sources = plans.flatMap { plan -> plan.classes.map { sourceOf(plan, it) } }
+        return Outcome(facts, sources.sortedWith(compareBy({ it.virtualPath }, { it.sourceSet.value })))
     }
 
     private fun readFile(artifact: Artifact, request: ProduceRequest): ReadFile? {
@@ -82,7 +90,7 @@ internal class ViewBindingSynthesizer : SurfaceSynthesizer {
         } catch (_: IOException) {
             ReadLayout.Empty
         }
-        return ReadFile(sourceSet, location.baseName, layout)
+        return ReadFile(sourceSet, location.baseName, layout, location.qualifiers)
     }
 
     private fun sourceSetOf(id: SourceSetId, request: ProduceRequest): SourceSet? =
@@ -99,12 +107,11 @@ internal class ViewBindingSynthesizer : SurfaceSynthesizer {
     private fun unusable(module: Module) = module.note(
         DiagnosticSeverity.INFO,
         "android.viewbinding.namespace-unknown",
-        "view binding is on but the module has no usable Android namespace or main source set; no binding classes " +
-            "are made",
+        "view binding is on but the module has no usable Android namespace; no binding classes are made",
     )
 
-    private fun notes(module: Module, plan: BindingPlan, skippedLayouts: Int): List<Fact> {
-        val skippedFields = plan.classes.sumOf { it.skippedFields }
+    private fun notes(module: Module, classes: List<BindingClass>, skippedLayouts: Int): List<Fact> {
+        val skippedFields = classes.sumOf { it.skippedFields }
         return listOfNotNull(
             skippedLayouts.takeIf { it > 0 }?.let {
                 module.note(

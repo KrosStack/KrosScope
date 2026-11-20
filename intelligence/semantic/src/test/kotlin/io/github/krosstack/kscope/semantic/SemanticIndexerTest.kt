@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.semantic
 
 import io.github.krosstack.kscope.model.SymbolCategory
+import io.github.krosstack.kscope.semantic.store.GenerationFile
 import io.github.krosstack.kscope.semantic.store.GenerationStore
 import io.github.krosstack.kscope.semantic.store.PublishResult
 import org.junit.jupiter.api.io.TempDir
@@ -60,12 +61,34 @@ class SemanticIndexerTest {
         repeat(300) { graph.file("new$it.kt") }
         provider.failAfter = 2
         val report = indexer.update(provider, graph.reader, graph, directory)
-        assertEquals(256, report.embedded)
+        assertEquals(16, report.embedded)
         assertEquals(300, report.behind)
         assertIs<PublishResult.Deferred>(report.publication)
         assertContentEquals(manifest, Files.readAllBytes(directory.resolve("embeddings.json")))
         GenerationStore(directory).open(provider.id).use { assertEquals(1, assertNotNull(it).generation.chunks.size) }
-        assertTrue(provider.batches.all { it.size <= 256 && it.sumOf { text -> text.toByteArray().size } <= 262144 })
+        assertTrue(provider.batches.all { it.size <= 16 && it.sumOf { text -> text.toByteArray().size } <= 262144 })
+    }
+
+    @Test
+    fun `failure before cached chunks reports every reusable chunk`() {
+        val graph = SemanticFixture().apply { repeat(272) { file("source$it.kt") } }
+        val generation = graph.generation()
+        val cached = generation.chunks.sortedBy { it.chunk.key }.drop(16)
+        GenerationStore(directory).publish(
+            GenerationFile(generation.header.copy(chunkCount = cached.size), cached),
+        )
+        val manifest = Files.readAllBytes(directory.resolve("embeddings.json"))
+        val provider = FakeEmbeddingProvider().apply { failAfter = 0 }
+
+        val report = SemanticIndexer().update(provider, graph.reader, graph, directory)
+
+        assertIs<PublishResult.Deferred>(report.publication)
+        assertEquals(0, report.embedded)
+        assertEquals(16, report.behind)
+        assertEquals(0, report.dropped)
+        assertEquals(256, report.reused)
+        assertTrue(provider.batches.isEmpty())
+        assertContentEquals(manifest, Files.readAllBytes(directory.resolve("embeddings.json")))
     }
 
     @Test

@@ -33,7 +33,7 @@ private class ModuleStubs(val sources: List<SyntheticSource>, val facts: List<Fa
  */
 internal class SqlDelightSynthesizer : SurfaceSynthesizer {
     override val descriptor = ProducerDescriptor(
-        producer = ProducerRef("kscope.schema.sqldelight-stubs", "0.1.0"),
+        producer = ProducerRef("kscope.schema.sqldelight-stubs", "0.1.2"),
         consumes = setOf(SchemaArtifactTypes.sqldelight),
         capabilities = setOf(AnalyzerCapability.DECLARATIONS),
         granularity = OwnershipKind.MODULE,
@@ -49,7 +49,8 @@ internal class SqlDelightSynthesizer : SurfaceSynthesizer {
     private fun stubsOf(unit: AnalysisUnit, request: ProduceRequest): ModuleStubs {
         val databases = unit.module?.let(SqlDelightDatabases::of).orEmpty()
         val sources = unit.artifacts.mapNotNull { SqSource.read(it, request.model, request.files) }
-        val planned = SqlDelightPlan(sources).stubs().filter { it.placement.sourceSet != null }
+        val plan = SqlDelightPlan(sources)
+        val planned = plan.stubs().filter { it.placement.sourceSet != null }
         val generated = planned.map { stub ->
             val symbols = StubSymbols(stub.placement.identity, GENERATOR, stub.placement.scope).of(stub.file)
             val declared = symbols.symbols.map { Fact.OfSymbol(it) }
@@ -63,7 +64,9 @@ internal class SqlDelightSynthesizer : SurfaceSynthesizer {
             )
             source to facts
         }
-        val notes = listOfNotNull(databaseNote(unit, databases.isEmpty() && sources.isNotEmpty()))
+        val unassigned = if (databases.isEmpty()) emptyList() else sources.filter { it.database == null }
+        val notes = listOfNotNull(databaseNote(unit, databases.isEmpty() && sources.isNotEmpty())) +
+            unassigned.sortedBy { it.artifact.ref.path.value }.map(::unassignedNote) + plan.repeated.map(::repeatedNote)
         return ModuleStubs(generated.map { it.first }, generated.flatMap { it.second } + notes)
     }
 
@@ -77,4 +80,24 @@ internal class SqlDelightSynthesizer : SurfaceSynthesizer {
             ),
         )
     }
+
+    private fun repeatedNote(repeat: RepeatedDeclaration): Fact = Fact.OfDiagnostic(
+        Diagnostic(
+            DiagnosticSeverity.WARNING,
+            ReasonCode("sqldelight.generated-name-repeated"),
+            "${repeat.source.artifact.ref.path.value}: ${repeat.qualifiedName} is already generated from an earlier " +
+                "file, so only the first file's declaration is kept.",
+            null,
+        ),
+    )
+
+    private fun unassignedNote(source: SqSource): Fact = Fact.OfDiagnostic(
+        Diagnostic(
+            DiagnosticSeverity.INFO,
+            ReasonCode("sqldelight.database-ambiguous"),
+            "${source.artifact.ref.path.value}: the module declares several SQLDelight databases and no directory " +
+                "of the file names exactly one of them, so the file is left out of every database interface.",
+            null,
+        ),
+    )
 }

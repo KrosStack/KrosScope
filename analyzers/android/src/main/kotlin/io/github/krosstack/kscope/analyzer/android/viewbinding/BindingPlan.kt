@@ -7,16 +7,18 @@ import io.github.krosstack.kscope.analyzer.android.resources.symbolName
 import io.github.krosstack.kscope.model.Module
 import io.github.krosstack.kscope.model.SourceSet
 import io.github.krosstack.kscope.model.SymbolId
+import io.github.krosstack.kscope.model.Variant
+import io.github.krosstack.kscope.model.sourceSetPrecedence
 
 /** A layout file of the module that has a binding: [name] is the layout, [sourceSet] the one that holds the file. */
-internal class LayoutFile(val sourceSet: SourceSet, val name: String, val views: LayoutViews)
+internal class LayoutFile(val sourceSet: SourceSet, val name: String, val views: LayoutViews, val qualifiers: String?)
 
 /** A field of a binding class; [sources] are the id resources that `@+id` defines for it. */
 internal class BindingField(val name: String, val type: String, val sources: List<SymbolId>)
 
 /**
- * The binding class of one layout, merged over all its configurations. [layoutSymbols] are the resource symbols of
- * the layout, one per source set that defines it; [skippedFields] counts the ids that have no field.
+ * The binding class of one layout, merged over its configurations and inherited ones. [layoutSymbols] names their
+ * resource symbols; [skippedFields] counts the ids that have no field.
  */
 internal data class BindingClass(
     val layout: String,
@@ -28,7 +30,7 @@ internal data class BindingClass(
     val skippedFields: Int,
 )
 
-/** The binding classes of one module. */
+/** The binding classes of one source set of a module. */
 internal class BindingPlan(
     val module: Module,
     val namespace: String,
@@ -41,14 +43,31 @@ internal class BindingPlan(
 private class Entry(val file: LayoutFile, val view: BoundView)
 
 /**
- * Works out the binding classes of a module from the layout files of all its configurations and source sets. A field
+ * Works out the binding classes of a source set from the layout files of all its configurations. A field
  * has the type of its views when they agree and `View` when they do not.
  */
-internal class BindingPlanner(private val module: Module, private val namespace: String, private val host: SourceSet) {
-    fun plan(files: List<LayoutFile>): BindingPlan {
+internal class BindingPlanner(
+    private val module: Module,
+    private val namespace: String,
+    private val host: SourceSet,
+    private val variants: List<Variant>,
+) {
+    fun plan(files: List<LayoutFile>, known: Set<String>, all: List<LayoutFile>): BindingPlan {
         val layouts = files.filter { JavaNames.isIdentifier(BindingNames.classNameOf(it.name)) }
             .groupBy { it.name }.toSortedMap()
-        return BindingPlan(module, namespace, host, layouts.map { (name, group) -> classOf(name, group, layouts.keys) })
+        val classes = layouts.map { (name, group) ->
+            classOf(name, configurationsOf(name, group, all), known)
+        }
+        return BindingPlan(module, namespace, host, classes)
+    }
+
+    private fun configurationsOf(layout: String, own: List<LayoutFile>, all: List<LayoutFile>): List<LayoutFile> {
+        val inherited = variants.filter { it.id in host.variants }.sortedBy { it.id.value }.flatMap { variant ->
+            val order = variant.sourceSetPrecedence().dropWhile { it != host.name }
+            all.filter { it.name == layout && it.sourceSet.name in order }
+                .sortedBy { order.indexOf(it.sourceSet.name) }.distinctBy { it.qualifiers }
+        }
+        return (own + inherited).distinctBy { it.sourceSet.id to it.qualifiers }
     }
 
     private fun classOf(layout: String, group: List<LayoutFile>, known: Set<String>): BindingClass {

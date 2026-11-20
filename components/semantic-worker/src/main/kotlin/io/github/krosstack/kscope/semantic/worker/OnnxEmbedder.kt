@@ -7,13 +7,16 @@ import io.github.krosstack.kscope.semantic.worker.tokenizer.WordPieceTokenizer
 import java.nio.LongBuffer
 import kotlin.math.sqrt
 
-internal class OnnxEmbedder(files: ModelFiles, private val tokenizer: WordPieceTokenizer) : AutoCloseable {
+internal class OnnxEmbedder(files: ModelFiles, private val tokenizer: WordPieceTokenizer, device: String = "cpu") :
+    AutoCloseable {
     private val environment = OrtEnvironment.getEnvironment()
     private val options = OrtSession.SessionOptions().apply {
         setIntraOpNumThreads(THREADS)
         setInterOpNumThreads(1)
+        System.getProperty("kscope.semantic.profile")?.let { enableProfiling(it) }
     }
     private val session = try {
+        if (device == "cuda") options.addCUDA(0)
         environment.createSession(files.model.toString(), options)
     } catch (failure: ai.onnxruntime.OrtException) {
         options.close()

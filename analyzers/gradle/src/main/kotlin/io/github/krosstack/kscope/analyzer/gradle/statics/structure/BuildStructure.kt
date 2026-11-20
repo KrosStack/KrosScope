@@ -100,7 +100,7 @@ internal class BuildStructureReader(
         val id = BuildRootId("${repository.value}//$directory")
         val root = BuildRoot(id, repository, RepoPath(directory), BuildSystem.GRADLE)
         val rootProject = ProjectPlan(":", directory, inputs.scriptIn(directory), false)
-        val paths = settings?.includes.orEmpty().flatMap { withParents(it.path) }.distinct()
+        val paths = settings?.includes.orEmpty().flatMap { withParents(it.path) }.distinct().filter { it != ":" }
         val declared = paths.mapNotNull { projectOf(it, directory, settings) }
         val discovered = if (settings?.hasDynamicIncludes == true) discover(directory, roots, declared) else emptyList()
         return BuildPlan(root, settings, included, listOf(rootProject) + declared + discovered)

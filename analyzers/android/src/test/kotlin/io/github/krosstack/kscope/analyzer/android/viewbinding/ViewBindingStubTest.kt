@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 internal class ViewBindingStubTest : ViewBindingTestBase() {
 
     @Test
-    fun `a module that turns view binding on gets one stub per layout in its main source set`() {
+    fun `a module that turns view binding on gets one stub per layout in its owning source set`() {
         val result = run()
         assertEquals(
             listOf("ActivityMainBinding", "DebugBannerBinding", "ViewBadgeBinding", "ViewRowsBinding"),
@@ -49,9 +49,9 @@ internal class ViewBindingStubTest : ViewBindingTestBase() {
     }
 
     @Test
-    fun `a layout in a variant source set joins the classes of the module`() {
+    fun `a layout in a variant source set owns its binding class`() {
         val banner = run().source("DebugBannerBinding")
-        assertEquals(DroidModel.sourceSetId(":app", "main"), banner.sourceSet)
+        assertEquals(DroidModel.sourceSetId(":app", "debug"), banner.sourceSet)
         assertTrue("android.widget.TextView bannerText" in banner.text)
     }
 

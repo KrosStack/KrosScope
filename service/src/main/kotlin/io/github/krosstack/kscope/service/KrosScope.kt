@@ -15,12 +15,20 @@ import io.github.krosstack.kscope.retrieval.RelatedResult
 import io.github.krosstack.kscope.retrieval.RetrievalStage
 import io.github.krosstack.kscope.retrieval.SymbolResult
 import io.github.krosstack.kscope.retrieval.TaskRetrieval
+import io.github.krosstack.kscope.semantic.store.GenerationStore
+import io.github.krosstack.kscope.service.context.RankedAnalysis
 import io.github.krosstack.kscope.service.graph.ImpactClosure
 import io.github.krosstack.kscope.service.graph.repositoryEntries
 import io.github.krosstack.kscope.service.level.LevelInForce
 import io.github.krosstack.kscope.service.registry.ExternalCheckouts
 import io.github.krosstack.kscope.service.registry.RepositoryRegistry
 import io.github.krosstack.kscope.service.registry.ScannedCheckouts
+import io.github.krosstack.kscope.service.semantic.SemanticComponents
+import io.github.krosstack.kscope.service.semantic.SemanticIndexingMode
+import io.github.krosstack.kscope.service.semantic.SemanticRuntime
+import io.github.krosstack.kscope.service.semantic.SemanticScanGuard
+import io.github.krosstack.kscope.service.semantic.SemanticWorkspace
+import io.github.krosstack.kscope.service.semantic.query.withSemanticRanking
 import io.github.krosstack.kscope.service.settings.FreshnessReading
 import io.github.krosstack.kscope.service.settings.IndexedScope
 import io.github.krosstack.kscope.service.settings.SettingsFile
@@ -40,6 +48,7 @@ import io.github.krosstack.kscope.service.wiring.toSummary
 import io.github.krosstack.kscope.service.wiring.withNotice
 import io.github.krosstack.kscope.spi.graph.GraphReader
 import io.github.krosstack.kscope.spi.search.SearchIndex
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -51,7 +60,8 @@ import java.nio.file.Path
  * changes a result either. [settings] are the settings of the workspace
  * for a caller that must not depend on a file inside it, such as a benchmark, which passes
  * [WorkspaceSettings.DEFAULTS]; when null, a scan and `info` read `kscope.toml` in the workspace root, and a query
- * reads nothing.
+ * reads nothing. [workerMemoryMib] sets the allowance for the optional worker processes of the whole machine, in
+ * MiB; when null, it is the larger of 1 GiB and a quarter of the physical memory.
  */
 public data class OpenOptions(
     public val trustBuild: Boolean = false,
@@ -60,16 +70,26 @@ public data class OpenOptions(
     public val tokenCache: Boolean = true,
     public val settings: WorkspaceSettings? = null,
     public val level: ScanLevel? = null,
-)
+    public val semanticIndexing: SemanticIndexingMode = SemanticIndexingMode.OFF,
+    public val workerMemoryMib: Long? = null,
+) {
+    init {
+        require(workerMemoryMib == null || workerMemoryMib >= 1) { "workerMemoryMib must be 1 or more." }
+    }
+}
 
 /** The use-case API of KrosScope for one workspace. Frontends render its serializable results. */
 public class KrosScope private constructor(
     internal val engine: ScanEngine,
     location: WorkspaceLocation,
-    internal val progress: ProgressListener,
-    internal val tokenCounts: TokenCountFile?,
+    options: OpenOptions,
     private val levels: LevelInForce,
+    semanticComponents: SemanticComponents,
 ) : AutoCloseable {
+    internal val progress: ProgressListener = options.progress
+    internal val tokenCounts: TokenCountFile? =
+        TokenCountFile(location.indexDirectory.resolve(TokenCountFile.FILE_NAME)).takeIf { options.tokenCache }
+    internal val semanticMode: SemanticIndexingMode = options.semanticIndexing
     private val settings: SettingsSource = levels.settings
     internal val workspaceRoot: Path = location.root
     internal val externalCheckouts: ExternalCheckouts = location.externalCheckouts
@@ -82,6 +102,16 @@ public class KrosScope private constructor(
     private val indexFile = location.indexDirectory.resolve(INDEX_FILE_NAME)
     private val indexLocation = location.indexDirectory.toString().replace('\\', '/')
     internal val memory = IndexMemory(engine, progress, indexFile, indexLocation)
+    private val indexDirectory = location.indexDirectory
+    private val scanGuard = SemanticScanGuard(indexDirectory)
+    internal val semantic = SemanticRuntime(
+        indexDirectory,
+        semanticComponents::open,
+        semanticComponents::unavailable,
+        SemanticWorkspace(::isIndexed, memory::reader, { readWorkspaceFiles() }, { memory.revision }) {
+            memory.refresh().also { if (it) tokenCounts?.reload() }
+        },
+    )
 
     /**
      * Builds the index, or updates it incrementally. A rebuild discards the existing index first. A settings file
@@ -92,11 +122,19 @@ public class KrosScope private constructor(
         settings.prepareScan()
         val run = levels.decide({ engine.indexLevel()?.let(ScanLevel::of) }, rebuild)
         levels.fix(run.level)
-        memory.forget()
-        if (rebuild) tokenCounts?.discard()
-        val report = if (rebuild) engine.rebuild(verify) else engine.update(verify)
-        memory.forget()
-        tokenCounts?.prune(engine.graph().artifacts().map { it.contentHash }.toSet())
+        val report = scanGuard.exclusively {
+            semantic.invalidate()
+            memory.forget()
+            if (rebuild) {
+                tokenCounts?.discard()
+                if (Files.isDirectory(indexDirectory)) GenerationStore(indexDirectory).rebuild()
+            }
+            (if (rebuild) engine.rebuild(verify) else engine.update(verify)).also {
+                memory.forget()
+                tokenCounts?.prune(engine.graph().artifacts().map { hashed -> hashed.contentHash }.toSet())
+            }
+        }
+        if (semanticMode == SemanticIndexingMode.FOREGROUND) semantic.finish()
         val result = report.toScanResult(indexLocation, memory.levelMemory.level() ?: run.level)
         return run.notice?.let(result::withNotice) ?: result
     }
@@ -147,15 +185,7 @@ public class KrosScope private constructor(
         stage: RetrievalStage = RetrievalStage.FULL,
         includeContextEstimates: Boolean = true,
         ml: MlMode = MlMode.ON,
-    ): AnalysisResult {
-        memory.load()
-        val result = progress.stage(QueryStages.RANK) { TaskRetrieval(graph(), searchIndex()).analyze(task, stage, ml) }
-        return if (includeContextEstimates) {
-            progress.stage(QueryStages.ESTIMATE) { withContextEstimates(result) }
-        } else {
-            result
-        }
-    }
+    ): AnalysisResult = rankedAnalysis(task, stage, includeContextEstimates, ml).result
 
     public fun symbol(query: String): SymbolResult {
         memory.load()
@@ -186,7 +216,11 @@ public class KrosScope private constructor(
     }
 
     override fun close() {
-        engine.close()
+        try {
+            semantic.close()
+        } finally {
+            engine.close()
+        }
     }
 
     public companion object {
@@ -214,6 +248,7 @@ public class KrosScope private constructor(
             options: OpenOptions,
             environment: (String) -> String?,
             trust: TrustStore = TrustStore.ofThisMachine(environment = environment),
+            semanticComponents: SemanticComponents? = null,
         ): KrosScope {
             val absoluteRoot = root.toAbsolutePath().normalize()
             val index = (options.indexDirectory ?: absoluteRoot.resolve(WorkspaceConfig.DEFAULT_INDEX_DIRECTORY))
@@ -241,11 +276,44 @@ public class KrosScope private constructor(
                 DefaultCapabilities.registry(index, settings::workerSettings, analyzers, level)
             }
             val engine = ScanEngine(registry::get, config, options.progress.toEngine())
-            val tokenCounts = TokenCountFile(index.resolve(TokenCountFile.FILE_NAME)).takeIf { options.tokenCache }
             val location = WorkspaceLocation(absoluteRoot, index, external)
-            return KrosScope(engine, location, options.progress, tokenCounts, levels)
+            val installed = semanticComponents
+                ?: SemanticComponents.installed(environment, options.workerMemoryMib) { settings.componentFlags }
+            return KrosScope(engine, location, options, levels, installed)
         }
     }
+}
+
+internal fun KrosScope.rankedAnalysis(
+    task: String,
+    stage: RetrievalStage,
+    includeContextEstimates: Boolean,
+    ml: MlMode,
+): RankedAnalysis {
+    memory.load()
+    val revision = memory.revision
+    val retrieval = TaskRetrieval(graph(), searchIndex())
+    val structural = progress.stage(QueryStages.RANK) {
+        retrieval.analyze(task, stage, ml)
+    }
+    val result = withSemanticRanking(structural, stage, ml, retrieval)
+    val estimated = if (includeContextEstimates && memory.revision == revision) {
+        progress.stage(QueryStages.ESTIMATE) { withContextEstimates(result, retrieval, structural) }
+    } else {
+        result
+    }
+    if (memory.revision == revision) return RankedAnalysis(estimated, structural)
+    semantic.invalidate()
+    val fallbackRetrieval = TaskRetrieval(graph(), searchIndex())
+    val fallback = progress.stage(QueryStages.RANK) {
+        fallbackRetrieval.analyze(task, stage, ml)
+    }
+    val fallbackResult = if (includeContextEstimates) {
+        progress.stage(QueryStages.ESTIMATE) { withContextEstimates(fallback, fallbackRetrieval) }
+    } else {
+        fallback
+    }
+    return RankedAnalysis(fallbackResult, fallback)
 }
 
 private fun emptyInfo(indexLocation: String, settings: SettingsReport) = InfoResult(

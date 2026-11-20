@@ -1,5 +1,6 @@
 package io.github.krosstack.kscope.benchmark.context
 
+import io.github.krosstack.kscope.benchmark.context.identity.ContextPipelineIdentity
 import io.github.krosstack.kscope.benchmark.localization.BenchmarkSet
 import io.github.krosstack.kscope.benchmark.localization.LocalizationCorpusSummary
 import io.github.krosstack.kscope.benchmark.localization.LocalizationSymbolAddress
@@ -8,7 +9,9 @@ import io.github.krosstack.kscope.benchmark.stats.ComparisonReport
 import io.github.krosstack.kscope.model.context.ContextPackage
 import io.github.krosstack.kscope.model.context.TokenCount
 import io.github.krosstack.kscope.model.context.TokenizerId
+import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.retrieval.RetrievalStage
+import io.github.krosstack.kscope.retrieval.SemanticStatus
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -36,8 +39,13 @@ public data class ContextBenchmarkTask(
 }
 
 @Serializable
-public enum class ContextBenchmarkMethod(public val label: String, public val stage: RetrievalStage? = null) {
+public enum class ContextBenchmarkMethod(
+    public val label: String,
+    public val stage: RetrievalStage? = null,
+    public val ml: MlMode = MlMode.OFF,
+) {
     FULL_COMPILER("Full retrieval compiler", RetrievalStage.FULL),
+    FULL_SEMANTIC_COMPILER("Full retrieval with semantic ranking", RetrievalStage.FULL, MlMode.ON),
     LEXICAL_COMPILER("Lexical only compiler", RetrievalStage.LEXICAL),
     GRAPH_COMPILER("Graph compiler", RetrievalStage.GRAPH),
     PROJECTION_COMPILER("Projection compiler", RetrievalStage.PROJECTION),
@@ -109,6 +117,7 @@ public data class ContextMethodResult(
     public val scores: ContextScores,
     public val context: ContextPackage,
     public val fullFileCoverageCosts: FullFileCoverageCosts,
+    public val semantic: SemanticStatus? = null,
 )
 
 @Serializable
@@ -146,7 +155,8 @@ public data class ContextBenchmarkResult(
     public val complete: Boolean,
     public val valid: Boolean,
     public val validationErrors: List<String> = emptyList(),
-    public val schemaVersion: Int = 1,
+    public val schemaVersion: Int = 2,
+    public val pipeline: ContextPipelineIdentity? = null,
 )
 
 @Serializable

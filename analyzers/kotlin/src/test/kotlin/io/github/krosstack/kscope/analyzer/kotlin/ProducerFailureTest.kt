@@ -30,7 +30,7 @@ class ProducerFailureTest {
             assertEquals(DiagnosticSeverity.ERROR, diagnostic.severity)
             assertEquals("kotlin.worker-unavailable", diagnostic.code.value)
             assertContains(diagnostic.message, "it is not installed")
-            assertEquals(ProducerRef("kscope.analyzer.kotlin", "0.1.0"), batch.producer)
+            assertEquals(ProducerRef("kscope.analyzer.kotlin", "0.1.1"), batch.producer)
         }
     }
 

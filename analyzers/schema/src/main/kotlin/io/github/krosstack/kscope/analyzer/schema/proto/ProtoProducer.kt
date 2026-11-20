@@ -25,7 +25,7 @@ private const val NOTE_PREFIX = "proto"
 /** Turns each proto file into the symbols of the file, its messages, fields, enums, services and rpcs. */
 internal class ProtoProducer : FactProducer {
     override val descriptor = ProducerDescriptor(
-        producer = ProducerRef("kscope.schema.proto", "0.2.0"),
+        producer = ProducerRef("kscope.schema.proto", "0.2.1"),
         consumes = setOf(SchemaArtifactTypes.proto),
         capabilities = setOf(AnalyzerCapability.DECLARATIONS),
         granularity = OwnershipKind.ARTIFACT,

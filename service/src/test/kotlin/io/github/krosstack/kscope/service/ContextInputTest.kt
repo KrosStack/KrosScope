@@ -21,6 +21,8 @@ import io.github.krosstack.kscope.retrieval.ChangeScope
 import io.github.krosstack.kscope.retrieval.FileRole
 import io.github.krosstack.kscope.retrieval.RankedFile
 import io.github.krosstack.kscope.retrieval.RankedSymbol
+import io.github.krosstack.kscope.retrieval.SemanticState
+import io.github.krosstack.kscope.retrieval.SemanticStatus
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -57,6 +59,16 @@ class ContextInputTest {
 
         assertEquals(ContextRole.READ, result.candidates.single { it.node == NodeRef.OfSymbol(symbol.id) }.role)
         assertEquals(0.04, result.candidates.filter { it.role == ContextRole.TEST }.maxOf { it.relevance })
+    }
+
+    @Test
+    fun `applied results require the graph backed context input entry`() {
+        val failures = listOf(SemanticState.USED, SemanticState.BEHIND).map { state ->
+            runCatching { analysis().copy(semantic = SemanticStatus(state)).contextInput() }.exceptionOrNull()
+        }
+
+        assertTrue(failures.all { it is IllegalArgumentException }, failures.toString())
+        assertTrue(failures.all { it?.message?.contains("KrosScope.contextInput") == true })
     }
 
     private fun analysis(): AnalysisResult = AnalysisResult(

@@ -1,15 +1,10 @@
 package io.github.krosstack.kscope.semantic.store
 
 import java.io.IOException
-import java.nio.channels.FileChannel
 import java.nio.file.Files
 import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
-import java.nio.file.StandardOpenOption
-import java.security.MessageDigest
-import java.util.HexFormat
-import java.util.concurrent.ConcurrentHashMap
 
 public class GenerationStore internal constructor(
     directory: Path,
@@ -21,50 +16,39 @@ public class GenerationStore internal constructor(
 
     private val directory = directory.toAbsolutePath().normalize()
     private val manifest = GenerationManifest(this.directory)
+    private val access = GenerationAccess(this.directory, now)
 
-    public fun open(provider: String): GenerationLease? {
-        val opening = locked {
-            val name = manifest.read()[provider] ?: return@locked null
-            val lease = GenerationLease(
-                directory.resolve("embeddings-leases/$name-${ProcessHandle.current().pid()}"),
-                now,
-            )
-            try {
-                Triple(lease, Files.newInputStream(directory.resolve(name)), name)
-            } catch (_: IOException) {
-                lease.close()
-                null
-            }
-        } ?: return null
-        val (lease, input, name) = opening
-        val digest = name.substringBeforeLast(".").substringAfterLast("-")
-        return if (lease.load(input, digest) && lease.generation.header.provider == provider) {
-            lease
-        } else {
-            lease.close()
-            null
+    public fun current(provider: String): String? = access.locked { manifest.read()[provider] }
+
+    /** Reads only the manifest without waiting for publication; the selected file may be absent or invalid. */
+    public fun tryCurrent(provider: String): GenerationCurrent = access.tryCurrent(provider)
+
+    public fun tryOpen(provider: String): GenerationOpening = access.tryOpen(provider)
+
+    public fun open(provider: String): GenerationLease? = access.open(provider)
+
+    public fun publish(generation: GenerationFile): PublishResult = access.locked {
+        PreparedGeneration.create(directory, generation, writeTemporary).use {
+            publishFile(it.provider, it.name, it.temporary)
         }
     }
 
-    public fun publish(generation: GenerationFile): PublishResult {
-        val provider = generation.header.provider
-        require(provider.matches(Regex("[A-Za-z0-9_-]+")))
-        val bytes = generation.bytes()
-        val digest = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes))
-        val name = "embeddings-$provider-$digest.bin"
-        return locked {
-            val temporary = Files.createTempFile(directory, "publishing-", ".tmp")
-            try {
-                writeTemporary(temporary, bytes)
-                publishFile(provider, name, temporary)
-            } finally {
-                Files.deleteIfExists(temporary)
-            }
+    public fun prepare(generation: GenerationFile): PreparedGeneration = access.locked {
+        PreparedGeneration.create(directory, generation, writeTemporary)
+    }
+
+    public fun publish(prepared: PreparedGeneration, expectedGeneration: String?): PublishResult = access.locked {
+        check(!prepared.closed) { "Preparation is closed" }
+        require(prepared.temporary.parent == directory) { "Preparation belongs to another index" }
+        if (manifest.read()[prepared.provider] != expectedGeneration || !Files.exists(prepared.temporary)) {
+            PublishResult.Deferred("Generation changed during preparation")
+        } else {
+            publishFile(prepared.provider, prepared.name, prepared.temporary)
         }
     }
 
     public fun rebuild() {
-        locked {
+        access.locked {
             entries(directory).filter {
                 val name = it.fileName.toString()
                 (name.startsWith("embeddings-") || name.matches(Regex("publishing-.*\\.tmp"))) &&
@@ -113,30 +97,22 @@ public class GenerationStore internal constructor(
     }
 
     private fun leased(name: String): Boolean = entries(directory.resolve("embeddings-leases")).any { lease ->
-        lease.fileName.toString().startsWith("$name-") && live(lease)
-    }
-
-    private fun live(lease: Path): Boolean = try {
-        now() - Files.getLastModifiedTime(lease).toMillis() < STALE_MILLIS
-    } catch (_: NoSuchFileException) {
-        false
-    }
-
-    private fun entries(path: Path): List<Path> = if (Files.isDirectory(path)) {
-        Files.list(path).use { it.sorted().toList() }
-    } else {
-        emptyList()
-    }
-
-    private fun <T> locked(action: () -> T): T = synchronized(monitors.computeIfAbsent(directory) { Any() }) {
-        Files.createDirectories(directory)
-        FileChannel.open(directory.resolve("embeddings.lock"), StandardOpenOption.CREATE, StandardOpenOption.WRITE)
-            .use { channel -> channel.lock().use { action() } }
+        try {
+            lease.fileName.toString().startsWith("$name-") &&
+                now() - Files.getLastModifiedTime(lease).toMillis() < STALE_MILLIS
+        } catch (_: NoSuchFileException) {
+            false
+        }
     }
 
     private companion object {
         const val MAX_GENERATIONS = 3
         const val STALE_MILLIS = 5 * 60_000L
-        val monitors = ConcurrentHashMap<Path, Any>()
+
+        fun entries(path: Path): List<Path> = if (Files.isDirectory(path)) {
+            Files.list(path).use { it.sorted().toList() }
+        } else {
+            emptyList()
+        }
     }
 }
