@@ -34,10 +34,11 @@ class CatalogStaticTest {
     }
 
     @Test
-    fun `symbols are identified by the build root, the catalog, the section and the normalized alias`() {
+    fun `symbols are identified by the build root, the catalog file, the section and the normalized alias`() {
         val coroutines = facts.symbol("library", "kotlinx.coroutines.core")
         assertEquals(
-            "kscope gradle tasktide// . gradle/catalog/libs/libraries/`kotlinx.coroutines.core`.",
+            "kscope gradle tasktide// . gradle/catalog/`gradle/libs.versions.toml`/libraries/" +
+                "`kotlinx.coroutines.core`.",
             coroutines.id.value,
         )
         assertIs<ParsedSymbolId.Valid>(coroutines.id.identity())

@@ -22,6 +22,8 @@ internal class ServiceFile(val path: Path) {
         ServiceFileReading.Unreadable("$path: ${failure.message}")
     }
 
+    fun workerMemoryMib(): Long? = (read() as? ServiceFileReading.Read)?.limits?.workerMemoryMib
+
     fun <T> exclusively(block: () -> T): T =
         ServiceFileLocks.exclusively(path.resolveSibling(path.fileName.toString() + ".lock"), block)
 
@@ -83,6 +85,7 @@ internal class ServiceFile(val path: Path) {
         const val KEY = "workspaces"
         private val KEYS = setOf(KEY) + ServiceFileLimits.KEYS
         private const val KEY_LIST =
-            "\"$KEY\", \"${ServiceFileLimits.IDLE_KEY}\" and \"${ServiceFileLimits.MEMORY_KEY}\""
+            "\"$KEY\", \"${ServiceFileLimits.IDLE_KEY}\", \"${ServiceFileLimits.MEMORY_KEY}\" and " +
+                "\"${ServiceFileLimits.WORKER_MEMORY_KEY}\""
     }
 }

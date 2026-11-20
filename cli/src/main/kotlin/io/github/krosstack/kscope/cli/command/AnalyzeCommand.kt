@@ -62,6 +62,8 @@ internal class AnalyzeCommand : CliktCommand(name = "analyze") {
         "and estimates the context size. Give it one name such as TaskRepository, or a file path, and it prints " +
         "a card instead: the declaration, what it depends on, what refers to it, its tests and the impact of a " +
         "change. The first line says which reading was used. Run `kscope scan` first.\n\n" +
+        "When semantic ranking is applied, task analysis shows the fused top ten in rank order. Standard and full " +
+        "detail show all ten; brief shows the first five. A smaller candidate set shows fewer files.\n\n" +
         "Sections for --sections, for a task: ${AnalyzeText.SECTIONS.joinToString(", ")}. For a name or file: " +
         "${UnitCardText.SECTIONS.joinToString(", ")}."
 

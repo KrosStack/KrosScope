@@ -1,5 +1,6 @@
 package io.github.krosstack.kscope.benchmark.context
 
+import io.github.krosstack.kscope.benchmark.context.identity.ContextBenchmarkIdentity
 import io.github.krosstack.kscope.benchmark.graph.WorkspaceNames
 import io.github.krosstack.kscope.benchmark.localization.BenchmarkSet
 import io.github.krosstack.kscope.benchmark.localization.LocalizationCorpus
@@ -12,7 +13,6 @@ import io.github.krosstack.kscope.model.ArtifactRef
 import io.github.krosstack.kscope.model.context.TokenCount
 import io.github.krosstack.kscope.service.KrosScope
 import io.github.krosstack.kscope.service.readWorkspaceFiles
-import kotlinx.serialization.json.Json
 
 public object ContextBenchmark {
     public fun run(
@@ -44,6 +44,7 @@ public object ContextBenchmark {
             complete,
             valid,
             errors,
+            pipeline = options.selection.pipeline,
         )
     }
 
@@ -52,14 +53,19 @@ public object ContextBenchmark {
         workspace: java.nio.file.Path,
         tasks: List<ContextBenchmarkTask>,
         options: ContextBenchmarkOptions = ContextBenchmarkOptions(),
-    ): ContextSetResult = ContextBenchmarkRuntime(scope, workspace, options)
-        .measure(linkedMapOf(BenchmarkSet.ORIGINAL to tasks.sortedBy { it.id })).single()
+        acceptsAbsentGold: Boolean = false,
+    ): ContextSetResult {
+        require(!acceptsAbsentGold || options.checkpoints == null) { "Absent gold cannot use task checkpoints." }
+        return ContextBenchmarkRuntime(scope, workspace, options, acceptsAbsentGold)
+            .measure(linkedMapOf(BenchmarkSet.ORIGINAL to tasks.sortedBy { it.id })).single()
+    }
 }
 
 private class ContextBenchmarkRuntime(
     private val scope: KrosScope,
     workspace: java.nio.file.Path,
     private val options: ContextBenchmarkOptions,
+    private val acceptsAbsentGold: Boolean = false,
 ) {
     private val graph = scope.graph()
     private val names = WorkspaceNames.of(graph)
@@ -102,18 +108,24 @@ private class ContextBenchmarkRuntime(
         evaluator: ContextTaskEvaluator,
     ): Map<TokenCount, TaskContextResult> {
         val trace = ContextProgressTrace(set, task.id, options.progress)
-        val configuration = "${options.budgets}:${options.methods}:${options.estimator.id}"
         val request = ContextCheckpointRequest(
             set,
             task.id,
-            contextFingerprint(snapshot + configuration + Json.encodeToString(task)),
+            ContextBenchmarkIdentity.task(snapshot, task, options),
         )
         trace.emit(ContextProgressBoundary.TASK_STARTED)
-        val loaded = options.checkpoints?.load(request)?.takeIf { it.keys == options.budgets.toSet() }
+        val legacy = ContextBenchmarkIdentity.legacyTask(snapshot, task, options)
+        val cached = options.checkpoints?.load(request) ?: legacy?.let {
+            options.checkpoints?.load(request.copy(fingerprint = it))
+        }
+        val loaded = cached?.takeIf { it.keys == options.budgets.toSet() }
         val result = if (loaded == null) {
-            evaluator.evaluate(task, resolver.resolve(task.gold), set).also { results ->
-                options.checkpoints?.save(request, results)
-                if (options.checkpoints != null) trace.emit(ContextProgressBoundary.CHECKPOINT_SAVED)
+            evaluator.evaluate(task, resolver.resolve(task.gold), set, acceptsAbsentGold).also { results ->
+                val checkpoints = options.checkpoints?.takeIf {
+                    options.selection.pipeline == null || results.values.all(TaskContextResult::valid)
+                }
+                checkpoints?.save(request, results)
+                if (checkpoints != null) trace.emit(ContextProgressBoundary.CHECKPOINT_SAVED)
             }
         } else {
             trace.emit(ContextProgressBoundary.CHECKPOINT_LOADED)

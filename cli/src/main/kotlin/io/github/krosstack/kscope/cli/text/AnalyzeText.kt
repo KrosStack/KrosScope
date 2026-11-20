@@ -14,7 +14,7 @@ import io.github.krosstack.kscope.service.ArtifactKind
 
 /**
  * The result of `analyze` for a task: which files it touches, in what scope, and what is left uncertain. Lists show
- * the files that pass the [RelevanceCutoff]; binary files are only counted and documents are listed apart.
+ * the files that pass the [RelevanceCutoff], or the fused list when semantic ranking was applied.
  */
 internal object AnalyzeText {
     private const val TASK_WIDTH = 100
@@ -30,10 +30,14 @@ internal object AnalyzeText {
     )
     private val BRIEF = setOf(Section.HEADLINE, Section.TOP, Section.TESTS, Section.NEXT)
     private val STANDARD = SECTIONS.toSet() - Section.TOP
+    private val APPLIED = STANDARD - setOf(Section.EDIT, Section.READ, Section.DOCUMENTS, Section.CUTOFF) + Section.TOP
 
-    /** The files of [result] that pass the cut-off, whose kinds [render] needs. */
-    fun relevantFiles(result: AnalysisResult): List<ArtifactRef> =
+    /** The files whose kinds [render] needs, including every fused candidate when ranking was applied. */
+    fun relevantFiles(result: AnalysisResult): List<ArtifactRef> = if (SemanticAnalyzeText.isApplied(result.semantic)) {
+        result.files.map { it.artifact }
+    } else {
         RelevanceCutoff.select(result.files) { it.score }.relevant.map { it.artifact }
+    }
 
     fun render(
         result: AnalysisResult,
@@ -41,13 +45,25 @@ internal object AnalyzeText {
         kinds: Map<ArtifactRef, ArtifactKind> = emptyMap(),
         reading: String? = null,
     ): String {
-        val document = TextDocument(context, context.shown { if (it == DetailLevel.BRIEF) BRIEF else STANDARD })
+        val applied = SemanticAnalyzeText.isApplied(result.semantic)
+        val document = TextDocument(
+            context,
+            context.shown {
+                when {
+                    it == DetailLevel.BRIEF -> BRIEF
+                    applied -> APPLIED
+                    else -> STANDARD
+                }
+            },
+        )
         reading?.let { document.note(it) }
         if (result.files.isEmpty()) return nothingFound(result, document)
         val listing = Listing.of(result, kinds)
         document.conclusion(conclusion(listing, result), Tone.GOOD)
+        if (applied) document.fields(SemanticAnalyzeText.status(result.semantic))
         document.section(null, Section.QUERY).fields(query(result))
-        AnalyzeLists.render(listing, context, document)
+        if (applied) SemanticAnalyzeText.append(result, context, kinds, document)
+        AnalyzeLists.render(listing, context, document, result.semantic)
         AnalyzeLists.tests(result, context, document)
         scope(result, document)
         gaps(result, document)

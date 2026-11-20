@@ -22,19 +22,28 @@ import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireNoDot
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.scanService
+import io.github.krosstack.kscope.cli.service.home.ServiceDirectory
 import io.github.krosstack.kscope.cli.text.ScanText
 import io.github.krosstack.kscope.cli.textContext
 import io.github.krosstack.kscope.cli.withProgress
+import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.service.OpenOptions
 import io.github.krosstack.kscope.service.ProgressListener
 import io.github.krosstack.kscope.service.ScanLevel
 import io.github.krosstack.kscope.service.ScanResult
 import io.github.krosstack.kscope.service.ServiceJson
+import io.github.krosstack.kscope.service.semantic.SemanticIndexingMode
 
 /** `scan`, and `update`, its hidden alias for scripts written when the command had that name. */
 internal class ScanCommand(name: String = "scan", compatibilityAlias: Boolean = false) : CliktCommand(name = name) {
     private val common by RootOptions(
-        setOf(SharedOption.WORKSPACE, SharedOption.FORMAT, SharedOption.PROGRESS, SharedOption.QUIET),
+        setOf(
+            SharedOption.WORKSPACE,
+            SharedOption.FORMAT,
+            SharedOption.PROGRESS,
+            SharedOption.QUIET,
+            SharedOption.ML,
+        ),
         FormatGuide.TEXT_OR_JSON,
     )
     private val rebuild by option(
@@ -74,7 +83,7 @@ internal class ScanCommand(name: String = "scan", compatibilityAlias: Boolean = 
         forward(options)
         val result = guarded {
             withProgress(options) { listener ->
-                scanService(options, openOptions(asked, listener), rebuild, verify)
+                scanService(options, openOptions(asked, listener, options.ml), rebuild, verify)
             }
         }
         echoResult(
@@ -94,10 +103,12 @@ internal class ScanCommand(name: String = "scan", compatibilityAlias: Boolean = 
         return if (trustBuild) ScanLevel.EXACT else level
     }
 
-    private fun openOptions(asked: ScanLevel?, listener: ProgressListener) = OpenOptions(
+    private fun openOptions(asked: ScanLevel?, listener: ProgressListener, ml: MlMode) = OpenOptions(
         trustBuild = asked == ScanLevel.EXACT,
         level = asked.takeIf { it != ScanLevel.EXACT },
         progress = listener,
+        semanticIndexing = if (ml == MlMode.ON) SemanticIndexingMode.FOREGROUND else SemanticIndexingMode.OFF,
+        workerMemoryMib = if (ml == MlMode.ON) ServiceDirectory.of(this).file.workerMemoryMib() else null,
     )
 
     private fun render(result: ScanResult, options: ResolvedOptions) = when (options.format) {

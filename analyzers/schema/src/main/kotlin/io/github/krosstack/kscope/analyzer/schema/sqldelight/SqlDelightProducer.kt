@@ -5,6 +5,7 @@ import io.github.krosstack.kscope.analyzer.schema.SchemaArtifactTypes
 import io.github.krosstack.kscope.analyzer.schema.SymbolSite
 import io.github.krosstack.kscope.analyzer.schema.TextIndex
 import io.github.krosstack.kscope.analyzer.schema.fileNote
+import io.github.krosstack.kscope.analyzer.schema.sqldelight.sql.SqStatement
 import io.github.krosstack.kscope.model.Artifact
 import io.github.krosstack.kscope.model.DiagnosticSeverity
 import io.github.krosstack.kscope.model.Fact
@@ -24,7 +25,7 @@ import io.github.krosstack.kscope.spi.ProducerDescriptor
  */
 internal class SqlDelightProducer : FactProducer {
     override val descriptor = ProducerDescriptor(
-        producer = ProducerRef("kscope.schema.sqldelight", "0.1.0"),
+        producer = ProducerRef("kscope.schema.sqldelight", "0.1.1"),
         consumes = setOf(SchemaArtifactTypes.sqldelight),
         capabilities = setOf(AnalyzerCapability.DECLARATIONS),
         granularity = OwnershipKind.ARTIFACT,
@@ -54,6 +55,13 @@ internal class SqlDelightProducer : FactProducer {
         val site = SymbolSite(source.artifact.ref, source.placement.scope, TextIndex(source.text))
         val symbols = SqlDelightDeclarations(source).symbols().map { Fact.OfSymbol(it.toSymbol(site)) }
         val references = SqlDelightTableReferences(source, site).all().map { Fact.OfSymbolicReference(it) }
-        return symbols + references
+        return symbols + references + source.file.repeatedQueries.map { repeatedNote(source, it) }
     }
+
+    private fun repeatedNote(source: SqSource, query: SqStatement): Fact = fileNote(
+        source.artifact,
+        DiagnosticSeverity.WARNING,
+        "sqldelight.query-label-repeated",
+        "the query label ${query.label} is written more than once, only the first is kept",
+    )
 }

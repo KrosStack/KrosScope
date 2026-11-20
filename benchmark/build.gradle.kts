@@ -25,7 +25,9 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:spi"))
     implementation(project(":service"))
+    implementation(project(":intelligence:semantic"))
     implementation(libs.sqlite.jdbc)
+    testImplementation(project(path = ":service", configuration = "testElements"))
     add(kotlinWorkerDependencies.name, project(":analyzers:kotlin-worker"))
 }
 

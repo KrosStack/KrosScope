@@ -17,7 +17,7 @@ internal fun KrosScope.analyzeByCompiling(task: String): AnalysisResult {
     val result = analyze(task, includeContextEstimates = false)
     val store = tokenCounts ?: TokenCountStore.NONE
     val compiler = ContextCompiler(graph(), readWorkspaceFiles(), TokenEstimators.create(), store)
-    val input = result.contextInput()
+    val input = contextInput(result)
     val estimates = ContextLevel.entries.associateWith { compiler.compile(input, it).totalTokens }
     tokenCounts?.flush()
     return result.copy(contextEstimates = estimates)

@@ -9,7 +9,12 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 internal class ServiceHost(requested: ServiceSettings) {
     private val settings = requested.copy(
-        serve = requested.serve.copy(watchEnabled = true, hosted = true, idleTimeoutMillis = 0),
+        serve = requested.serve.copy(
+            watchEnabled = true,
+            hosted = true,
+            idleTimeoutMillis = 0,
+            workerMemoryMib = { limits.workerMemoryMib },
+        ),
         scanRunner = SingleScanRunner(requested.scanRunner),
     )
     private val lifecycle = Any()

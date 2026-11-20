@@ -21,7 +21,8 @@ internal class GroupWiring(
     fun wiringOf(group: SourceSetGroup): Wiring {
         val friends = friendsOf(group)
         val inherited = friends.flatMap(::otherModulesOf)
-        val defaultGroup = layouts.getValue(group.module).takeIf { it.isOutsideDefaultVariant(group) }?.defaultGroup
+        val defaultGroup = layouts.getValue(group.module)
+            .takeIf { it.isOutsideDefaultVariant(group) && !group.hasContext }?.defaultGroup
         val direct = otherModulesOf(group) + inherited + friends + listOfNotNull(defaultGroup)
         val all = direct.flatMap(graph::withRefined).filter { it !== group }.distinct()
         return Wiring(all, friends)
@@ -31,7 +32,9 @@ internal class GroupWiring(
         if (edges.hasInformation) moduleDependencies.dependenciesOf(group) else assumedFor(group)
 
     private fun assumedFor(group: SourceSetGroup): List<SourceSetGroup> =
-        layouts.values.flatMap { it.offered() }.filter { it !== group && group.platform.canSee(it.platform) }
+        layouts.values.flatMap { it.offered() }.filter {
+            it !== group && group.platform.canSee(it.platform) && (!group.hasContext || it.module != group.module)
+        }
 
     private fun friendsOf(group: SourceSetGroup): List<SourceSetGroup> {
         if (group.isMainSide) return emptyList()

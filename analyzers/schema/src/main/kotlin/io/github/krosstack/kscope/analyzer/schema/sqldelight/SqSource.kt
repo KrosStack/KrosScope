@@ -13,10 +13,14 @@ import java.io.IOException
 /** A `.sq` file read and split, with the database it belongs to, the tables it defines and the ids of its symbols. */
 internal class SqSource(val artifact: Artifact, val placement: Placement, val text: String, val file: SqFile) {
     val path = SqPath(artifact.ref.path.value)
-    val database: SqlDelightDatabase? = SqlDelightDatabases.forFile(SqlDelightDatabases.of(placement.module), path)
+    val database: SqlDelightDatabase? =
+        SqlDelightDatabases.forFile(SqlDelightDatabases.of(placement.module), modulePath(), path)
     val packageName: String = path.packageName(database)
     val ids = SqlDelightIdentities(placement.identity, packageName)
     val tables: List<SqlTable> = file.tables.mapNotNull { SqlTableReader.read(it, file.imports) }
+
+    private fun modulePath(): String =
+        artifact.ref.path.value.removePrefix(placement.module.directory.value).removePrefix("/")
 
     companion object {
         /** Null for a file that is not a `.sq` file, that no module contains or that cannot be read. */

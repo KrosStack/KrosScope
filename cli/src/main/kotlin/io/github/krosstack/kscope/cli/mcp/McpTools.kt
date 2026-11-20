@@ -14,6 +14,7 @@ internal object McpTools {
             listOf(
                 McpArgument("task", "The task to implement or investigate, in your own words."),
                 McpArgument("budget", "Maximum tokens in the context.", false, integerRange = MIN_BUDGET..MAX_BUDGET),
+                McpArgument("ml", "Use learned signals when installed.", false, booleanDefault = true),
             ),
         ),
         McpTool(

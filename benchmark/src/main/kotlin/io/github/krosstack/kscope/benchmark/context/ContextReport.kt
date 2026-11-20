@@ -1,11 +1,14 @@
 package io.github.krosstack.kscope.benchmark.context
 
+import io.github.krosstack.kscope.benchmark.context.semantic.SemanticContextGate
 import io.github.krosstack.kscope.benchmark.stats.ComparisonRows
 import io.github.krosstack.kscope.model.context.TokenCount
 import java.util.Locale
 
 public object ContextReport {
-    public fun markdown(result: ContextBenchmarkResult): String = buildString {
+    public fun markdown(result: ContextBenchmarkResult): String = markdown(result, null)
+
+    internal fun markdown(result: ContextBenchmarkResult, expected: Set<String>?): String = buildString {
         appendLine("# Context benchmark")
         appendLine()
         val measured = measuredBudgets(result)
@@ -14,6 +17,20 @@ public object ContextReport {
         appendLine("Valid: ${result.valid}.")
         appendLine("Estimator: ${result.estimator.value}. Definition: ${result.definition.version}.")
         result.validationErrors.forEach { appendLine("Validation error: $it") }
+        if (result.pipeline != null || result.sets.any { set ->
+                set.budgets.any { budget ->
+                    budget.tasks.any { ContextBenchmarkMethod.FULL_SEMANTIC_COMPILER in it.methods }
+                }
+            }
+        ) {
+            appendLine()
+            val verdict = if (expected == null) {
+                SemanticContextGate.evaluate(result)
+            } else {
+                SemanticContextGate.evaluate(result, expected)
+            }
+            append(SemanticContextGate.markdown(verdict))
+        }
         appendDefinition(result.definition)
         result.sets.forEach { set ->
             appendLine()

@@ -31,19 +31,20 @@ import io.github.krosstack.kscope.cli.useService
 import io.github.krosstack.kscope.cli.withProgress
 import io.github.krosstack.kscope.context.TokenEstimators
 import io.github.krosstack.kscope.model.context.ContextLevel
-import io.github.krosstack.kscope.model.context.ContextPackage
 import io.github.krosstack.kscope.model.context.TokenCount
 import io.github.krosstack.kscope.model.context.TokenizerId
 import io.github.krosstack.kscope.service.Leveled
 import io.github.krosstack.kscope.service.OpenOptions
 import io.github.krosstack.kscope.service.ProgressListener
 import io.github.krosstack.kscope.service.ServiceJson
-import io.github.krosstack.kscope.service.context
+import io.github.krosstack.kscope.service.context.ContextRequest
+import io.github.krosstack.kscope.service.context.ContextResult
+import io.github.krosstack.kscope.service.contextResult
 import io.github.krosstack.kscope.service.leveled
 import io.github.krosstack.kscope.service.workspaceLocations
 
 internal class ContextCommand : CliktCommand(name = "context") {
-    private val common by RootOptions(SharedOption.QUERY, FormatGuide.CONTEXT)
+    private val common by RootOptions(SharedOption.QUERY + SharedOption.ML, FormatGuide.CONTEXT)
     private val task by argument(
         "TASK",
         help = "What you want to do, in your own words. Leave it out when you use --task-file.",
@@ -98,9 +99,9 @@ internal class ContextCommand : CliktCommand(name = "context") {
         val result = located.value
         echoResult(
             when (options.format) {
-                OutputFormat.JSON -> ServiceJson.encode(result, answer.level)
-                OutputFormat.MARKDOWN -> result.markdown
-                else -> ContextText.render(result, textContext(options, located.locations))
+                OutputFormat.JSON -> ServiceJson.encode(result.context, answer.level)
+                OutputFormat.MARKDOWN -> result.context.markdown
+                else -> ContextText.render(result.context, textContext(options, located.locations), result.semantic)
             },
             options.format,
         )
@@ -110,10 +111,10 @@ internal class ContextCommand : CliktCommand(name = "context") {
         options: ResolvedOptions,
         text: String,
         listener: ProgressListener,
-    ): Leveled<Located<ContextPackage>> = useService(options, OpenOptions(progress = listener)) {
+    ): Leveled<Located<ContextResult>> = useService(options, OpenOptions(progress = listener)) {
         it.requireIndex()
         val tokens = TokenEstimators.create(TokenizerId(estimator))
-        val compiled = it.context(text, budget?.let(::TokenCount), level, tokens)
+        val compiled = it.contextResult(ContextRequest(text, budget?.let(::TokenCount), level, tokens, ml = options.ml))
         it.leveled(Located(compiled, it.workspaceLocations()))
     }
 }

@@ -77,7 +77,7 @@ class McpMlOptionTest {
     @Test
     fun `ml on another tool is an unknown argument`() {
         var executed = false
-        val result = McpTools.call("context", buildJsonObject { put("ml", false) }) {
+        val result = McpTools.call("info", buildJsonObject { put("ml", false) }) {
             executed = true
             McpToolResult("unexpected")
         }

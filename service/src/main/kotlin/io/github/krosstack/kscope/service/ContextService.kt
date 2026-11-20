@@ -12,7 +12,13 @@ import io.github.krosstack.kscope.model.context.ContextRole
 import io.github.krosstack.kscope.model.context.TokenCount
 import io.github.krosstack.kscope.retrieval.AnalysisResult
 import io.github.krosstack.kscope.retrieval.FileRole
+import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.retrieval.RetrievalStage
+import io.github.krosstack.kscope.retrieval.SemanticState
+import io.github.krosstack.kscope.retrieval.TaskRetrieval
+import io.github.krosstack.kscope.service.context.ContextRequest
+import io.github.krosstack.kscope.service.context.ContextResult
+import io.github.krosstack.kscope.service.context.SemanticContextCandidates
 import io.github.krosstack.kscope.spi.context.TokenEstimator
 
 public fun KrosScope.context(
@@ -21,17 +27,30 @@ public fun KrosScope.context(
     level: ContextLevel = ContextLevel.RECOMMENDED,
     estimator: TokenEstimator = TokenEstimators.create(),
     stage: RetrievalStage = RetrievalStage.FULL,
-): ContextPackage {
-    val analysis = analyze(task, stage, includeContextEstimates = false)
-    return progress.stage(QueryStages.COMPILE) {
-        val compiler = ContextCompiler(graph(), readWorkspaceFiles(), estimator, countStore())
-        compiler.compile(analysis.contextInput(), level, budget).also { tokenCounts?.flush() }
+): ContextPackage = context(ContextRequest(task, budget, level, estimator, stage, ml = MlMode.ON))
+
+public fun KrosScope.context(request: ContextRequest): ContextPackage = compileContext(request).context
+
+public fun KrosScope.contextResult(request: ContextRequest): ContextResult = compileContext(request)
+
+private fun KrosScope.compileContext(request: ContextRequest): ContextResult {
+    val ranked = rankedAnalysis(request.task, request.stage, includeContextEstimates = false, ml = request.ml)
+    val analysis = ranked.result
+    val context = progress.stage(QueryStages.COMPILE) {
+        val compiler = ContextCompiler(graph(), readWorkspaceFiles(), request.estimator, countStore())
+        compiler.compile(contextInput(analysis, null, ranked.structural), request.level, request.budget)
+            .also { tokenCounts?.flush() }
     }
+    return ContextResult(context, analysis.semantic)
 }
 
-internal fun KrosScope.withContextEstimates(result: AnalysisResult): AnalysisResult {
+internal fun KrosScope.withContextEstimates(
+    result: AnalysisResult,
+    retrieval: TaskRetrieval? = null,
+    baseline: AnalysisResult? = null,
+): AnalysisResult {
     val compiler = ContextCompiler(graph(), readWorkspaceFiles(), TokenEstimators.create(), countStore())
-    val input = result.contextInput()
+    val input = contextInput(result, retrieval, baseline)
     val estimates = ContextLevel.entries.associateWith { compiler.estimate(input, it) }
     tokenCounts?.flush()
     return result.copy(contextEstimates = estimates)
@@ -39,7 +58,25 @@ internal fun KrosScope.withContextEstimates(result: AnalysisResult): AnalysisRes
 
 private fun KrosScope.countStore(): TokenCountStore = tokenCounts ?: TokenCountStore.NONE
 
+public fun KrosScope.contextInput(result: AnalysisResult): ContextInput = contextInput(result, null)
+
+internal fun KrosScope.contextInput(
+    result: AnalysisResult,
+    retrieval: TaskRetrieval?,
+    baseline: AnalysisResult? = null,
+): ContextInput = if (result.semantic.state == SemanticState.USED || result.semantic.state == SemanticState.BEHIND) {
+    val canonical = retrieval ?: TaskRetrieval(graph(), searchIndex())
+    val structural = baseline ?: canonical.analyze(result.query.text, RetrievalStage.FULL, MlMode.OFF)
+    SemanticContextCandidates.input(result, structural, canonical::canonicalFile)
+} else {
+    result.contextInput()
+}
+
+/** USED and BEHIND results require [KrosScope.contextInput] and are rejected here. */
 public fun AnalysisResult.contextInput(): ContextInput {
+    require(semantic.state != SemanticState.USED && semantic.state != SemanticState.BEHIND) {
+        "Applied results require KrosScope.contextInput."
+    }
     val edits = files.filter { it.role == FileRole.EDIT }.map { it.artifact }.toSet()
     val primary = files.map { file ->
         val role = if (file.role == FileRole.EDIT) ContextRole.EDIT else ContextRole.READ

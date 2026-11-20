@@ -19,7 +19,8 @@ import java.util.HexFormat
 internal class AnalysisModulePlanner {
     fun plan(input: PlanInput): AnalysisPlan {
         val edges = ModuleEdges(input.model)
-        val layouts = layoutsOf(input, edges)
+        val android = AndroidSyntheticSources(input)
+        val layouts = layoutsOf(input, edges).mapValues { android.layoutOf(it.value) }
         val groups = layouts.values.flatMap { it.groups }
         val graph = GroupGraph(groups, input.model.sourceSets)
         val wiring = GroupWiring(layouts, graph, edges)
@@ -29,7 +30,12 @@ internal class AnalysisModulePlanner {
             workerModule(group, wirings.getValue(group), graph.refined(group), input, synthetic)
         }
         val reach = reachOf(wirings, GroupWiring(layouts, graph, edges.withoutHeuristic()))
-        return AnalysisPlan(modules, dependenciesAssumed = !edges.hasInformation, reach = reach)
+        return AnalysisPlan(
+            modules,
+            dependenciesAssumed = !edges.hasInformation,
+            reach = reach,
+            ownedSourceSets = groups.flatMap { it.ids }.toSet(),
+        )
     }
 
     private fun reachOf(wirings: Map<SourceSetGroup, Wiring>, sure: GroupWiring): HeuristicReach {
@@ -67,15 +73,23 @@ internal class AnalysisModulePlanner {
         refined: List<SourceSetGroup>,
         input: PlanInput,
         synthetic: Map<SourceSetId, List<SyntheticSource>>,
-    ) = WorkerModule(
-        name = group.name,
-        platform = group.platform,
-        sourceSets = group.members.map { workerSourceSet(it, input, synthetic[it.id].orEmpty()) },
-        dependsOn = refined.names(),
-        dependencies = wiring.dependencies.names(),
-        friends = wiring.friends.names(),
-        classpath = group.members.flatMap { input.classpaths[it.id].orEmpty() }.distinct(),
-    )
+    ): WorkerModule {
+        val selected = AndroidSyntheticSources(input).sourcesOf(group, synthetic)
+        return WorkerModule(
+            name = group.name,
+            platform = group.platform,
+            sourceSets = group.members.map { sourceSet ->
+                workerSourceSet(sourceSet, input, synthetic[sourceSet.id].orEmpty()).copy(
+                    syntheticSources = selected[sourceSet.id].orEmpty(),
+                    emitFactsFor = sourceSet.id in group.ids && sourceSet.id in input.requested,
+                )
+            },
+            dependsOn = refined.names(),
+            dependencies = wiring.dependencies.names(),
+            friends = wiring.friends.names(),
+            classpath = group.members.flatMap { input.classpaths[it.id].orEmpty() }.distinct(),
+        )
+    }
 
     private fun workerSourceSet(
         sourceSet: SourceSet,

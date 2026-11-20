@@ -101,15 +101,22 @@ internal class ViewBindingSymbolsTest : ViewBindingTestBase() {
     }
 
     @Test
-    fun `a layout that several source sets define generates the class from each definition`() {
+    fun `a layout that several source sets define generates a separate class from each definition`() {
         val debugBadge = "<TextView xmlns:android=\"http://schemas.android.com/apk/res/android\"" +
             " android:id=\"@+id/badge_text\"/>"
         val merged = run(treeWithBinding(mapOf("app/src/debug/res/layout/view_badge.xml" to debugBadge)))
-        val badge = symbolNamed("$databinding.ViewBadgeBinding", merged)
+        val badges = merged.symbols().filter { it.qualifiedName == "$databinding.ViewBadgeBinding" }
         assertEquals(
-            listOf(":app@debug:android/res/layout/view_badge.", ":app@main:android/res/layout/view_badge."),
-            merged.generatorsOf(badge).map { Render.node(it.from) }.sorted(),
+            listOf(
+                ":app@debug:sample/droid/app/databinding/ViewBadgeBinding#",
+                ":app@main:sample/droid/app/databinding/ViewBadgeBinding#",
+            ),
+            badges.map { Render.id(it.id) }.sorted(),
         )
+        badges.forEach { badge ->
+            val source = ":app@${badge.scope.sourceSet?.value?.substringAfterLast('@')}:android/res/layout/view_badge."
+            assertEquals(source, Render.node(merged.generatorsOf(badge).single().from))
+        }
     }
 
     @Test

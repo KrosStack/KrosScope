@@ -1,6 +1,7 @@
 # JSON result schemas
 
-These Draft 2020-12 schemas describe version 2 of analysis JSON and version 1 of the other CLI JSON results and benchmark reports.
+These Draft 2020-12 schemas describe version 2 of analysis and context-benchmark JSON,
+and version 1 of the other CLI JSON results and benchmark reports.
 They are generated from Kotlin serialization descriptors. Inline identifiers remain JSON scalars;
 sealed values retain their `type` discriminator. Token counts are nonnegative integers.
 
@@ -29,7 +30,7 @@ an independent Draft 2020-12 validator.
 | `structure.schema.json` | The structure report of `info --structure` |
 | `symbol.schema.json` | Symbol lookup results |
 | `localization.schema.json` | Localization methods, gates and paired comparisons |
-| `context-benchmark.schema.json` | Context coverage, precision, budgets and paired comparisons |
+| `context-benchmark.schema.json` | Context coverage, precision, budgets, actual method status and optional pipeline identity |
 
 A result that is read from an index (analysis, context, graph, impact, info, node resolution, related, scan and
 symbol) has the field `indexLevel` right after `schemaVersion`: the level of that index, `resolved` or `exact`. In `info`
@@ -37,3 +38,8 @@ it is `null` while there is no index.
 
 The schemas describe JSON structure. Source-range validity, evidence quality, index freshness and
 budget accounting are checked by the implementation and its behavioral tests.
+
+Context-benchmark v2 adds nullable method `semantic` status and result `pipeline` identity.
+Version 1 records still decode with these fields absent; they provide no evidence of semantic use.
+Product context JSON remains version 1 and contains the counted context package without semantic status.
+Service callers can obtain that status through `contextResult`.

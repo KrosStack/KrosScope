@@ -1,5 +1,7 @@
 package io.github.krosstack.kscope.benchmark.context
 
+import io.github.krosstack.kscope.benchmark.context.identity.ContextAnalysisKey
+import io.github.krosstack.kscope.benchmark.context.identity.ContextBenchmarkIdentity
 import io.github.krosstack.kscope.model.context.TokenCount
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -21,9 +23,12 @@ private data class CheckpointRecord(
 
 public class FileContextTaskCheckpoints(
     private val directory: Path,
-    private val identity: String,
+    identity: String,
     private val resume: Boolean = true,
+    analysisKeys: List<ContextAnalysisKey> = emptyList(),
 ) : ContextTaskCheckpoints {
+    private val identity = ContextBenchmarkIdentity.bind(identity, analysisKeys)
+
     override fun load(request: ContextCheckpointRequest): Map<TokenCount, TaskContextResult>? {
         val path = path(request)
         if (!resume || !Files.isRegularFile(path)) return null

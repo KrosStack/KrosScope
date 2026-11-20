@@ -1,0 +1,14 @@
+Read as a task (use --as symbol to look it up as a name).
+0 files to edit and 0 to read; 10 files scored; no strong match.
+  Semantic ranking  used
+
+Ranked files
+  score  role  kind      file
+  0.032  edit  document  lib/docs/anchor-0.md
+  0.031  read  document  lib/docs/anchor-4.md
+  0.031  read  document  lib/docs/anchor-7.md
+  0.031  read  document  lib/docs/anchor-3.md
+  0.031  read  document  lib/docs/anchor-9.md
+  5 more relevant (use --detail full to list them)
+
+Next: kscope context "<task>" --budget 4000 --format markdown compiles the source of these files.

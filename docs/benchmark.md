@@ -1,5 +1,8 @@
 # Benchmark Methodology
 
+The [semantic ranking protocol](benchmarks/semantic-ranking-protocol.md) specifies frozen S9 quality
+verdicts, S8 measurement boundaries, identity checklists and repeat procedures.
+
 Measurement is a product requirement. KrosScope maintains two benchmark classes and never reports a token
 reduction without task-success results beside it.
 
@@ -309,6 +312,22 @@ How the methods and the costs are packed and measured:
 ./gradlew :benchmark:run --args="context-benchmark --mode default --out <directory>"
 ```
 
+`--semantic off` is the default and retains the existing five methods, with every compiler explicitly OFF.
+`--semantic on` selects FULL OFF, FULL ON, lexical OFF, raw BM25, English BM25 and path order.
+It requires installed, enabled semantic components and completes foreground indexing before evaluation;
+missing components, failed indexing or an unusable generation cause a nonzero exit with an explanation.
+No component is installed or downloaded by this command.
+
+The pair uses the same parent, source corpus, RECOMMENDED level, estimator and budgets.
+Context-benchmark JSON version 2 records each compiler analysis's actual semantic status and the pipeline identity,
+including installed payload/model/descriptor hashes, runtime, ranking policy and selected generation digest.
+An ON task is invalid unless its own analysis reports USED with the expected provider and complete model identity,
+zero missing chunks and the selected generation. BEHIND and fallback results remain diagnostic measurements.
+Inputs are reused across budgets only within the same analysis key; checkpoints also bind the pipeline identity.
+Version 1 records remain readable but lack this evidence. The existing `tier1Passed` flag still evaluates FULL OFF;
+it does not establish semantic Tier 1 improvement or the paired S9 regression gate.
+Product context JSON remains version 1 without semantic metadata; service callers use `contextResult` for status.
+
 The optional `--budgets 2000,4000` limits the run to those standard budgets; the result then
 reports only them and is never a Tier 1 evaluation: the report states `Tier 1: NOT EVALUATED`, lists the
 budgets it measured, and the JSON `tier1Passed` is false.
@@ -442,6 +461,65 @@ How runs are stored, resumed and reported:
   statistics leave it out, and their sample count shows how many tasks they hold.
 - The report command exits 0 only when every group is complete, valid and passes Tier 1; a report over a partial
   run lists the observed tasks and cannot pass.
+
+### Semantic arms
+
+`real-repos-semantic` measures a separate experiment without changing the standard methods or records.
+It visits each repository's selected split in timestamp/commit order in one scratch checkout, scans the
+first parent and incrementally updates subsequent parents. Production bounded chunking and
+`IndexingSession` reuse compatible chunk digests. Gold always includes every task gold file.
+
+```text
+./gradlew :benchmark:run --args="real-repos-semantic --manifest <manifest.json> --paraphrases <directory> --split dev --repositories <id,id> --scratch <scratch-directory> --out <run-directory> --checkpoint-key <freeze-sha256> --worker <distribution-directory> --model <model-directory> --device cpu"
+```
+
+Omit `--repositories` for the whole split. Paraphrases are UTF-8 `<directory>/DEV|TEST/<id>.jsonl`
+rows with `id` and nullable `paraphrase`. Null queries are reported as unresolved; missing rows are rejected.
+CPU accepts the shipped worker; `cuda` requires a worker accepting `<model> cuda` (the device as its optional second argument).
+Every record and checkpoint binds model/tokenizer/distribution checksums, device, runtime and recipe.
+Repeat the identical command to resume; changed inputs require a new output directory.
+
+The five file arms are lexical (`analyze --stage lexical --ml off`), structural (full analyze, ML off),
+semantic, lexical+semantic and structural+semantic. Semantic scores use the maximum scaled int8 chunk
+dot product per file; hybrids sum `1/(60+rank)` over complete deduplicated rankings, with path ties.
+Private task records retain top-ten rankings, full-gold hit/recall/NDCG@10, embedded/reused chunk counts
+and update/embedding/scoring seconds. Update includes checkout; embedding includes chunk preparation
+and publication; scoring includes both query embeddings. The JSON aggregate contains repository and
+pooled means, paired bootstrap differences for both hybrids, and original-query win/tie/loss counts
+for each metric. It uses the existing bootstrap policy (10,000 resamples, seed 20261005, linear 95%
+percentiles). Failures and unresolved paraphrases remain explicit; no search quality gate is inferred.
+
+### Semantic context on chronological parents
+
+`real-repos-context-semantic` measures FULL OFF and FULL ON through the product context compiler at
+RECOMMENDED, at exactly 2,000, 4,000, 8,000 and 16,000 tokens, for original and paraphrased queries.
+It requires installed, enabled semantic components and performs foreground indexing in isolated scratch
+parent snapshots. It never installs components or writes the source checkout or its index.
+
+```text
+./gradlew :benchmark:run --args="real-repos-context-semantic --manifest <manifest.json> --paraphrases <directory> --split dev --scratch <scratch-directory> --out <new-run-directory> --checkpoint-key <freeze-sha256> [--repositories <id,id>]"
+```
+
+Paraphrases use the same nullable JSONL format described above. Null is explicitly unresolved and cannot
+produce a complete paired measurement. Missing rows are errors. There are no model, ranking or budget
+tuning flags. Scratch and output must be separate directories outside source checkouts.
+
+Before any completed record is read, the global binding includes the manifest, split, selected query set,
+product/component/model/runtime recipe, both arms, compiler policy, estimator, fixed budgets and caller key.
+Changed inputs require a new output directory; directories containing older runner records are rejected.
+Each atomically published version-1 private record binds the task and parent to its selected pipeline,
+generation and canonical scanned artifact inventory, retaining both context sets and actual query outcomes.
+Complete records resume from immutable recorded provenance without reopening or embedding that parent,
+even when generation retention has removed its index files. Records with changed contents are rejected.
+
+Failed scans, foreground indexing, unusable generations or invalid ON requests stop processing with a
+nonzero exit. ON is complete only when its own request reports USED, zero behind chunks, the expected
+provider/model and the selected generation. Recorded request status keeps state, provider/model and
+behind-chunk count, without separate skipped, discarded or fallback reasons; non-USED or behind requests
+never count as complete. The command reports the pooled ON/OFF regression verdict in JSON and Markdown
+and uses the gate result for its exit status, with per-repository cells below the limit counted as evidence
+(`cellsBelowLimit`, `repositoriesBelowLimit`) and ON Tier 1 not evaluated, following the
+[semantic ranking protocol](benchmarks/semantic-ranking-protocol.md).
 
 ### Tasks over several repositories and task levels
 

@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.cli.serve
 
 import io.github.krosstack.kscope.cli.command.ScanRunner
+import io.github.krosstack.kscope.cli.serve.semantic.ServeSemantics
 import io.github.krosstack.kscope.cli.serve.watch.WatchSettings
 import io.github.krosstack.kscope.service.KrosScope
 import io.github.krosstack.kscope.service.OpenOptions
@@ -15,11 +16,11 @@ import java.nio.file.Path
 internal class ServeServices(
     private val workspace: Path,
     private val scanRunner: ScanRunner,
-    private val onLoadChange: (Boolean) -> Unit = {},
-    private val beforeScan: () -> Unit = {},
-    private val afterScan: () -> Unit = {},
+    private val hooks: ScanHooks = ScanHooks(),
+    private val settings: ServeSettings = ServeSettings(),
 ) : AutoCloseable {
-    private var service = KrosScope.open(workspace)
+    val semantic = ServeSemantics({ service }, { loaded }, settings.ml, settings.workerMemoryMib)
+    private var service: KrosScope = scanRunner.open(workspace, semantic.openOptions())
 
     @Volatile
     var loaded = false
@@ -63,11 +64,11 @@ internal class ServeServices(
         try {
             service.close()
         } finally {
-            service = KrosScope.open(workspace)
+            service = scanRunner.open(workspace, semantic.openOptions())
             generation++
             loaded = false
         }
-        onLoadChange(false)
+        settings.onLoadChange(false)
     }
 
     fun refresh() = service.refreshIndex()
@@ -76,7 +77,7 @@ internal class ServeServices(
         queries++
         if (!loaded) {
             warm()
-            onLoadChange(true)
+            settings.onLoadChange(true)
         }
         return work(service)
     }
@@ -94,23 +95,24 @@ internal class ServeServices(
 
     fun scan(options: OpenOptions, rebuild: Boolean, verify: Boolean): ScanResult {
         val started = System.nanoTime()
+        val scanning = semantic.forScan(options)
         val outcome = runCatching {
             service.close()
-            beforeScan()
+            hooks.before()
             attemptedScans++
-            scanRunner.run(workspace, options, rebuild, verify).also { completedScans++ }
+            scanRunner.run(workspace, scanning, rebuild, verify).also { completedScans++ }
         }
         lastScan = ScanRecord.since(started, outcome.exceptionOrNull())
         try {
             reopen()
         } finally {
-            afterScan()
+            hooks.after()
         }
         return outcome.getOrThrow()
     }
 
     private fun reopen() {
-        service = KrosScope.open(workspace)
+        service = scanRunner.open(workspace, semantic.openOptions())
         generation++
         indexed = service.isIndexed()
         indexLevel = service.indexLevel()?.wireName
@@ -118,4 +120,6 @@ internal class ServeServices(
     }
 
     override fun close() = service.close()
+
+    class ScanHooks(val before: () -> Unit = {}, val after: () -> Unit = {})
 }

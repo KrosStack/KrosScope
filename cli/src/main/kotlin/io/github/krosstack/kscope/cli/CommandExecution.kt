@@ -87,7 +87,7 @@ internal class CommandExecution(
 
     fun <T> useService(options: ResolvedOptions, opening: OpenOptions, work: (KrosScope) -> T): T {
         requireWorkspace(options)
-        return if (service == null) KrosScope.open(options.workspace, opening).use(work) else service.use(work)
+        return if (service == null) scanRunner.open(options.workspace, opening).use(work) else service.use(work)
     }
 
     fun scan(options: ResolvedOptions, opening: OpenOptions, rebuild: Boolean, verify: Boolean): ScanResult {

@@ -97,6 +97,7 @@ nav:
           - 'ADR 0019: Installers in shell and PowerShell, and a skill for coding agents': decisions/0019-installers-and-agent-skill.md
           - 'ADR 0020: Repositories registered anywhere, linked through what they build for each other': decisions/0020-links-through-built-artifacts.md
           - 'ADR 0021: A read-only map in the browser, served by `serve --map`': decisions/0021-browser-map.md
+          - 'ADR 0023: Semantic search and ranking': decisions/0023-semantic-search.md
   - Benchmarks:
       - benchmarks/README.md
       - benchmarks/real-repositories.md
