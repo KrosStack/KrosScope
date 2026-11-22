@@ -1,0 +1,212 @@
+{
+    "kind": "SYMBOL",
+    "title": "Call flow of app.Checkout.pay: 8 of 8 nodes, 8 of 9 links",
+    "nodes": [
+        {
+            "id": "n1",
+            "label": "fun pay()",
+            "kind": "kotlin.function",
+            "group": "g2",
+            "selected": true,
+            "symbolId": "kscope gradle alpha//:app main Checkout#pay()."
+        },
+        {
+            "id": "n2",
+            "label": "fun validate()",
+            "kind": "kotlin.function",
+            "group": "g2",
+            "symbolId": "kscope gradle alpha//:app main Checkout#validate()."
+        },
+        {
+            "id": "n3",
+            "label": "fun record()",
+            "kind": "kotlin.function",
+            "group": "g3",
+            "symbolId": "kscope gradle alpha//:app main Ledger#record()."
+        },
+        {
+            "id": "n4",
+            "label": "fun main()",
+            "kind": "kotlin.function",
+            "group": "g1",
+            "symbolId": "kscope gradle alpha//:app main main()."
+        },
+        {
+            "id": "n5",
+            "label": "fun log()",
+            "kind": "kotlin.function",
+            "group": "g2",
+            "symbolId": "kscope gradle alpha//:app main Checkout#log()."
+        },
+        {
+            "id": "n6",
+            "label": "fun other()",
+            "kind": "kotlin.function",
+            "group": "g1",
+            "symbolId": "kscope gradle alpha//:app main other()."
+        }
+    ],
+    "groups": [
+        {
+            "id": "g1",
+            "label": "src/main/Top.kt",
+            "members": [
+                "n4",
+                "n6"
+            ]
+        },
+        {
+            "id": "g2",
+            "label": "app.Checkout",
+            "members": [
+                "n1",
+                "n2",
+                "n5"
+            ]
+        },
+        {
+            "id": "g3",
+            "label": "app.Ledger",
+            "members": [
+                "n3"
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "from": "n1",
+            "to": "r1",
+            "label": "calls; compiler=1; not-analysed=1",
+            "weakest": "NOT_ANALYSED",
+            "byState": {
+                "NOT_ANALYSED": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "position": 5
+        },
+        {
+            "from": "n1",
+            "to": "r2",
+            "label": "calls; compiler=1; unresolved=1",
+            "weakest": "UNRESOLVED",
+            "byState": {
+                "UNRESOLVED": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "position": 4
+        },
+        {
+            "from": "n1",
+            "to": "n2",
+            "label": "calls; compiler=2; exact=2",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 2
+            },
+            "byEvidence": {
+                "COMPILER": 2
+            },
+            "position": 1
+        },
+        {
+            "from": "n1",
+            "to": "n3",
+            "label": "calls; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "position": 2
+        },
+        {
+            "from": "n3",
+            "to": "n1",
+            "label": "calls; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "position": 1
+        },
+        {
+            "from": "n4",
+            "to": "n1",
+            "label": "calls; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "position": 1
+        },
+        {
+            "from": "n2",
+            "to": "n5",
+            "label": "calls; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "position": 1
+        },
+        {
+            "from": "n6",
+            "to": "n4",
+            "label": "calls; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "position": 1
+        }
+    ],
+    "reasons": [
+        {
+            "id": "r1",
+            "reason": "jni.native-side-not-analysed",
+            "count": 1
+        },
+        {
+            "id": "r2",
+            "reason": "kotlin.unresolved-reference",
+            "count": 1
+        }
+    ],
+    "omitted": {
+        "nodes": 0,
+        "linksByState": {
+            "EXACT": 0,
+            "PROBABLE": 0,
+            "HEURISTIC": 0,
+            "UNRESOLVED": 0,
+            "NOT_ANALYSED": 0
+        },
+        "beyondDepth": 1
+    },
+    "legend": [
+        "solid: exact",
+        "dashed: probable, heuristic",
+        "dotted ?: unresolved, not-analysed",
+        "labels: relation; evidence counts; state counts",
+        "selected: chosen symbol",
+        "thick: inheritance; numbered: call position"
+    ]
+}

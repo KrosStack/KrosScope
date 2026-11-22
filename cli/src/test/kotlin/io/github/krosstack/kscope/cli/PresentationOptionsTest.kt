@@ -12,7 +12,7 @@ class PresentationOptionsTest {
 
     @Test
     fun `detail and sections are refused by a command that cannot honour them`() = inScannedDeepWorkspace { root ->
-        listOf("info", "scan", "doctor", "graph", "impact Greeter", "context task").forEach {
+        listOf("info", "scan", "doctor", "graph", "diagram modules", "impact Greeter", "context task").forEach {
             val result = runKscopeWith(it.split(" ") + listOf("--detail", "brief", "--workspace", root.toString()))
             assertEquals(2, result.statusCode, "$it: ${result.output}")
             assertTrue(result.stderr.contains("available for analyze, symbol and related only"), result.stderr)
@@ -21,13 +21,24 @@ class PresentationOptionsTest {
     }
 
     @Test
-    fun `detail and sections apply to text and markdown but not to json`() = inScannedDeepWorkspace { root ->
-        listOf("--detail" to "brief", "--sections" to "tests").forEach { (option, value) ->
-            val result = run(root, "analyze", "Greeter", option, value, "--format", "json")
-            assertEquals(2, result.statusCode, result.output)
-            assertTrue(result.stderr.contains("JSON always has the full result"), result.stderr)
+    fun `detail and sections apply to text and markdown but not to the json of symbol and related`() =
+        inScannedDeepWorkspace { root ->
+            listOf("symbol", "related").forEach { command ->
+                listOf("--detail" to "brief", "--sections" to "tests").forEach { (option, value) ->
+                    val result = run(root, command, "Greeter", option, value, "--format", "json")
+                    assertEquals(2, result.statusCode, result.output)
+                    assertTrue(result.stderr.contains("JSON always has the full result"), result.stderr)
+                }
+            }
+            assertEquals(0, run(root, "analyze", "Greeter", "--detail", "full", "--format", "markdown").statusCode)
         }
-        assertEquals(0, run(root, "analyze", "Greeter", "--detail", "full", "--format", "markdown").statusCode)
+
+    @Test
+    fun `analyze takes detail with json but not sections`() = inScannedDeepWorkspace { root ->
+        assertEquals(0, run(root, "analyze", "Greeter", "--detail", "brief", "--format", "json").statusCode)
+        val sections = run(root, "analyze", "Greeter", "--sections", "tests", "--format", "json")
+        assertEquals(2, sections.statusCode, sections.output)
+        assertTrue(sections.stderr.contains("--sections applies to text and markdown output"), sections.stderr)
     }
 
     @Test

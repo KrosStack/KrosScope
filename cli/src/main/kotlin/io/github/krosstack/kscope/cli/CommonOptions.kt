@@ -11,13 +11,15 @@ import com.github.ajalt.clikt.parameters.types.choice
 import com.github.ajalt.clikt.parameters.types.path
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.lookup.IndexSource
+import io.github.krosstack.kscope.cli.lookup.inNearestIndex
 import io.github.krosstack.kscope.cli.progress.ProgressMode
 import io.github.krosstack.kscope.cli.text.format.DetailLevel
 import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.retrieval.RetrievalStage
 import java.nio.file.Path
 
-internal enum class OutputFormat { TEXT, JSON, MARKDOWN, DOT }
+internal enum class OutputFormat { TEXT, JSON, MARKDOWN, DOT, MERMAID }
 
 /**
  * The options every command accepts, given before or after the command name. Those not in [shown] are accepted all
@@ -48,7 +50,8 @@ internal class RootOptions(
     val workspace: Path? by option(
         "--workspace",
         metavar = "DIR",
-        help = "The workspace: the project directory to work on. It must exist. Defaults to the current directory.",
+        help = "The workspace: the project directory to work on. It must exist. Defaults to the current directory; " +
+            "a command that reads the index then also looks for one in the parent folders.",
         hidden = hides(SharedOption.WORKSPACE),
     ).path(mustExist = true, canBeFile = false)
 
@@ -61,6 +64,7 @@ internal class RootOptions(
         "json" to OutputFormat.JSON,
         "markdown" to OutputFormat.MARKDOWN,
         "dot" to OutputFormat.DOT,
+        "mermaid" to OutputFormat.MERMAID,
         metavar = formats.choices,
     )
 
@@ -81,7 +85,8 @@ internal class RootOptions(
     val detail: DetailLevel? by option(
         "--detail",
         help = "How much to print: brief fits one screen, standard is the default, full lists every relevant " +
-            "row of every section. Text and markdown output only.",
+            "row of every section. For text and markdown output; analyze also uses it to set how many symbols " +
+            "and files its JSON lists.",
         hidden = hides(SharedOption.DETAIL),
     ).choice("brief" to DetailLevel.BRIEF, "standard" to DetailLevel.STANDARD, "full" to DetailLevel.FULL)
 
@@ -127,6 +132,7 @@ internal data class ResolvedOptions(
     val noServer: Boolean = false,
     val ml: MlMode = MlMode.ON,
     val stage: RetrievalStage = RetrievalStage.FULL,
+    val source: IndexSource = IndexSource.Stated,
 )
 
 /** The `--detail` and `--sections` the user gave, the ones after the command name winning. */
@@ -138,28 +144,50 @@ private class Presentation(own: RootOptions, inherited: RootOptions?) {
 
 /**
  * Options given after the command name win over options given before it. [presentation] says that the command
- * honours `--detail` and `--sections`; any other command refuses them rather than ignore them.
+ * honours `--detail` and `--sections`; any other command refuses them rather than ignore them. [jsonDetail] says that
+ * the command also honours `--detail` in JSON output. [defaultFormat] is the format of a command that is given none.
  */
-internal fun CliktCommand.resolve(own: RootOptions, presentation: Boolean = false): ResolvedOptions {
+internal fun CliktCommand.resolve(
+    own: RootOptions,
+    presentation: Boolean = false,
+    defaultFormat: OutputFormat = OutputFormat.TEXT,
+    jsonDetail: Boolean = false,
+): ResolvedOptions {
     val parent = currentContext.parent?.obj
-    if (parent is GroupSession) return resolveWithin(parent.resolved, own, presentation)
+    if (parent is GroupSession) return resolveWithin(parent.resolved, own, presentation, jsonDetail)
     val session = parent as? CliSession
     val inherited = session?.defaults
     val shown = Presentation(own, inherited)
     val environment = session?.environment ?: CliEnvironment.detached()
-    val resolved = own.mergedWith(inherited, environment, shown).copy(
+    val resolved = own.mergedWith(inherited, environment, shown, defaultFormat).copy(
         noServer = own.noServer || inherited?.noServer == true || currentContext.readEnvvar("KSCOPE_NO_SERVER") == "1",
         workspace = (own.workspace ?: inherited?.workspace ?: session?.execution?.directory ?: Path.of(""))
             .toAbsolutePath().normalize(),
     )
-    if (shown.given) requirePresentation(presentation, resolved.format)
+    if (shown.given) requirePresentation(presentation, jsonDetail, shown, resolved.format)
     return resolved
+}
+
+internal fun CliktCommand.resolveReading(
+    own: RootOptions,
+    presentation: Boolean = false,
+    forStatus: Boolean = false,
+    defaultFormat: OutputFormat = OutputFormat.TEXT,
+    jsonDetail: Boolean = false,
+): ResolvedOptions {
+    val session = currentContext.parent?.obj as? CliSession
+    val resolved = resolve(own, presentation, defaultFormat, jsonDetail)
+    val stated = own.workspace ?: session?.defaults?.workspace
+    val execution = session?.execution.takeIf { stated == null }
+    return execution?.let { resolved.inNearestIndex(it, if (forStatus) it.lookup.forStatus() else it.lookup) }
+        ?: resolved
 }
 
 private fun CliktCommand.resolveWithin(
     group: ResolvedOptions,
     own: RootOptions,
     presentation: Boolean,
+    jsonDetail: Boolean,
 ): ResolvedOptions {
     val shown = Presentation(own, null)
     val resolved = ResolvedOptions(
@@ -174,7 +202,7 @@ private fun CliktCommand.resolveWithin(
         ml = if (own.noMl) MlMode.OFF else own.ml ?: group.ml,
         stage = own.stage ?: group.stage,
     )
-    if (shown.given) requirePresentation(presentation, resolved.format)
+    if (shown.given) requirePresentation(presentation, jsonDetail, shown, resolved.format)
     return resolved
 }
 
@@ -182,9 +210,10 @@ private fun RootOptions.mergedWith(
     inherited: RootOptions?,
     environment: CliEnvironment,
     shown: Presentation,
+    defaultFormat: OutputFormat,
 ): ResolvedOptions = ResolvedOptions(
     workspace = workspace ?: inherited?.workspace ?: Path.of("").toAbsolutePath(),
-    format = format ?: inherited?.format ?: OutputFormat.TEXT,
+    format = format ?: inherited?.format ?: defaultFormat,
     progress = progress ?: inherited?.progress ?: ProgressMode.AUTO,
     quiet = quiet || inherited?.quiet == true,
     environment = environment,
@@ -194,11 +223,15 @@ private fun RootOptions.mergedWith(
     stage = stage ?: inherited?.stage ?: RetrievalStage.FULL,
 )
 
-private fun requirePresentation(supported: Boolean, format: OutputFormat) {
+private fun requirePresentation(supported: Boolean, jsonDetail: Boolean, shown: Presentation, format: OutputFormat) {
     if (!supported) throw UsageError("--detail and --sections are available for analyze, symbol and related only.")
-    if (format == OutputFormat.JSON) {
-        throw UsageError("--detail and --sections apply to text and markdown output; JSON always has the full result.")
+    if (format != OutputFormat.JSON) return
+    val refusal = when {
+        !jsonDetail -> "--detail and --sections apply to text and markdown output; JSON always has the full result."
+        shown.sections != null -> "--sections applies to text and markdown output."
+        else -> return
     }
+    throw UsageError(refusal)
 }
 
 /** Refuses a `--sections` list that is empty or names a section that [known] does not hold. */

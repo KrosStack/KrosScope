@@ -23,57 +23,81 @@ kscope {{kscope-version}}; when `kscope --version` differs, `kscope <command> --
   it with `kscope workspace add`, then run `kscope scan`. Its files then answer with the project's own. Run
   `kscope workspace list` to see what is registered already. See "Several repositories".
 
-Skip it, and the first check below, for an edit in a file you already know or that the user named. The project's
+Skip it, and the first call below, for an edit in a file you already know or that the user named. The project's
 own pilots on small tasks found no gain over reading the files directly.
 
-## First check
+## First call
 
-1. **Check it is installed:** `kscope --version`. If the command is not found, tell the user. Do not install
-   software unless they ask.
-   - **macOS or Linux:** `curl -fsSL https://raw.githubusercontent.com/KrosStack/KrosScope/main/install.sh | sh`
-   - **Windows PowerShell:** `irm https://raw.githubusercontent.com/KrosStack/KrosScope/main/install.ps1 | iex`
-2. **Find the workspace root.**
-   - **With an index:** the directory that holds the `.kscope` folder.
-   - **Without one:** the directory with `settings.gradle.kts` or `settings.gradle`. For several repositories side
-     by side, it is their common parent.
-   - Run every command there, or pass `--workspace DIR`. Scanning a subdirectory of an indexed workspace makes a
-     second, separate index.
-   - `kscope info --structure` describes a directory without needing an index.
-3. **Check the index:** `kscope info`.
-   - If it fails with `No index found`, run `kscope scan`. The first scan of a large project can take several
-     minutes: say so, and run it in the background if your environment allows long commands. Later scans are
-     incremental.
-   - **Read the `Level` and `Trust` lines.** If the level is `exact` and the workspace is trusted, a plain
-     `kscope scan` runs the project's Gradle build. Ask the user before scanning.
-4. **Keep it current.** Answers come from the last scan, and they do not warn when files changed since then. Run
-   `kscope scan` after you or the user edit code, before you rely on new answers. A watching server (see the
-   last section) rescans by itself, and says `Index is behind: ...` on standard error when it is still catching
-   up.
+1. **Run `kscope status`.** It prints one line, changes nothing and starts nothing. If the command is not found, see
+   "Not installed". Read the line:
+   - `kscope: no index in <dir>; run kscope scan`: there is no index yet. Find the workspace root first.
+     - **With an index:** the directory that holds the `.kscope` folder.
+     - **Without one:** the directory with `settings.gradle.kts` or `settings.gradle`. For several repositories side
+       by side, it is their common parent.
+     - Run every command there, or pass `--workspace DIR`. Scanning a subdirectory of an indexed workspace makes a
+       second, separate index.
+     - `kscope info --structure` describes a directory without needing an index.
+     - Then run `kscope scan`. The first scan of a large project can take several minutes: say so, and run it in
+       the background if your environment allows long commands. Later scans are incremental.
+   - `index <dir>/.kscope; level resolved; ...; up to date (N repositories)`: the index matches the files. Use it.
+   - `behind: ...`: a repository is at another commit, or working trees changed, since the scan. See "Keep the
+     index current".
+   - `not checked: <reason>`: the check could not compare. Treat the index as possibly behind.
+   - `is of another format` or `cannot be read`: run `kscope scan` for another format, `kscope scan --rebuild` for
+     an index that cannot be read.
+   - **Read the level.** `syntax` has no references resolved; `exact` came from the project's own build. If the
+     level is `exact` and the workspace is trusted, a plain `kscope scan` runs the project's Gradle build. Ask the
+     user before scanning.
+   - **Read the line, not the exit code.** A behind index exits with 0. Exit 1 means there is no index, or it is
+     damaged or of another format.
+2. **Check what the index holds** with `kscope info` when you need the counts, the settings or the trust line.
+
+## Not installed
+
+If the first call, `kscope status`, fails with command not found, tell the user. Do not install software unless they ask.
+
+- **macOS or Linux:** `curl -fsSL https://raw.githubusercontent.com/KrosStack/KrosScope/main/install.sh | sh`
+- **Windows PowerShell:** `irm https://raw.githubusercontent.com/KrosStack/KrosScope/main/install.ps1 | iex`
+
+## Keep the index current
+
+Answers come from the last scan.
+
+- **Refresh before you ask.** When `kscope status` says `behind`, or you or the user edited code since the last scan,
+  run `kscope scan` before you rely on an answer. It is incremental. At level `exact`, ask the user first.
+- **With `kscope serve --watch` running, no refresh is needed.** It rescans changed files by itself. See "Many
+  questions in a row".
+- `analyze`, `context` and `impact` also end with `Index is behind: ...` on standard error when a repository is at
+  another commit, or when files of the repository of the current folder changed since the scan. The other commands
+  do not warn.
 
 If something fails in a way you do not understand, run `kscope doctor`. It checks the JDK (17 or newer), the
 analysis worker, Git, the Android SDK and the index.
 
 ## Workflow for a task
 
-1. **Find where it goes:**
+1. **Find where it goes.** A task, in the user's words, goes to `analyze`. A name goes to `symbol`.
    ```
-   kscope analyze "<the task, in the user's words>" --detail brief
+   kscope analyze "<the task, in the user's words>"
+   kscope symbol <Name>
    ```
-   - `--detail brief` gives one screen: the headline, the five best files, the number of tests and the next
-     step.
-   - Without it you get every section: `Files to edit`, `Files to read`, `Documents`, `Tests to run`, the scope
-     of the change, and the context size.
-   - **Read the headline's last words.** `one clear match` means the ranking is confident. `no strong match`
-     means rephrase the task with the project's own words, such as class, screen or feature names, or look up a
-     name with `kscope symbol`.
+   - The default detail, `standard`, gives the headline and every section: `Files to edit`, `Files to read`,
+     `Documents`, `Tests to run`, the scope of the change, and the context size. Do not use `--detail brief` for
+     a task: it shows only the five best files and hides the sections you need.
+   - **Read the headline's last words.**
+     - `one clear match`: the ranking is confident.
+     - `several close candidates`: the top files score near each other. Read all the files under `Files to edit`,
+       not only the first.
+     - `no strong match`: rephrase the task with the project's own words, such as class, screen or feature names,
+       or look up a name with `kscope symbol`.
    - **Open the files to edit first,** then the files to read as you need them.
 2. **Read the source in one piece** when you would otherwise open many files:
    ```
-   kscope context "<the same task>" --budget 8000 --format markdown > <temporary file outside the workspace>
+   kscope context "<the same task>" --budget 8000 --format markdown
    ```
+   - The package goes to standard output. Read it there; no temporary file is needed.
    - Use the budget the user gave. Otherwise choose one that fits your context; 4000 to 16000 suits most tasks.
-   - Write the package to a file and read the file. A package of several thousand tokens is longer than many
-     shells show of a command's output.
+     If your environment cuts long output, lower the budget.
    - Below 8000 tokens the package is raw source in rank order. From 8000 it also has signatures, outlines and
      the code at module boundaries.
 3. **Check what a change affects** before changing a signature or a shared type, and again after editing:
@@ -92,6 +116,8 @@ analysis worker, Git, the Android SDK and the index.
    - `kscope related <node>`: the closest collaborators, even ones that share no words with it.
    - `kscope graph`: how modules depend on each other. Add `--scope neighborhood --node <node>` for one node's
      surroundings.
+   - `kscope diagram modules` or `kscope diagram symbol <Name>`: a Mermaid diagram of how modules depend on each
+     other, or of the types or calls around one symbol. Add `--format json` for fields.
 
 ## Several repositories
 
@@ -136,11 +162,13 @@ analysis worker, Git, the Android SDK and the index.
 - **Paths** are relative to the workspace root, and printed in full when captured.
 - **Scores** compare items within one result only. They are not probabilities.
 - **Lists stop at a relevance cut-off** (30% of the best score, and at least three items). They say how many they
-  left out. `--detail full` lists every relevant item. `--format json` lists everything scored, with the
-  evidence (`schemaVersion: 1`). Text is shorter, so prefer it unless you need fields.
+  left out. `--detail full` lists every relevant item. `--format json` has the fields and the evidence;
+  `analyze` there lists the top 50 symbols (10 with `--detail brief`, up to 1,000 with `--detail full`) and the
+  relevant files, and `symbolsOmitted` and `filesOmitted` say what is left out. Text is shorter, so prefer it
+  unless you need fields.
 - **Task or name.** `analyze` says whether it read the argument as a task or a name. Force it with `--as task`
   or `--as symbol`.
-- **The index level** shows in `kscope info` and as `indexLevel` in JSON.
+- **The index level** shows in `kscope status` and `kscope info`, and as `indexLevel` in JSON.
   - `syntax`: declarations only, with no references resolved.
   - `resolved`: the default, with references resolved by the compiler inside the workspace.
   - `exact`: also the project's own build model.
@@ -148,7 +176,8 @@ analysis worker, Git, the Android SDK and the index.
     missing.
 - **Exit codes:**
   - 0: success.
-  - 1: failure. `No index found` means run `kscope scan`; an unreadable index means `kscope scan --rebuild`.
+  - 1: failure. `No index found` or `kscope: no index in ...` means run `kscope scan`; an unreadable index means
+    `kscope scan --rebuild`. `kscope status` exits with 0 for an index that is behind.
   - 2: a usage error or an ambiguous name.
   - 3: `scan --verify` found a difference.
 
@@ -158,15 +187,15 @@ analysis worker, Git, the Android SDK and the index.
   - Do not pass `--level exact` or `--trust-build`.
   - Do not run `kscope trust`: it lets later scans run the build.
   - In a trusted workspace at level `exact`, ask before `kscope scan` or `kscope serve --watch` (see
-    "First check").
+    "First call").
   - Do any of these only when the user asks for it in so many words.
 - **Change nothing outside the index unless asked.** Do not run `kscope service install`,
   `kscope service uninstall` or `kscope trust --revoke`; they change the user's machine or their trust settings.
   Run `kscope workspace add` or `remove` only when the user asks or agrees, and clone a URL only when the user
   gave it.
 - **`kscope scan --rebuild` discards the index.** Use it only when the index is unreadable or the user asks.
-- **Pass the task as one quoted argument.**
-  - For text with non-ASCII characters on Windows, or very long text, write it to a UTF-8 file and pass
+- **Pass the task as one quoted argument, not through a file.**
+  - Only for text with non-ASCII characters on Windows, or very long text, write it to a UTF-8 file and pass
     `--task-file FILE`.
   - Put `--` before a task that starts with `-`.
 - **`.kscope` holds derived data.** Do not edit or commit it. It can be deleted, and a scan recreates it.

@@ -29,9 +29,17 @@ internal fun CliktCommand.textContext(
     ).located(locations)
 }
 
-/** Only the graph command prints Graphviz DOT. */
-internal fun requireNoDot(format: OutputFormat) {
-    if (format == OutputFormat.DOT) throw UsageError("--format dot is available for the graph command only.")
+/** Only the graph and diagram commands print Graphviz DOT, and only the diagram command prints Mermaid. */
+internal fun requireNoDiagramFormat(format: OutputFormat) {
+    requireNoMermaid(format)
+    if (format == OutputFormat.DOT) {
+        throw UsageError("--format dot is available for the graph and diagram commands only.")
+    }
+}
+
+/** Only the diagram command prints Mermaid. */
+internal fun requireNoMermaid(format: OutputFormat) {
+    if (format == OutputFormat.MERMAID) throw UsageError("--format mermaid is available for the diagram command only.")
 }
 
 private const val NO_COLOR = "NO_COLOR"

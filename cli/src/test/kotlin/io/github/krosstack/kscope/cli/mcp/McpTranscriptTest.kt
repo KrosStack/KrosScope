@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.cli.mcp
 
 import io.github.krosstack.kscope.cli.inScannedWorkspace
 import io.github.krosstack.kscope.service.KrosScope
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -14,6 +15,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class McpTranscriptTest {
+    private val scanTime = Regex("[0-9]{4}(-[0-9]{2}){2}T[0-9]{2}(:[0-9]{2}){2}Z")
     private val tools = listOf(
         "context" to buildJsonObject {
             put("task", "change the library")
@@ -62,10 +64,13 @@ class McpTranscriptTest {
         assertEquals(ping, replies[1]["result"])
         assertCatalogue(replies[2].getValue("result").jsonObject, modern)
         commands.forEachIndexed { index, command ->
-            val stdout = mcpCommandStdout(root, command)
-            assertToolResult(replies[index + 3].getValue("result").jsonObject, modern, false, stdout)
+            val stdout = mcpCommandStdout(root, command).replace(scanTime, "<scanned>")
+            assertToolResult(withoutScanTime(replies[index + 3].getValue("result").jsonObject), modern, false, stdout)
         }
     }
+
+    private fun withoutScanTime(result: JsonObject): JsonObject =
+        Json.parseToJsonElement(result.toString().replace(scanTime, "<scanned>")).jsonObject
 
     private fun assertOpening(result: kotlinx.serialization.json.JsonObject, modern: Boolean) {
         val info = buildJsonObject {

@@ -25,6 +25,7 @@ internal object InfoText {
         relationships(result.coverage, document)
         if (result.metricsByName.isNotEmpty()) counts("Metrics", result.metricsByName, document)
         document.section("Index health").fields(health(result))
+        result.indexFreshness?.let { document.section("Freshness").fields(FreshnessText.fields(it)) }
         document.section("Settings").fields(SettingsText.fields(result.settings))
         return document.toString()
     }

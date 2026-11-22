@@ -1,5 +1,8 @@
 package io.github.krosstack.kscope.service
 
+import io.github.krosstack.kscope.diagram.DiagramKind
+import io.github.krosstack.kscope.diagram.DiagramRequest
+import io.github.krosstack.kscope.service.diagram.diagram
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.test.Test
@@ -16,6 +19,7 @@ class NotIndexedTest {
         "impact" to { scope -> scope.impact("Lib") },
         "related" to { scope -> scope.related("Lib") },
         "graph" to { scope -> scope.graphView() },
+        "diagram" to { scope -> scope.diagram(DiagramRequest(DiagramKind.MODULES)) },
         "resolve" to { scope -> scope.resolveNode("Lib") },
         "graph reader" to { scope -> scope.graph() },
         "search index" to { scope -> scope.searchIndex() },

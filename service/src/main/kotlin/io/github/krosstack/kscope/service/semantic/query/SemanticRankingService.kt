@@ -1,5 +1,7 @@
 package io.github.krosstack.kscope.service.semantic.query
 
+import io.github.krosstack.kscope.model.ArtifactRef
+import io.github.krosstack.kscope.model.RepositoryId
 import io.github.krosstack.kscope.retrieval.AnalysisResult
 import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.retrieval.RetrievalStage
@@ -12,6 +14,7 @@ internal fun KrosScope.withSemanticRanking(
     stage: RetrievalStage,
     ml: MlMode,
     retrieval: TaskRetrieval? = null,
+    within: RepositoryId? = null,
 ): AnalysisResult {
     if (stage != RetrievalStage.FULL || ml != MlMode.ON) return result
     val revision = memory.revision
@@ -23,7 +26,7 @@ internal fun KrosScope.withSemanticRanking(
                 semantic.invalidate()
                 result
             } else {
-                val fused = FileRankFusion.fuse(result.files.map { it.artifact }, outcome.files)
+                val fused = FileRankFusion.fuse(result.files.map { it.artifact }, outcome.files.inside(within))
                 val applied = (retrieval ?: TaskRetrieval(graph(), searchIndex())).withFileRanking(result, fused)
                 if (memory.revision != revision) {
                     semantic.invalidate()
@@ -35,3 +38,6 @@ internal fun KrosScope.withSemanticRanking(
         }
     }
 }
+
+private fun List<ArtifactRef>.inside(repository: RepositoryId?): List<ArtifactRef> =
+    if (repository == null) this else filter { it.repository == repository }

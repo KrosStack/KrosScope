@@ -2,11 +2,11 @@ package io.github.krosstack.kscope.diagram.build
 
 import io.github.krosstack.kscope.diagram.Diagram
 import io.github.krosstack.kscope.diagram.DiagramEdge
+import io.github.krosstack.kscope.diagram.DiagramKind
 import io.github.krosstack.kscope.diagram.DiagramNode
 import io.github.krosstack.kscope.diagram.DiagramRequest
 import io.github.krosstack.kscope.diagram.DiagramResult
 import io.github.krosstack.kscope.diagram.DrawnState
-import io.github.krosstack.kscope.diagram.Omission
 
 public class DiagramCut {
     public fun apply(diagram: Diagram, request: DiagramRequest, measure: (Diagram) -> Int): DiagramResult {
@@ -36,25 +36,49 @@ public class DiagramCut {
             val evidence = parallels.flatMap { it.byEvidence.keys }.distinct().sorted().associateWith { key ->
                 parallels.sumOf { it.byEvidence[key] ?: 0 }
             }
+            val kinds = parallels.flatMap { it.byKind.keys }.distinct().sorted().associateWith { key ->
+                parallels.sumOf { it.byKind[key] ?: 0 }
+            }
             val counts = evidence.entries.joinToString(",") { "${it.key.lowercase().replace('_', '-')}=${it.value}" }
             val stateCounts = states.entries.joinToString(",") {
                 "${it.key.name.lowercase().replace('_', '-')}=${it.value}"
             }
             first.copy(
                 label = "${first.label}; $counts; $stateCounts",
+                byKind = kinds,
                 weakest = states.keys.max(),
                 byState = states,
                 byEvidence = evidence,
+                position = parallels.mapNotNull { it.position }.minOrNull(),
             )
-        }.sortedWith(
-            compareBy(
-                { order[it.from] },
-                { it.label.substringBefore(';').substringBefore(" [cycle]") },
-                { order[it.to] },
-                { it.label },
-            ),
+        }
+        return diagram.copy(edges = edges.sortedWith(edgeOrder(diagram, order)))
+    }
+
+    private fun edgeOrder(diagram: Diagram, order: Map<String, Int>): Comparator<DiagramEdge> =
+        if (diagram.kind == DiagramKind.SYMBOL) nearestFirst(diagram, order) else byNodeOrder(order)
+
+    private fun byNodeOrder(order: Map<String, Int>): Comparator<DiagramEdge> = compareBy(
+        { order[it.from] },
+        { it.label.substringBefore(';').substringBefore(" [cycle]") },
+        { order[it.to] },
+        { it.label },
+    )
+
+    private fun nearestFirst(diagram: Diagram, order: Map<String, Int>): Comparator<DiagramEdge> {
+        val reasons = diagram.reasons.map { it.id }.toSet()
+        fun rank(id: String): Int = order.getValue(id)
+        fun farthest(edge: DiagramEdge): Int =
+            if (edge.to in reasons) rank(edge.from) else maxOf(rank(edge.from), rank(edge.to))
+        fun nearest(edge: DiagramEdge): Int =
+            if (edge.to in reasons) rank(edge.from) else minOf(rank(edge.from), rank(edge.to))
+        return compareBy(
+            { farthest(it) },
+            { nearest(it) },
+            { rank(it.from) },
+            { rank(it.to) },
+            { it.label },
         )
-        return diagram.copy(edges = edges)
     }
 
     private fun retain(diagram: Diagram, edges: List<DiagramEdge>, allNodes: Boolean): Diagram {
@@ -70,7 +94,7 @@ public class DiagramCut {
                     null,
                 )
             }
-        val nodes = diagram.nodes.filter { allNodes || it.id in used }
+        val nodes = diagram.nodes.filter { allNodes || it.selected || it.id in used }
         val reasons = diagram.reasons.filter { it.id in used }.map { reason ->
             reason.copy(count = edges.filter { it.to == reason.id }.sumOf { it.byState.values.sum() })
         }
@@ -88,7 +112,7 @@ public class DiagramCut {
             groups = groups,
             edges = edges,
             reasons = reasons,
-            omitted = Omission(totalNodes - nodeCount, omitted),
+            omitted = diagram.omitted.copy(nodes = totalNodes - nodeCount, linksByState = omitted),
         )
     }
 }

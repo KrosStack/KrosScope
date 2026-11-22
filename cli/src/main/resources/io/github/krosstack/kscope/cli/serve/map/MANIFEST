@@ -16,3 +16,10 @@ panel.js
 panel-links.js
 scene.js
 words.js
+diagram.css
+diagram.js
+diagram-draw.js
+diagram-layout.js
+diagram-names.js
+diagram-routes.js
+diagram-words.js

@@ -1,9 +1,10 @@
 package io.github.krosstack.kscope.cli.serve
 
 import com.github.ajalt.clikt.testing.test
-import io.github.krosstack.kscope.cli.CommandExecution
 import io.github.krosstack.kscope.cli.KscopeCommand
 import io.github.krosstack.kscope.cli.command.ScanRunner
+import io.github.krosstack.kscope.cli.freshness.PatientScans
+import io.github.krosstack.kscope.cli.isolatedExecution
 import io.github.krosstack.kscope.cli.parseWithExitCodes
 import java.nio.file.Path
 import java.util.concurrent.Executors
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit
 internal fun <T> withTestServer(
     root: Path,
     settings: ServeSettings = ServeSettings(),
-    scanRunner: ScanRunner = ScanRunner.DEFAULT,
+    scanRunner: ScanRunner = PatientScans,
     onQueued: () -> Unit = {},
     block: (ServeServer) -> T,
 ): T {
@@ -30,7 +31,7 @@ internal fun <T> withTestServer(
 }
 
 internal fun runAt(directory: Path, args: List<String>) =
-    KscopeCommand(execution = CommandExecution(directory)).let { command ->
+    KscopeCommand(execution = isolatedExecution(directory)).let { command ->
         command.test(args) { command.parseWithExitCodes(it) }
     }
 

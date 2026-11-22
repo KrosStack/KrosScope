@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.diagram.emit
 
 import io.github.krosstack.kscope.diagram.Diagram
 import io.github.krosstack.kscope.diagram.DiagramEdge
+import io.github.krosstack.kscope.diagram.DiagramNode
 import io.github.krosstack.kscope.diagram.DrawnState
 
 public object MermaidEmitter {
@@ -16,13 +17,12 @@ public object MermaidEmitter {
         diagram.groups.forEach { group ->
             appendLine("  subgraph ${group.id}[\"${group.label.mermaidEscape()}\"]")
             diagram.nodes.filter { it.id in group.members }.forEach { node ->
-                appendLine("    ${node.id}[\"${node.label.mermaidEscape()}\"]")
+                appendLine("    ${node.id}[\"${node.label.mermaidEscape()}\"]${node.styleClass()}")
             }
             appendLine("  end")
         }
         diagram.nodes.filter { it.group == null }.forEach { node ->
-            val style = if (node.kind == "aggregate") ":::aggregate" else ""
-            appendLine("  ${node.id}[\"${node.label.mermaidEscape()}\"]$style")
+            appendLine("  ${node.id}[\"${node.label.mermaidEscape()}\"]${node.styleClass()}")
         }
         diagram.reasons.forEach { reason ->
             val label = "${reason.reason} (${reason.count})".middleCut().mermaidEscape()
@@ -30,19 +30,28 @@ public object MermaidEmitter {
         }
         diagram.edges.forEachIndexed { index, edge -> appendEdge(index, edge) }
         appendLine("  legend[\"${diagram.legend.joinToString("; ").mermaidEscape()}\"]:::metadata")
-        val omitted = diagram.omitted.linksByState.entries.joinToString(
-            ", ",
-        ) { "${it.key.name.lowercase().replace('_', '-')}=${it.value}" }
-        appendLine("  footer[\"Omitted links: $omitted\"]:::metadata")
+        appendLine("  footer[\"${diagram.omissionText()}\"]:::metadata")
         appendLine("  classDef reason stroke-dasharray:2 3")
         appendLine("  classDef aggregate stroke-dasharray:6 3")
         appendLine("  classDef metadata fill:#fff,stroke:#999")
+        if (diagram.nodes.any { it.selected }) {
+            appendLine("  classDef selected fill:#ffe9a8,stroke:#000,stroke-width:3px")
+        }
+    }
+
+    private fun DiagramNode.styleClass(): String = when {
+        selected -> ":::selected"
+        kind == "aggregate" -> ":::aggregate"
+        else -> ""
     }
 
     private fun StringBuilder.appendEdge(index: Int, edge: DiagramEdge) {
-        val unknown = edge.weakest >= DrawnState.UNRESOLVED
-        val label = ((if (unknown) "? " else "") + edge.label).mermaidEscape()
-        val arrow = if (edge.weakest == DrawnState.EXACT) "-->" else "-.->"
+        val label = edge.drawnLabel().mermaidEscape()
+        val arrow = when {
+            edge.inherits() -> "==>"
+            edge.weakest == DrawnState.EXACT -> "-->"
+            else -> "-.->"
+        }
         appendLine("  ${edge.from} $arrow|\"$label\"| ${edge.to}")
         when (edge.weakest) {
             DrawnState.EXACT -> Unit

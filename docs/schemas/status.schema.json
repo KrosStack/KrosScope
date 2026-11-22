@@ -1,0 +1,225 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_service_status_StatusResult",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:status:1",
+    "$defs": {
+        "io_github_krosstack_kscope_service_freshness_FreshnessCounts": {
+            "type": "object",
+            "properties": {
+                "behind": {
+                    "type": "integer"
+                },
+                "notBehind": {
+                    "type": "integer"
+                },
+                "notChecked": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "behind",
+                "notBehind",
+                "notChecked"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_freshness_IndexFreshness": {
+            "type": "object",
+            "properties": {
+                "changedFiles": {
+                    "type": "integer"
+                },
+                "commits": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_FreshnessCounts"
+                },
+                "estimate": {
+                    "type": "boolean"
+                },
+                "reason": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "scannedAt": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "behind",
+                        "not-behind",
+                        "not-checked"
+                    ]
+                },
+                "workingTrees": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_FreshnessCounts"
+                }
+            },
+            "required": [
+                "state",
+                "scannedAt",
+                "commits",
+                "workingTrees",
+                "changedFiles",
+                "estimate",
+                "reason"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_status_ServerStatus": {
+            "type": "object",
+            "properties": {
+                "pid": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "stale": {
+                    "type": "boolean"
+                },
+                "startedAt": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "running",
+                        "notRunning",
+                        "unknown"
+                    ]
+                },
+                "version": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "state",
+                "pid",
+                "version",
+                "startedAt",
+                "stale"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_status_StatusResult": {
+            "type": "object",
+            "properties": {
+                "ageSeconds": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "checkMillis": {
+                    "type": "integer"
+                },
+                "freshness": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_IndexFreshness"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "indexLocation": {
+                    "type": "string"
+                },
+                "indexed": {
+                    "type": "boolean"
+                },
+                "repositories": {
+                    "type": "integer"
+                },
+                "scannedAt": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "server": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_status_ServerStatus"
+                },
+                "toolVersion": {
+                    "type": "string"
+                },
+                "workspace": {
+                    "type": "string"
+                },
+                "schemaVersion": {
+                    "const": 1
+                },
+                "indexLevel": {
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": [
+                                "syntax",
+                                "resolved",
+                                "exact"
+                            ]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "workspace",
+                "indexLocation",
+                "indexed",
+                "indexLevel",
+                "scannedAt",
+                "ageSeconds",
+                "freshness",
+                "repositories",
+                "server",
+                "checkMillis",
+                "toolVersion",
+                "schemaVersion"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

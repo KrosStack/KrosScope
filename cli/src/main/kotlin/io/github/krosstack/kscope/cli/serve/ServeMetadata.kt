@@ -9,6 +9,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.time.Instant
 
 @Serializable
 internal data class ServeMetadata(
@@ -18,6 +19,7 @@ internal data class ServeMetadata(
     val toolVersion: String,
     val protocol: Int,
     val startTime: String,
+    val processStart: String? = null,
 ) {
     fun write(workspace: Path) = writeTo(file(workspace))
 
@@ -39,6 +41,9 @@ internal data class ServeMetadata(
 
     companion object {
         fun file(workspace: Path): Path = workspace.resolve(".kscope/serve.json")
+
+        fun thisProcessStart(): String? =
+            ProcessHandle.current().info().startInstant().map(Instant::toString).orElse(null)
 
         private val lenient = Json(ServeWire.json) { ignoreUnknownKeys = true }
 

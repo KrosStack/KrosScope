@@ -71,6 +71,61 @@ class DescriptorSchemasTest {
         }
     }
 
+    @Test
+    fun `a result read from an index may name the location of that index`() {
+        val read = DescriptorSchemas.document("sample", Sample.serializer().descriptor, LevelField.REQUIRED)
+        val other = DescriptorSchemas.document("sample", Sample.serializer().descriptor)
+        val shape = resolve(read, read)
+
+        val location = shape.getValue("properties").jsonObject.getValue("indexLocation").jsonObject
+        assertEquals("string", location.getValue("type").jsonPrimitive.content)
+        assertEquals(false, "indexLocation" in shape.getValue("required").jsonArray.map { it.jsonPrimitive.content })
+        assertEquals(false, "indexLocation" in resolve(other, other).getValue("properties").jsonObject)
+    }
+
+    @Test
+    fun `a result of a search that can be limited to a repository may say how it was limited`() {
+        val limited = DescriptorSchemas.document(
+            "sample",
+            Sample.serializer().descriptor,
+            LevelField.REQUIRED,
+            narrowed = true,
+        )
+        val plain = DescriptorSchemas.document("sample", Sample.serializer().descriptor, LevelField.REQUIRED)
+        val shape = resolve(limited, limited)
+        val properties = shape.getValue("properties").jsonObject
+        val required = shape.getValue("required").jsonArray.map { it.jsonPrimitive.content }
+
+        val strings = listOf("narrowedTo", "outsideNarrowing", "widenedFrom")
+        fun typeOf(name: String) = properties.getValue(name).jsonObject.getValue("type").jsonPrimitive.content
+        strings.forEach { assertEquals("string", typeOf(it)) }
+        assertEquals("boolean", typeOf("incomplete"))
+        assertEquals(emptyList(), required.filter { it in strings + "incomplete" })
+        assertEquals(false, "narrowedTo" in resolve(plain, plain).getValue("properties").jsonObject)
+    }
+
+    @Test
+    fun `only the schemas of analysis, context, symbol and node-resolution have the fields of a limited search`() {
+        val names = listOf("narrowedTo", "outsideNarrowing", "widenedFrom", "incomplete")
+        names.forEach { name ->
+            val documents = ApiSchemas.documents().filterValues { "\"$name\"" in it }
+
+            assertEquals(setOf("analysis", "context", "node-resolution", "symbol"), documents.keys, name)
+        }
+    }
+
+    @Test
+    fun `a result that can come from an index that is behind may carry the freshness of that index`() {
+        val dated = DescriptorSchemas.document("sample", Sample.serializer().descriptor, LevelField.REQUIRED, true)
+        val plain = DescriptorSchemas.document("sample", Sample.serializer().descriptor, LevelField.REQUIRED)
+        val shape = resolve(dated, dated)
+
+        val freshness = resolve(dated, shape.getValue("properties").jsonObject.getValue("indexFreshness").jsonObject)
+        assertContains(freshness.getValue("properties").jsonObject.keys, "scannedAt")
+        assertEquals(false, "indexFreshness" in shape.getValue("required").jsonArray.map { it.jsonPrimitive.content })
+        assertEquals(false, "indexFreshness" in resolve(plain, plain).getValue("properties").jsonObject)
+    }
+
     private fun resolve(document: JsonObject, value: JsonObject): JsonObject {
         val reference = value["\$ref"]?.jsonPrimitive?.content ?: return value
         return document.getValue("\$defs").jsonObject.getValue(reference.substringAfterLast('/')).jsonObject

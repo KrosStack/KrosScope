@@ -1,5 +1,6 @@
 package io.github.krosstack.kscope.service.semantic.process
 
+import io.github.krosstack.kscope.service.semantic.query.QueryDeadline
 import java.io.BufferedReader
 import java.io.IOException
 import java.util.concurrent.ArrayBlockingQueue
@@ -39,7 +40,7 @@ internal class WorkerDiagnostics(
             } catch (_: IOException) {
                 lock.withLock {
                     flushTail()
-                    forward("Semantic diagnostics stream closed")
+                    forward(CLOSED_LINE)
                 }
             }
         }
@@ -82,6 +83,30 @@ internal class WorkerDiagnostics(
                     else -> changed.await(READ_MILLIS, TimeUnit.MILLISECONDS)
                 }
             }
+        }
+    }
+
+    fun drain(deadline: QueryDeadline?) {
+        val limit = System.nanoTime() + minOf(
+            deadline?.remaining()?.inWholeNanoseconds ?: Long.MAX_VALUE,
+            TimeUnit.MILLISECONDS.toNanos(DRAIN_MILLIS),
+        )
+        val remaining = { maxOf(limit - System.nanoTime(), 0L) }
+        try {
+            while (reading.isAlive && remaining() > 0L && pendingInput(remaining)) Thread.sleep(READ_MILLIS)
+        } catch (_: InterruptedException) {
+            Thread.currentThread().interrupt()
+        }
+    }
+
+    private fun pendingInput(remaining: () -> Long): Boolean {
+        if (!lock.tryLock(remaining(), TimeUnit.NANOSECONDS)) return false
+        return try {
+            reader.ready()
+        } catch (_: IOException) {
+            false
+        } finally {
+            lock.unlock()
         }
     }
 
@@ -155,6 +180,7 @@ internal class WorkerDiagnostics(
     companion object {
         const val DRAIN_MILLIS = 1000L
         private const val READ_MILLIS = 10L
+        private const val CLOSED_LINE = "Semantic diagnostics stream closed"
         private const val DIAGNOSTIC_LINES = 16
         private const val DIAGNOSTIC_TAIL_CHARACTERS = 8192
         private const val OMITTED_LINE = "Semantic diagnostic line over 8192 characters omitted"

@@ -3,10 +3,10 @@ package io.github.krosstack.kscope.cli.mcp
 import com.github.ajalt.mordant.terminal.Terminal
 import io.github.krosstack.kscope.cli.CliEnvironment
 import io.github.krosstack.kscope.cli.ClientRendering
-import io.github.krosstack.kscope.cli.CommandExecution
 import io.github.krosstack.kscope.cli.EncodingReport
 import io.github.krosstack.kscope.cli.KscopeCommand
 import io.github.krosstack.kscope.cli.RequestTerminal
+import io.github.krosstack.kscope.cli.isolatedExecution
 import io.github.krosstack.kscope.cli.parseWithExitCodes
 import io.github.krosstack.kscope.cli.progress.ProgressScreen
 import io.github.krosstack.kscope.cli.progress.TickerFactory
@@ -32,7 +32,7 @@ internal fun mcpCommandStdout(root: Path, arguments: List<String>): String {
         EncodingReport.DETACHED,
         terminal,
     )
-    KscopeCommand(environment, CommandExecution(root, scanRunner = stableMcpScan)).parseWithExitCodes(
+    KscopeCommand(environment, isolatedExecution(root, stableMcpScan)).parseWithExitCodes(
         listOf("--no-server", "--progress", "never") + arguments,
     )
     return capture.toString().lineSequence().filter { it.isNotEmpty() }

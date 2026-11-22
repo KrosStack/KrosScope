@@ -43,6 +43,7 @@ public object QueryStages {
     public val IMPACT: ProgressStage = ProgressStage("trace-impact")
     public val RELATED: ProgressStage = ProgressStage("follow-relationships")
     public val GRAPH_VIEW: ProgressStage = ProgressStage("build-graph")
+    public val DIAGRAM: ProgressStage = ProgressStage("draw-diagram")
 }
 
 internal inline fun <T> ProgressListener.stage(stage: ProgressStage, block: () -> T): T {

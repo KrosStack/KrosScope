@@ -1,5 +1,6 @@
 package io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.kotlinrefs
 
+import io.github.krosstack.kscope.analyzer.kotlin.worker.aa.JavaSourcePackages
 import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.Attempt
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallResolutionSuccess
@@ -25,7 +26,9 @@ import org.jetbrains.kotlin.resolution.KtResolvable
  * Asks the compiler what a reference stands for. A failure inside the compiler is not an answer: it is counted and the
  * reference is left out, so one odd construct cannot take the rest of the file with it.
  */
-internal class KotlinResolver(private val session: KaSession) {
+internal class KotlinResolver(private val session: KaSession, javaPackages: JavaSourcePackages) {
+    private val packages by lazy { VisiblePackages(session.useSiteModule, javaPackages) }
+
     var failures = 0
         private set
 
@@ -86,7 +89,7 @@ internal class KotlinResolver(private val session: KaSession) {
         }
     }
 
-    fun isPackage(name: FqName): Boolean = guarded(false) { with(session) { findPackage(name) != null } }
+    fun isPackage(name: FqName): Boolean = guarded(false) { packages.exist(name) }
 
     private fun KaSession.declaredSymbolOf(declaration: KtDeclaration): KaDeclarationSymbol? {
         val symbol = declaration.symbol

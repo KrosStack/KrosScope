@@ -1,3 +1,4 @@
+import { drawsDiagram } from "./diagram.js";
 import { linkSections, listSection, rollUpSections, row } from "./panel-links.js";
 import { el, nodeFacts, nodeKindName, plural, relationPhrase } from "./words.js";
 
@@ -22,8 +23,11 @@ export class Panel {
     if (facts) parts.push(el("p", { class: "facts", text: facts }));
     parts.push(this.#actions(node));
     parts.push(...this.#openCount(node));
+    if (drawsDiagram(node)) parts.push(...app.diagram.section(node));
     if (node.detail) parts.push(...linkSections(app, node, node.detail), ...this.#symbolList(node));
-    else if (node.type === "symbol") parts.push(...linkSections(app, node, node.parent.detail ?? fileDetail(node)));
+    else if (node.type === "symbol") {
+      parts.push(...linkSections(app, node, node.parent.detail ?? fileDetail(node)), ...this.#symbolList(node));
+    }
     else parts.push(...rollUpSections(app, node), ...this.#childList(node));
     this.host.replaceChildren(...parts);
     this.host.scrollTop = 0;
@@ -54,7 +58,8 @@ export class Panel {
     const top = node.children.filter((child) => child.type === "symbol");
     if (top.length === 0) return [];
     const rows = top.slice(0, MOST_CHILDREN).map((child) => row("", child.label, child.symbol.line ? `line ${child.symbol.line}` : "", null, child.symbol.kind, () => this.app.select(child, { fly: true })));
-    return listSection("Declares", plural(node.symbols, "symbol"), rows, "");
+    const count = node.type === "symbol" ? top.length : node.symbols;
+    return listSection("Declares", plural(count, "symbol"), rows, "");
   }
 
   #childList(node) {

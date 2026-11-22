@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "indexLevel": "resolved",
   "query": {
     "text": "greet a person by name",

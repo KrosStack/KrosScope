@@ -20,6 +20,9 @@ class MissingIndexTest {
         "impact" to listOf("impact", "Greeter"),
         "related" to listOf("related", "Greeter"),
         "graph" to listOf("graph"),
+        "diagram modules" to listOf("diagram", "modules"),
+        "diagram components" to listOf("diagram", "components"),
+        "diagram symbol" to listOf("diagram", "symbol", "Lib"),
         "graph neighborhood" to listOf("graph", "--scope", "neighborhood", "--node", "lib/src/main/kotlin/Lib.kt"),
     )
 

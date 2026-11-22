@@ -13,25 +13,38 @@ import io.github.krosstack.kscope.cli.CommandGroup
 import io.github.krosstack.kscope.cli.OutputFormat
 import io.github.krosstack.kscope.cli.ResolvedOptions
 import io.github.krosstack.kscope.cli.RootOptions
-import io.github.krosstack.kscope.cli.forward
+import io.github.krosstack.kscope.cli.forwardWithoutNote
+import io.github.krosstack.kscope.cli.freshness.Staleness
+import io.github.krosstack.kscope.cli.freshness.warnBehind
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.lookup.IndexNotes
+import io.github.krosstack.kscope.cli.lookup.Narrowed
+import io.github.krosstack.kscope.cli.lookup.askedFrom
+import io.github.krosstack.kscope.cli.lookup.fromFolder
+import io.github.krosstack.kscope.cli.lookup.parentIndex
+import io.github.krosstack.kscope.cli.output.AnalyzeJsonView
 import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireIndex
-import io.github.krosstack.kscope.cli.requireNoDot
+import io.github.krosstack.kscope.cli.requireNoDiagramFormat
 import io.github.krosstack.kscope.cli.requireSections
-import io.github.krosstack.kscope.cli.resolve
+import io.github.krosstack.kscope.cli.resolveReading
 import io.github.krosstack.kscope.cli.taskInput
 import io.github.krosstack.kscope.cli.text.AnalyzeText
 import io.github.krosstack.kscope.cli.text.UnitCardText
 import io.github.krosstack.kscope.cli.textContext
 import io.github.krosstack.kscope.cli.useService
+import io.github.krosstack.kscope.cli.withIndexNote
 import io.github.krosstack.kscope.cli.withProgress
+import io.github.krosstack.kscope.retrieval.AnalysisResult
+import io.github.krosstack.kscope.service.Leveled
 import io.github.krosstack.kscope.service.OpenOptions
 import io.github.krosstack.kscope.service.ProgressListener
 import io.github.krosstack.kscope.service.ServiceJson
 import io.github.krosstack.kscope.service.leveled
+import io.github.krosstack.kscope.service.lookup.SearchOrigin
+import io.github.krosstack.kscope.service.lookup.narrowingFor
 
 internal class AnalyzeCommand : CliktCommand(name = "analyze") {
     private val common by RootOptions(
@@ -55,6 +68,8 @@ internal class AnalyzeCommand : CliktCommand(name = "analyze") {
             "anything else as a task. Text and markdown output only.",
     ).choice("task" to Reading.TASK, "symbol" to Reading.SYMBOL)
 
+    private val staleness = Staleness(this)
+
     override val helpTags = CommandGroup.tag(CommandGroup.ASK)
 
     override fun help(context: Context) = "Finds what a task is likely to touch, or describes a class or file.\n\n" +
@@ -75,37 +90,60 @@ internal class AnalyzeCommand : CliktCommand(name = "analyze") {
     ).joinToString("\n")
 
     override fun run() {
-        val options = resolve(common, presentation = true)
-        requireNoDot(options.format)
-        val text = guarded { taskInput(task, taskFile) }
+        val options = resolveReading(common, presentation = true, jsonDetail = true)
+        requireNoDiagramFormat(options.format)
+        val text = options.fromFolder(guarded { taskInput(task, taskFile) })
         validateSections(options, text)
         if (options.format == OutputFormat.JSON) {
             if (reading == Reading.SYMBOL) throw UsageError(JSON_NEEDS_TASK)
-            forward(options)
-            val result = guarded { withProgress(options) { listener -> analyse(options, text, listener) } }
-            echoResult(ServiceJson.encode(result.value, result.level), options.format)
+            forwardWithoutNote(options)
+            val narrowed = guarded { withProgress(options) { listener -> analyse(options, text, listener) } }
+            val result = narrowed.value
+            val json = ServiceJson.encode(
+                AnalyzeJsonView.of(result.value, options.detail),
+                result.level,
+                options.parentIndex(),
+                staleness.behind(),
+                narrowed.origin,
+            )
+            echoResult(json, options.format)
             return
         }
-        forward(options)
+        forwardWithoutNote(options)
         val outcome = guarded { withProgress(options) { listener -> route(options, text, listener) } }
         val sections = when (outcome) {
             is AnalyzeOutcome.Task -> AnalyzeText.SECTIONS
             is AnalyzeOutcome.Card, AnalyzeOutcome.NoUnit -> UnitCardText.SECTIONS
         }
         requireSections(options, sections)
+        outcome.chosenIn?.let { echo(IndexNotes.chosen(text, it, options.workspace), err = true) }
         echo(outcome.render(text, textContext(options, outcome.locations)))
+        warnBehind(staleness.behind(), options.format)
     }
 
-    private fun analyse(options: ResolvedOptions, text: String, listener: ProgressListener) =
-        useService(options, OpenOptions(progress = listener)) {
-            it.requireIndex()
-            it.leveled(it.analyze(text, stage = options.stage, ml = options.ml))
+    private fun analyse(
+        options: ResolvedOptions,
+        text: String,
+        listener: ProgressListener,
+    ): Narrowed<Leveled<AnalysisResult>> = useService(options, OpenOptions(progress = listener)) { scope ->
+        withIndexNote(options) {
+            scope.requireIndex()
+            staleness.read(scope, options)
+            val narrowing = scope.narrowingFor(options.askedFrom())
+            val result = scope.analyze(text, stage = options.stage, ml = options.ml, within = narrowing?.repository)
+            Narrowed(scope.leveled(result), SearchOrigin.limited(narrowing, result.searchCapped))
         }
+    }
 
     private fun route(options: ResolvedOptions, text: String, listener: ProgressListener): AnalyzeOutcome =
-        useService(options, OpenOptions(progress = listener)) {
-            it.requireIndex()
-            it.analyzeAs(text, IntentRouting.route(text, reading, options.workspace), options.ml, options.stage)
+        useService(options, OpenOptions(progress = listener)) { scope ->
+            withIndexNote(options) {
+                scope.requireIndex()
+                staleness.read(scope, options)
+                val routing = IntentRouting.route(text, reading, options.workspace)
+                val outcome = scope.analyzeAs(text, routing, options.ml, options.stage, options.askedFrom())
+                Narrowed(outcome, outcome.origin)
+            }.value
         }
 
     private fun validateSections(options: ResolvedOptions, text: String) {

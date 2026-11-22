@@ -112,7 +112,7 @@ internal object AnalyzeLists {
         if (listing.belowCutoff == 0) return
         document.section(null, Section.CUTOFF).note(
             "  ${Format.noun(listing.belowCutoff, "more file")} scored below ${RelevanceCutoff.percent()} of the " +
-                "best score (--format json lists all).",
+                "best score (--format json --detail full lists them).",
         )
     }
 

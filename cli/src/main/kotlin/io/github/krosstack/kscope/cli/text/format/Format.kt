@@ -3,6 +3,9 @@ package io.github.krosstack.kscope.cli.text.format
 import java.util.Locale
 
 private const val PERCENT = 100L
+private const val SECONDS_PER_MINUTE = 60L
+private const val SECONDS_PER_HOUR = 3_600L
+private const val SECONDS_PER_DAY = 86_400L
 private const val ELLIPSIS = "..."
 private const val SCORE_PLACES = 3
 private const val FINE_SCORE_PLACES = 4
@@ -26,6 +29,13 @@ internal object Format {
 
     fun noun(count: Int, singular: String, plural: String = "${singular}s"): String =
         noun(count.toLong(), singular, plural)
+
+    fun age(seconds: Long): String = when {
+        seconds < SECONDS_PER_MINUTE -> "${seconds}s"
+        seconds < SECONDS_PER_HOUR -> "${seconds / SECONDS_PER_MINUTE}m"
+        seconds < SECONDS_PER_DAY -> "${seconds / SECONDS_PER_HOUR}h"
+        else -> "${seconds / SECONDS_PER_DAY}d"
+    }
 
     fun percent(done: Long, total: Long): String = "${if (total <= 0) 0 else done * PERCENT / total}%"
 

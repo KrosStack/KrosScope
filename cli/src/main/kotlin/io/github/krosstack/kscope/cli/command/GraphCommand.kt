@@ -19,10 +19,15 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.lookup.askedFrom
+import io.github.krosstack.kscope.cli.lookup.fromFolder
+import io.github.krosstack.kscope.cli.lookup.parentIndex
+import io.github.krosstack.kscope.cli.noteChoice
 import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.reportAmbiguity
 import io.github.krosstack.kscope.cli.requireIndex
-import io.github.krosstack.kscope.cli.resolve
+import io.github.krosstack.kscope.cli.requireNoMermaid
+import io.github.krosstack.kscope.cli.resolveReading
 import io.github.krosstack.kscope.cli.text.GraphDot
 import io.github.krosstack.kscope.cli.text.GraphText
 import io.github.krosstack.kscope.cli.textContext
@@ -80,12 +85,14 @@ internal class GraphCommand : CliktCommand(name = "graph") {
     ).joinToString("\n")
 
     override fun run() {
-        val options = resolve(common)
+        val options = resolveReading(common)
+        requireNoMermaid(options.format)
         checkOptions()
         forward(options)
         val answer = guarded { withProgress(options) { listener -> query(options, listener) } }
+        noteChoice(answer, node.orEmpty(), options)
         when (answer) {
-            is NodeAnswer.Ambiguous -> reportAmbiguity(answer, options.format)
+            is NodeAnswer.Ambiguous -> reportAmbiguity(answer, options)
 
             is NodeAnswer.Found -> echoResult(
                 render(answer.value, answer.level, options, answer.locations),
@@ -105,7 +112,7 @@ internal class GraphCommand : CliktCommand(name = "graph") {
 
     private fun query(options: ResolvedOptions, listener: ProgressListener): NodeAnswer<GraphResult> =
         useService(options, OpenOptions(progress = listener)) { service ->
-            val centre = node
+            val centre = node?.let(options::fromFolder)
             if (centre == null) {
                 service.requireIndex()
                 NodeAnswer.Found(
@@ -114,7 +121,7 @@ internal class GraphCommand : CliktCommand(name = "graph") {
                     service.indexLevel(),
                 )
             } else {
-                service.answerAbout(centre) { id -> service.graphView(scope, id, depth, limit) }
+                service.answerAbout(centre, options.askedFrom()) { id -> service.graphView(scope, id, depth, limit) }
             }
         }
 
@@ -124,8 +131,8 @@ internal class GraphCommand : CliktCommand(name = "graph") {
         options: ResolvedOptions,
         locations: WorkspaceLocations,
     ) = when (options.format) {
-        OutputFormat.JSON -> ServiceJson.encode(result, level)
+        OutputFormat.JSON -> ServiceJson.encode(result, level, options.parentIndex())
         OutputFormat.DOT, OutputFormat.MARKDOWN -> GraphDot.render(result)
-        OutputFormat.TEXT -> GraphText.render(result, textContext(options, locations))
+        else -> GraphText.render(result, textContext(options, locations))
     }
 }

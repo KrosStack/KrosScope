@@ -2,8 +2,10 @@ package io.github.krosstack.kscope.benchmark.schema
 
 import io.github.krosstack.kscope.benchmark.context.ContextBenchmarkResult
 import io.github.krosstack.kscope.model.context.TokenCount
-import io.github.krosstack.kscope.retrieval.AnalysisResult
 import io.github.krosstack.kscope.service.ScanLevel
+import io.github.krosstack.kscope.service.analysis.AnalysisJson
+import io.github.krosstack.kscope.service.freshness.IndexFreshness
+import io.github.krosstack.kscope.service.lookup.SearchOrigin
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.descriptors.PolymorphicKind
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -19,12 +21,17 @@ import kotlinx.serialization.json.jsonObject
 
 @OptIn(ExperimentalSerializationApi::class)
 internal object DescriptorSchemas {
-    fun document(name: String, descriptor: SerialDescriptor, level: LevelField = LevelField.NONE): JsonObject =
-        SchemaBuilder().document(name, descriptor, level)
+    fun document(
+        name: String,
+        descriptor: SerialDescriptor,
+        level: LevelField = LevelField.NONE,
+        dated: Boolean = false,
+        narrowed: Boolean = false,
+    ): JsonObject = SchemaBuilder(dated, narrowed).document(name, descriptor, level)
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-private class SchemaBuilder {
+private class SchemaBuilder(private val dated: Boolean, private val narrowed: Boolean) {
     private val definitions = linkedMapOf<String, JsonObject>()
     private val serialNames = mutableMapOf<String, String>()
 
@@ -33,14 +40,13 @@ private class SchemaBuilder {
         val key = key(descriptor)
         val shape = definitions.getValue(key)
         val version = when (descriptor.serialName) {
-            AnalysisResult.serializer().descriptor.serialName,
-            ContextBenchmarkResult::class.java.name,
-            -> 2
-
+            AnalysisJson.serializer().descriptor.serialName -> 3
+            ContextBenchmarkResult::class.java.name -> 2
             else -> 1
         }
         val own = shape.getValue("properties").jsonObject.filterKeys { level == LevelField.NONE || it != "indexLevel" }
-        val properties = own + ("schemaVersion" to obj("const" to JsonPrimitive(version))) + levelProperty(level)
+        val properties = own + ("schemaVersion" to obj("const" to JsonPrimitive(version))) + levelProperty(level) +
+            originProperties(level)
         val required = shape.getValue("required").jsonArray + JsonPrimitive("schemaVersion") +
             listOf(JsonPrimitive("indexLevel")).filter { level != LevelField.NONE }
         definitions[key] = JsonObject(
@@ -63,6 +69,20 @@ private class SchemaBuilder {
             LevelField.REQUIRED -> mapOf("indexLevel" to named)
             LevelField.NULLABLE -> mapOf("indexLevel" to obj("anyOf" to JsonArray(listOf(named, type("null")))))
         }
+    }
+
+    private fun originProperties(level: LevelField): Map<String, JsonObject> {
+        val search = listOf(
+            SearchOrigin.NARROWED_TO to type("string"),
+            SearchOrigin.OUTSIDE_NARROWING to type("string"),
+            SearchOrigin.WIDENED_FROM to type("string"),
+            SearchOrigin.INCOMPLETE to type("boolean"),
+        )
+        val location = listOfNotNull(if (level == LevelField.NONE) null else "indexLocation" to type("string"))
+        val freshness = listOfNotNull(
+            if (dated) "indexFreshness" to reference(IndexFreshness.serializer().descriptor) else null,
+        )
+        return (location + (if (narrowed) search else emptyList()) + freshness).toMap()
     }
 
     private fun schema(descriptor: SerialDescriptor): JsonObject {
@@ -116,7 +136,11 @@ private class SchemaBuilder {
 
     private fun fields(descriptor: SerialDescriptor, discriminator: String? = null): JsonObject {
         val properties = (0 until descriptor.elementsCount).associate { index ->
-            descriptor.getElementName(index) to schema(descriptor.getElementDescriptor(index))
+            val field = descriptor.getElementName(index)
+            val shape = schema(descriptor.getElementDescriptor(index))
+            val description = FieldDescriptions.of(descriptor.serialName, field)
+            val note = description?.let { mapOf("description" to JsonPrimitive(it)) }.orEmpty()
+            field to JsonObject(shape + note)
         }.toMutableMap()
         val required = (0 until descriptor.elementsCount).filterNot(descriptor::isElementOptional)
             .map { descriptor.getElementName(it) }.toMutableList()

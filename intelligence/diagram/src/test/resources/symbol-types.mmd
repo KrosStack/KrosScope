@@ -1,0 +1,33 @@
+---
+title: "Type relations of app.Checkout: 8 of 8 nodes, 7 of 9 links"
+config:
+  layout: dagre
+  theme: neutral
+---
+flowchart LR
+  subgraph g1[":app"]
+    n1["app.Checkout"]:::selected
+    n2["app.Base"]
+    n3["app.Checkout.Step"]
+    n4["app.Ledger"]
+    n5["app.Payable"]
+    n6["app.Report"]
+  end
+  subgraph g2[":lib"]
+    n7["lib.Receipt"]
+  end
+  r1["kotlin.unresolved-reference (1)"]:::reason
+  n1 -.->|"? calls; compiler=1; unresolved=1"| r1
+  linkStyle 0 stroke-dasharray:2 3
+  n1 ==>|"extends; compiler=1; exact=1"| n2
+  n3 -->|"depends; compiler=1; exact=1"| n1
+  n1 -->|"depends; compiler=2; exact=2"| n4
+  n1 ==>|"implements; compiler=1; exact=1"| n5
+  n6 -->|"depends; compiler=1; exact=1"| n1
+  n1 -->|"depends; compiler=2; exact=2"| n7
+  legend["solid: exact; dashed: probable, heuristic; dotted ?: unresolved, not-analysed; labels: relation; evidence counts; state counts; selected: chosen symbol; thick: inheritance; numbered: call position; depends: calls, references and type-uses between two types"]:::metadata
+  footer["Omitted links: exact=0, probable=0, heuristic=0, unresolved=0, not-analysed=0; 1 links with an end in no type: a top-level function, a file facade or a class the index lacks; 1 links between two members of one type: a type has no edge to itself; 1 links from a symbol the walk did not follow: the depth limit, or a caller followed upstream only"]:::metadata
+  classDef reason stroke-dasharray:2 3
+  classDef aggregate stroke-dasharray:6 3
+  classDef metadata fill:#fff,stroke:#999
+  classDef selected fill:#ffe9a8,stroke:#000,stroke-width:3px

@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 internal class FloorTest {
     @Test
     fun `zero drawn links preserve every present state as an aggregate`() {
-        for (kind in DiagramKind.entries) {
+        for (kind in listOf(DiagramKind.MODULES, DiagramKind.COMPONENTS)) {
             val floor = (
                 DiagramBuilder(DiagramGraph()).build(
                     DiagramRequest(kind, links = 0),

@@ -6,7 +6,7 @@ import io.github.krosstack.kscope.model.FactBatch
 import io.github.krosstack.kscope.model.OwnershipKind
 import io.github.krosstack.kscope.model.OwnershipUnit
 import io.github.krosstack.kscope.model.ProducerRef
-import io.github.krosstack.kscope.spi.graph.GraphStore
+import io.github.krosstack.kscope.store.UnitKind
 
 /**
  * The record that an index was built at level `syntax`: an empty unit owned by the workspace. The other levels leave
@@ -23,7 +23,7 @@ internal object LevelUnit {
         return PlannedUnit(producer, OwnershipUnit(OwnershipKind.WORKSPACE, KEY), fingerprint)
     }
 
-    fun recordedIn(store: GraphStore): Boolean = store.units().any { it.producer == producer }
+    fun recordedIn(units: Collection<UnitKind>): Boolean = units.any { it.producer == producer }
 
     fun batch(unit: PlannedUnit): FactBatch = FactBatch(unit.producer, unit.owner, unit.fingerprint, emptyList())
 }

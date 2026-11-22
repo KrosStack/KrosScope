@@ -35,6 +35,7 @@ internal class ServiceInstance private constructor(
         KrosScope.toolVersion(),
         ServeWire.PROTOCOL,
         Instant.now().toString(),
+        ServeMetadata.thisProcessStart(),
     )
     private val host = ServiceHost(settings)
     private val snapshot = ServiceStatusSnapshot(metadata, host, settings.heap)

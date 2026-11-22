@@ -51,6 +51,7 @@ internal class ServeServer private constructor(
         KrosScope.toolVersion(),
         ServeWire.PROTOCOL,
         Instant.now().toString(),
+        ServeMetadata.thisProcessStart(),
     )
 
     fun run() {

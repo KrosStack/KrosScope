@@ -53,6 +53,7 @@ analyzers/schema        Proto, SQLDelight, Room, OpenAPI, Ktor routes, code gene
 analyzers/history       Git history signals.
 intelligence/retrieval  Lexical search, graph expansion, ranking, task and impact analysis.
 intelligence/context    Context compiler, token estimation, renderers.
+intelligence/diagram    Module, component and symbol diagrams, drawn as Mermaid, DOT or JSON.
 service               Frontend-independent use-case API with serializable results; default wiring.
 cli                   The `kscope` binary.
 benchmark             Analyzer conformance, task-localization benchmarks and agent benchmark harness.
@@ -245,7 +246,8 @@ A scan has a level, and the pipeline above runs at each of them; only what diffe
 
 An index at `syntax` holds one empty `kscope.level` unit owned by the workspace; the other levels leave no unit, and
 `exact` shows in the build model it stores. Units are keyed by producer, so changing the level reworks exactly the
-difference and the linkers run again.
+difference and the linkers run again. One rule in `core/engine` derives the level from the producers and kinds of the
+units, for `info` and for `status` alike.
 
 ## Progress
 
@@ -279,6 +281,12 @@ rest of the command; a scan drops them.
 - Whether a workspace is indexed is answered from the index file alone (`IndexProbe`): a missing, empty or
   other-version index is reported as `NotIndexedException` by every query of `service` before anything is opened
   or created.
+- A read command that is given no workspace asks `IndexLookup` of `service` for the nearest parent folder with such
+  an index ([cli.md](cli.md#the-index-of-a-parent-folder)). A folder that a running server keeps is taken without
+  being looked into, and the server finds its own workspace above the folder of the request.
+- `analyze` of a task, `context` and `symbol` pass the repository that holds that folder as a filter to
+  `TaskRetrieval` when the index holds several repositories ([ADR 0026](decisions/0026-repository-narrowing.md)).
+  Without a filter the retrieval runs as before.
 
 `kscope serve` removes the part of that cost that is the same for every query. It is the command line kept alive: one
 process holds one open `service` instance for a workspace, and a query command that finds it sends its arguments, its
@@ -410,6 +418,18 @@ The fingerprint of a source set unit decides what "can see" means.
 
 </details>
 
+A scan also writes `scan.json` into the index directory: when it started and finished, and for each Git repository
+the paths that Git reported as changed or untracked, up to 10,000. It is not a fact, no store
+table holds it, and `scan --verify` does not read it. The freshness check of `service` compares the workspace with
+it and with the commit that each repository had at the scan. `core/engine` reads the commit of every repository
+from the files of Git, without a process, and asks Git only where the files cannot tell: a reference they do not
+resolve, or a reftable repository. Only the working tree of the repository of the current folder is
+compared: through one Git process, or by file times where Git does not track the folder, within a time limit and
+without reading content ([cli.md](cli.md#how-fresh-the-index-is)). `kscope status` runs the same check for every
+working tree within 10 seconds. It reads the repositories and the kinds of units with a reader of `core/store` that
+opens the index file read-only and never opens the store, so it never replaces an index of another format, and it
+never connects to a server ([cli.md](cli.md#status)).
+
 Token counts are also cached on disk, in `token-counts.bin` in the index directory. The file is derived data,
 versioned and independent of the store schema, and `scan --verify` never reads it.
 
@@ -493,6 +513,6 @@ assumes them.
 
 ## Frontends
 
-`service` exposes scan, update, info, analyze, context, impact, symbol, related and graph use cases with
+`service` exposes scan, update, info, analyze, context, impact, symbol, related, graph and diagram use cases with
 serializable request and result types. The CLI renders them as text or JSON. An MCP server, IDE plugin,
 CI check or daemon would be further clients of the same API.

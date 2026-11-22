@@ -71,6 +71,7 @@ class ScanLevelCommandTest {
             listOf("impact", "lib/src/main/kotlin/Lib.kt"),
             listOf("related", "lib/src/main/kotlin/Lib.kt"),
             listOf("graph"),
+            listOf("diagram", "modules"),
         )
         for (command in commands) {
             val result = runKscopeWith(command + listOf("--workspace", workspace, "--format", "json"))

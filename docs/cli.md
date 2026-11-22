@@ -10,38 +10,44 @@ ones listed for it here.
 
 | Option | What it does | Default | Applies to |
 |---|---|---|---|
-| `--workspace DIR` | The project to work on. It must exist. | The current directory | Every command except `skill`. `service add` and `service remove` take their own. |
-| `--format text\|json\|markdown\|dot` | How to print the result; see [Output formats](#output-formats). | `text` | `scan`, `context`, `analyze`, `info`, `symbol`, `impact`, `related`, `graph`, `doctor`, `benchmark`. `dot` is for `graph` only. |
+| `--workspace DIR` | The project to work on. It must exist. | The current directory. A command that reads the index then also looks in the [parent folders](#the-index-of-a-parent-folder). | Every command except `skill`. `service add` and `service remove` take their own. |
+| `--format text\|json\|markdown\|dot` | How to print the result; see [Output formats](#output-formats). | `text` | `scan`, `context`, `analyze`, `info`, `status`, `symbol`, `impact`, `related`, `graph`, `doctor`, `benchmark`. `dot` is for `graph` only. |
+| `--format mermaid\|dot\|json` | How `diagram` prints; see [`diagram`](#diagram). | `mermaid` | `diagram` only, which also takes `--progress`, `--quiet` and `--no-server`. `text` and `markdown` exit with 2. |
 | `--progress auto\|always\|never` | When to show progress on standard error; see [Progress](#progress). | `auto` | `scan`, `context`, `analyze`, `symbol`, `impact`, `related`, `graph` |
 | `-q`, `--quiet` | No progress; standard error then carries errors only. | Off | Same as `--progress` |
-| `--detail brief\|standard\|full` | How much text to print; see [Output size](#output-size). Text and markdown only. | `standard` | `analyze`, `symbol`, `related` |
+| `--detail brief\|standard\|full` | How much text to print; see [Output size](#output-size). Text and markdown, and the size of the `analyze` JSON lists. | `standard` | `analyze`, `symbol`, `related` |
 | `--sections LIST` | Prints only these sections, a comma-separated list. Text and markdown only. | All | `analyze`, `symbol`, `related` |
 | `--task-file FILE` | Reads the task from a UTF-8 file; see [Text encodings](#text-encodings). | None | `analyze`, `context` |
 | `--no-server` | Answers without the server that [`serve`](#serve) or the [service](#service) runs for the workspace. | Off | `scan`, `context`, `analyze`, `info`, `symbol`, `impact`, `related`, `graph`, `mcp` |
 | `--no-ml`, `--ml on\|off` | Answers without learned signals when off. Analysis JSON reports `semantic.state` as `off`; context JSON has no semantic status. A `scan` with it off builds no semantic index. | `on` | `analyze`, `context`, `scan` |
 | `--version`, `-h`, `--help` | Print the version, or the help of the tool or a command, and exit. | | |
 
-`--detail` and `--sections` on any other command, or with `--format json`, exit with 2. `--no-ml` wins over
+`--detail` and `--sections` on any other command exit with 2, and so do they with `--format json`, except `--detail` for `analyze`; see [Output size](#output-size). `--no-ml` wins over
 `--ml on` wherever they appear. With no learned provider installed, turning ML off changes only the analysis JSON
 semantic status; rankings, context estimates and text output stay the same. Context output stays unchanged.
 
 ## Output formats
 
-The JSON of `analyze` carries `schemaVersion` 2 and a `semantic` object; its `state` is `off`, `not-installed`, `disabled`, `used`, `behind`, `worker-unavailable` or `static-fallback`. The other results stay at version 1.
+The JSON of `analyze` carries `schemaVersion` 3 and a `semantic` object; its `state` is `off`, `not-installed`, `disabled`, `used`, `behind`, `worker-unavailable` or `static-fallback`. The other results stay at version 1.
 
 | Format | For | Notes |
 |---|---|---|
 | `text` | People | The default. The answer in one line, then sections under headings. |
-| `json` | Programs and agents | Stable. Every result has `schemaVersion` and, when read from an index, `indexLevel`. See the [schemas](schemas/README.md). |
+| `json` | Programs and agents | Stable. Every result has `schemaVersion` and, when read from an index, `indexLevel`. A result read from the [index of a parent folder](#the-index-of-a-parent-folder) also has `indexLocation`, and, when the answer was [limited to one repository](#the-index-of-a-parent-folder), `narrowedTo` and the other fields described there. One from an index that is behind has [`indexFreshness`](#how-fresh-the-index-is). See the [schemas](schemas/README.md). |
 | `markdown` | Prompts | `context` prints the context package itself, `graph` prints DOT, the others print their text. |
 | `dot` | Graphviz | `graph` only. The other commands that take `--format` exit with 2. |
+| `mermaid` | Markdown pages and Mermaid tools | `diagram` only, where it is the default; `diagram` also prints `dot` and `json`. The other commands that take `--format` exit with 2. |
 
 - Counts have thousands separators and paths are relative to the workspace. A long list is cut and ends with
-  `N more (use --format json for the full list)`; JSON always has the full list.
+  `N more (use --format json for the full list)`; JSON has the full list, except for `analyze`: its JSON lists the
+  top 50 symbols and the relevant files, and `--detail full` lists every scored file and up to 1,000 symbols;
+  `symbolsOmitted` and `filesOmitted` say what was left out (see [Output size](#output-size)).
 - On a terminal the first line, headings and table headers are bold cyan (not with `NO_COLOR` set) and long paths are
   shortened in the middle. Captured output (`>`, a pipe, an agent) holds no escape code and every path in full.
 - A command that needs an index and finds none prints `error: No index found. Run `kscope scan` first.` on standard
-  error, exits with 1 and creates nothing. `doctor` reports a missing index as a check instead.
+  error, exits with 1 and creates nothing. Without `--workspace` it first looks in the
+  [parent folders](#the-index-of-a-parent-folder), and a second line names folders below that have an index. `doctor`
+  reports a missing index as a check instead.
 
 ## Progress
 
@@ -82,6 +88,9 @@ Inside a Git work tree the files come from `git ls-files`, so `.gitignore` appli
 Errors and warnings are listed under `Problems`; notes are only counted, and `--format json` lists all. An invalid
 [`kscope.toml`](#settings-file) stops the scan with exit 1 before it touches the index. `update` is a hidden alias of
 `scan` for old scripts.
+
+A scan works on the folder given or the current one and never on a parent folder. Before it makes an index in a folder
+that the index of a parent folder already covers, it [says so in one line](#the-index-of-a-parent-folder).
 
 ### Semantic index
 
@@ -171,7 +180,8 @@ as `library/model/src/main/kotlin/Record.kt`.
   repository; the `repositories` field of [`info`](#info) gives each directory.
 - Arguments that name a file (`analyze`, `symbol`, `impact`, `related`, `graph --node`) take a workspace path, with
   `:line` where a location is allowed. A path without the directory names no file: the command lists the workspace
-  paths it can mean and exits with 1.
+  paths it can mean and exits with 1. A command that uses the
+  [index of a parent folder](#the-index-of-a-parent-folder) also takes a path typed from the current folder.
 - In a workspace of one repository the directory is empty and paths are as in the repository.
 
 ### `--trust-build`
@@ -415,8 +425,8 @@ trim this list, and full detail does not append a structural tail. Text also rep
 `Semantic ranking: behind N chunks`, the number of current chunks without published vectors.
 
 Explicit `edit`, `read` and `documents` sections remain filtered views in the same relative order. Analysis JSON
-stays at schema 2 and contains the complete result regardless of text detail. Without applied ranking, text and JSON
-keep their existing output. A one-shot query may start the optional worker; `serve` reuses it across queries.
+is not affected by the text sections. Its `files` list is the fused ranking as it is, and `--detail` sets only the
+length of `symbols`; see [Output size](#output-size). A one-shot query may start the optional worker; `serve` reuses it across queries.
 
 ### Task or name
 
@@ -451,8 +461,8 @@ Except for applied task analysis, a ranked list shows only the items that pass o
 its score is at least 30% of the best score, and the three best always are. For `symbol` and `related` the node you
 asked about (an exact match, the node itself, the file that declares it) is always listed and the 30% is taken of the
 best of the others. A list longer than its row limit says `showing 10 of 25` and ends with `15 more relevant`; items
-below the cut-off are counted in one line. `--detail full` lists every relevant item and `--format json` everything
-scored.
+below the cut-off are counted in one line. `--detail full` lists every relevant item. `--format json --detail full` lists
+every scored file.
 
 **How sure the ranking is.** The end of the headline describes this ranking's scores, not a probability: `one clear
 match` (the second best file scores at most 65% of the best), `no strong match` (otherwise, and 10 or more files score
@@ -478,13 +488,26 @@ and an `Impact` line (the headline of [`impact`](#impact)).
 ### Output size
 
 `--detail` and `--sections` apply to `analyze`, `symbol` and `related` in text and markdown. A section name that the
-reading does not have exits with 2 and lists the available ones.
+reading does not have exits with 2 and lists the available ones. With `--format json`, `analyze` accepts `--detail`
+only; the other commands and `--sections` exit with 2.
 
 | `--detail` | Prints |
 |---|---|
 | `brief` | One screen: the headline, the five best candidates, the number of tests and the next step. For a name, the declaration. |
 | `standard` | Every section, at most 10 rows per list (15 for `symbol`). |
 | `full` | Every section with every relevant item and no row limit, still cut at the relevance cut-off. |
+
+**JSON of `analyze`.** The JSON is capped so that it stays small on a large project; the in-memory ranking behind `context` and the benchmark is not capped.
+
+| `--detail` | `symbols` | `files` |
+|---|---|---|
+| `brief` | The top 10 | The relevant files: score at least 30% of the best, and the three best always |
+| `standard` (default) | The top 50 | The same |
+| `full` | The top 1,000 | Every scored file |
+
+`symbols` keep their ranking order. When learned ranking is applied, `files` is the fused ranking as it is, at every
+detail level. `symbolsOmitted` and `filesOmitted` give the number of entries left out; each is present only when it is
+above 0. `tests` is not capped.
 
 `--sections a,b` prints only those sections, in their usual order; the first line belongs to `headline`. For example,
 `kscope analyze "..." --sections tests` prints the tests to run and nothing else. `top` is the short list `brief`
@@ -506,6 +529,8 @@ Summarizes the index without changing it, or with `--structure` describes the di
 kscope info [--structure [--structure-depth N]]
 ```
 
+It shows when the index was scanned and what a quick check finds behind since then
+([How fresh the index is](#how-fresh-the-index-is)).
 It shows the counts of files, modules, symbols and relationships, and the `Settings` in effect (see
 [Settings file](#settings-file)). A workspace that was never scanned exits with 1. Relationships are counted by
 relation kind, evidence class and resolution state (`exact`, `probable`, `heuristic`, `unresolved`, `not-analysed`). A
@@ -541,6 +566,81 @@ Inside a Git work tree, ignored directories are pruned (never the inspected dire
 rules, and the report counts them. If Git is unavailable the report says that ignore rules were not applied. The walk
 skips `.git`, `.gradle`, `.idea`, `.kscope`, `build`, `out` and `node_modules`, follows no symbolic link and stops after
 20,000 directories, saying so.
+
+## `status`
+
+Says in one line whether the index can be trusted: which index answers, its level, how long ago it was scanned, how
+far behind it is and whether a server runs. It is the thorough form of the quick check of
+[How fresh the index is](#how-fresh-the-index-is): every repository, its commit and its working tree.
+
+```
+kscope status [--format text|json]
+```
+
+```
+kscope: index /work/app/.kscope; level resolved; scanned 2d ago; behind: 2 of 8 repositories at another commit, 1 of 8 working trees changed (3 files); server not running
+```
+
+| Option | What it does | Default |
+|---|---|---|
+| `--workspace DIR` | The workspace. Without it, the index of the nearest folder that has one is reported, as for [`info`](#the-index-of-a-parent-folder). | The current directory |
+| `--format text\|json` | One line, or the [JSON](#status-json) below. | `text` |
+
+- **It only reads.** It reads the index file read-only, `scan.json`, the files of Git, one `git status` for each
+  working tree and the file of the server. It does not open the store, load the graph or start a server, and it never
+  asks a server, so a server that is busy is not disturbed. SQLite may create its side files of the write-ahead log
+  (`index.db-shm`, `index.db-wal`) beside the index while it reads, because a server may be writing; the index file
+  itself is never changed.
+- **An index of another format is named, never replaced.** `status` stops at the schema version of the file. Only
+  `scan` replaces an index.
+- **The freshness part** uses the words of the line that `analyze`, `context` and `impact` print, in lower case:
+  - `up to date (8 repositories)`, or `up to date as far as checked (...)` when some part could not be checked.
+  - `behind: 2 of 8 repositories at another commit, 1 of 8 working trees changed (3 files)`. An index of one
+    repository says `another commit checked out` and `working tree changed`. `estimated from file times` follows the
+    files of a folder that Git does not track.
+  - `not checked: 1 of 31 working trees (<reason>)` when nothing is behind and something could not be compared. The
+    reason is the first one found, such as `the time of the scan is not known; the next scan records it`.
+  - `3 of 8 working trees not checked` shows only when it is above 0.
+- **Bounds.** The check may take 10 seconds. A folder that Git does not track is walked for at most 200,000 files,
+  and `.git`, `.gradle`, `.idea`, `.kscope`, `build`, `out` and `node_modules` are skipped; no link is followed.
+  Whichever bound is reached first gives not checked, with its own reason, and never a partial count.
+- **The server** is one of three, and no port is connected to. `serve.json` names a process; `status` asks the system
+  for that process and compares its start time with the one the server recorded in `processStart`, within one second.
+    - `server running (pid 4120)`: the process lives and it is the server.
+    - `server not running`: there is no file, the process is gone, or another process has its number. A file that
+      names no server is `stale` in JSON.
+    - `server unknown (pid 4120 is alive, but it cannot be checked)`: the process lives, but the file has no start
+      time (a server of an earlier version) or the system does not tell its start. It is never reported as running.
+- **Exit codes.** 0 for any index that can be read, also when it is behind or not checked. 1 when there is no index
+  (`kscope: no index in /work/app; run kscope scan`), or the index is of another format or cannot be read; the
+  line says which, on standard output. 2 for a usage error. There is no option that makes a behind index exit non-zero.
+
+<a id="status-json"></a>
+
+`--format json` prints one object. Without a readable index it prints `indexed: false` with `null` where there is no
+value, writes the line to standard error and exits with 1.
+
+| Field | Meaning |
+|---|---|
+| `workspace` | The workspace whose index is reported. |
+| `indexLocation` | Its `.kscope` folder, also when there is no index in it. |
+| `indexed` | `true` when an index could be read. |
+| `indexLevel` | `syntax`, `resolved` or `exact`, as in `info`; `null` without an index. |
+| `scannedAt` | When the last scan finished; `null` without `scan.json`. |
+| `ageSeconds` | Seconds since `scannedAt`. |
+| `freshness` | The object of [`indexFreshness`](#how-fresh-the-index-is), with every working tree compared; `null` without an index. |
+| `repositories` | How many repositories the index holds. |
+| `server` | `{state, pid, version, startedAt, stale}`. `state` is `running`, `notRunning` or `unknown`; `startedAt` is the start of the server's process, or the time its file was written when it recorded none. |
+| `checkMillis` | How long the check took. |
+| `toolVersion` | The version of `kscope`. |
+
+### Which status
+
+| Command | Asks | Tells |
+|---|---|---|
+| `kscope status` | Nobody. It reads files and the list of processes. | Whether the index can be trusted, and whether a server runs. |
+| [`kscope serve --status`](#serve) | The server of the workspace, over its port. | What that server does: process, version, start time, watcher and map. |
+| [`kscope service status`](#service) | The service, over its port. | What the service does with each of its workspaces, its limits and its session entry. |
 
 ## `symbol`
 
@@ -592,6 +692,154 @@ kscope graph [--scope modules|workspace|neighborhood] [--node NODE] [--depth N] 
 
 `--format dot` prints Graphviz DOT, for example `kscope graph --format dot > modules.dot`. JSON keeps the evidence class
 and resolution state of every relationship, including unresolved ones.
+
+## `diagram`
+
+Draws the modules, the repositories or one symbol as a diagram: `kscope diagram KIND [NODE]`.
+
+```
+kscope diagram modules|components|symbol [NODE] [--depth N] [--links N] [--characters N] [--format mermaid|dot|json]
+```
+
+| `KIND` | What it draws | `NODE` |
+|---|---|---|
+| `modules` | How the modules depend on each other, grouped by repository. A dependency cycle is marked. | Optional: a module path such as `:core:model`, or a module id. With it, the diagram holds the modules within `--depth` steps of it. |
+| `components` | How the repositories connect through their modules, by dependencies and bindings. | Optional: a repository name or id. |
+| `symbol` | The types around a class, or the calls around a function. | Required: a name, a qualified name, a symbol id or `path:line`, written as for [`impact`](#impact). |
+
+| Option | What it does | Default |
+|---|---|---|
+| `--depth N` | How many steps away from `NODE` the diagram reaches. For `modules` and `components`, 0 draws `NODE` alone. For `symbol`, 0 means no depth limit: the walk goes to the boundary, within the links and read budgets. | 1 |
+| `--links N` | The most lines to draw. Relationships between the same two nodes can share one line. | 300 |
+| `--characters N` | The most characters the Mermaid text of the diagram may have. | 40,000 |
+
+- **Formats.** `--format mermaid` (the default) prints Mermaid source, which Markdown pages and Mermaid tools draw;
+  `dot` prints Graphviz DOT; `json` prints the nodes, groups, edges and what was left out, with `schemaVersion` and
+  `indexLevel` like the other commands (see the [schemas](schemas/README.md)). `text` and `markdown` exit with 2. The
+  default is `mermaid` because a diagram has no text form, and the size limit is counted in Mermaid characters.
+- **Size.** The limit is the length of the Mermaid text whatever the format, so the three formats show the same
+  diagram. The title says how many nodes and lines are drawn out of how many nodes and relationships exist, such as
+  `Modules: 17 of 17 nodes, 45 of 54 links`. Relationships of one kind between the same two nodes share a line, so
+  the line count can be lower than the relationship count with nothing cut. A cut shows as fewer nodes in the title
+  and in the `Omitted links:` footer, which counts what was left out by certainty; relationships are dropped from the
+  end until the diagram fits, and a certainty class that is dropped whole appears as a summary node. Every
+  relationship says how certain it is: solid is exact, dashed probable or heuristic, dotted unresolved or not
+  analysed.
+- **Names.** A symbol is resolved as for `impact`, so `path:line` picks the declaration around that line. A module or
+  repository is matched by its path, name or id and nothing else.
+- Standard output holds the diagram, or the message when the name matches nothing. Other messages go to standard
+  error.
+
+| Outcome | Message | Exit code |
+|---|---|---|
+| Name matches nothing | `No declaration matches "NAME".` (`No module matches` or `No repository matches` for the other kinds), on standard output, as for `symbol`; with `--format json` the `node-resolution` result with `requested` set and an empty `candidates` list. | 0 |
+| Name shared by several declarations | The candidates and the value that picks each, on standard output, as for `symbol`; with `--format json` the `node-resolution` result. | 2 |
+| `symbol` names something that is not a type or a function | `NAME is a KIND, which a diagram does not draw. Name a type or a function.` | 2 |
+| `--characters` too small | `--characters N is too small; the diagram needs at least M characters.` | 2 |
+| `symbol` without `NODE`, or a format other than `mermaid`, `dot` or `json` | A usage error. | 2 |
+| No index | `error: No index found. Run `kscope scan` first.` | 1 |
+
+A running [server](#serve) answers `diagram` and prints the same bytes and exit code as a command without one.
+
+### What a diagram leaves out
+
+The footer of the Mermaid and DOT output prints each non-zero reason as a count and the words below. In JSON the
+reasons are the integer fields of `omitted`, absent when 0, and the schema carries the same definitions.
+
+| Field | Definition |
+|---|---|
+| `notInType` | Links with an end in no type: a top-level function, a file facade or a class the index lacks. |
+| `notCallable` | Links with a caller or target that is no callable: the call level draws callables only. |
+| `withoutSymbol` | Links with an end that has no symbol: an external library or an id the index lacks. |
+| `withinType` | Links between two members of one type: a type has no edge to itself. |
+| `beyondDepth` | Links from a symbol the walk did not follow: the depth limit, or a caller followed upstream only. |
+| `stopped` | Links to symbols not reached: the walk stopped at the node limit or the read limit. |
+| `notExpanded` | Symbols not expanded: the walk stopped before it read their links. Counts symbols, not links. |
+| `membersNotRead` | Members not read: the read limit left their links unread. Counts members, not links. |
+| `callsNotDrawn` | Calls to targets that are no callable, not drawn, by target kind. A by-kind view of part of `notCallable`. |
+
+A line between two types, such as `depends; compiler=3; exact=3`, merges the calls, references and type uses between
+them; `byKind` in the JSON says how many of each.
+
+### Examples
+
+The examples run on this repository. Each prints Mermaid source, shortened here with `...`.
+
+The modules around `:service`, which depends on the analyzers, `:core:model` and the other modules it wires together:
+
+```
+$ kscope diagram modules :service
+---
+title: "Modules: 17 of 17 nodes, 45 of 54 links"
+...
+flowchart LR
+  subgraph g1["repo"]
+    n15[":analyzers:android"]
+    ...
+    n54[":cli"]
+    ...
+    n74[":core:model"]
+    ...
+    n149[":service"]
+  end
+  ...
+  n54 -->|"depends_on; build-model=2; exact=2"| n149
+  ...
+  n149 -->|"depends_on; build-model=1; exact=1"| n15
+  ...
+```
+
+The repositories of the workspace. Dependencies and bindings that no module of the workspace answers appear as dotted
+arrows to a reason node, with the number of relationships behind it:
+
+```
+$ kscope diagram components
+...
+flowchart LR
+  n1["repo"]
+  ...
+  r2["gradle.static.project-not-a-module (3)"]:::reason
+  ...
+  n1 -.->|"? depends_on; build-model=3; unresolved=3"| r2
+  linkStyle 3 stroke-dasharray:2 3
+  ...
+```
+
+The calls around a function, with the declarations that call it and the ones it calls. A name that several functions
+share lists them instead; pass a qualified name or `path:line` then:
+
+```
+$ kscope diagram symbol answerAbout
+---
+title: "Call flow of io.github.krosstack.kscope.cli.answerAbout: 12 of 12 nodes, 19 of 20 links"
+...
+  n1 -->|"3: calls; compiler=1; exact=1"| n2
+  n1 -->|"5: calls; compiler=1; exact=1"| n3
+  n4 -.->|"8: calls; compiler=1; probable=1"| n1
+  linkStyle 2 stroke-dasharray:6 3
+  n5 -->|"8: calls; compiler=1; exact=1"| n1
+  ...
+  footer["Omitted links: exact=0, ...; 64 links from a symbol the walk did not follow: the depth limit, or a caller followed upstream only"]:::metadata
+```
+
+The types around a class, here with the tests that use it. In the title, `67 of 312 links` means 67 lines for 312
+relationships, because relationships of one kind between the same two nodes share a line. A smaller `--links` or
+`--characters` cuts the diagram further:
+
+```
+$ kscope diagram symbol DiagramBuilder --format dot
+digraph diagram {
+  graph [label="Type relations of io.github.krosstack.kscope.diagram.DiagramBuilder: 15 of 15 nodes, 67 of 312 links", labelloc=t];
+  rankdir=LR;
+  n1 [label="io.github.krosstack.kscope.diagram.DiagramBuilder", style=filled, fillcolor=gold, penwidth=2];
+  n2 [label="io.github.krosstack.kscope.spi.graph.GraphReader"];
+  ...
+  n1 -> n2 [label="depends; compiler=1; exact=1", style=solid];
+  n1 -> n3 [label="depends; compiler=1; exact=1", style=solid];
+  ...
+  footer [label="Omitted links: exact=0, ...; 18 links between two members of one type: a type has no edge to itself; ...", shape=note];
+}
+```
 
 ## `serve`
 
@@ -655,7 +903,8 @@ While the index is behind the workspace, a query's standard error ends with one 
 changes are settling; a Git operation is in progress; the index is shallower than wanted and is being deepened; the scan
 did not reach the wanted level (for instance the build failed); the index is `exact` and not updated automatically; an
 update failed and is retried; the watcher gave up. `kscope serve --status` adds a watcher line: up to date, behind with
-the reason, or stopped.
+the reason, or stopped. Without a watcher, `analyze`, `context` and `impact` make a quick check themselves and use
+the same line; see [How fresh the index is](#how-fresh-the-index-is).
 
 ### Map
 
@@ -672,10 +921,21 @@ it. What the page reads is not a stable interface; see [ADR 0021](decisions/0021
   methods than `GET` get 405, and a `Host` other than `127.0.0.1` or `localhost` with the map's port gets 403, so a
   web page cannot reach it through another name.
 
+The panel of a function or a type also draws a diagram of its neighbourhood, from the links that the index holds: the
+calls around a function, or the types around a type. It is the diagram that [`diagram symbol`](#diagram) prints, drawn
+by the page in layers, with callers on the left and what the symbol uses on the right. Solid lines are exact, dashed
+ones probable, dotted ones lead to the reason why the index could not resolve a relationship, and inheritance is thick.
+The diagram has a depth of 1, 2, 3 or all, says what it left out, and a click on one of its nodes selects the symbol
+that was drawn for it. The answer of the route holds the diagram, whose nodes carry their symbol id, and `files`, which
+names the node of the file in the map for each of those ids. A node without an id, such as a reason node, is not
+clickable.
+See [ADR 0024](decisions/0024-diagrams-from-links.md).
+
 ### Safety of the server
 
 - It listens on the loopback address `127.0.0.1` only. There is no option to listen anywhere else.
-- At start it creates a random 256-bit token and writes it, with its port and process id, to `.kscope/serve.json`. It
+- At start it creates a random 256-bit token and writes it, with its port, its process id and the start time of its
+  process (which [`status`](#status) compares with the system's), to `.kscope/serve.json`. It
   answers only requests that carry the token; anything else is closed without an answer.
 - Whoever can read `serve.json` can use the server as you, so only your account can: mode `rw-------` on Linux and
   macOS, an access control list for your account alone on Windows. Where neither can be set, `kscope serve` refuses to
@@ -1064,10 +1324,13 @@ current path. Otherwise the scan reports the informational diagnostic `history.n
 
 | Code | Meaning |
 |---|---|
-| 0 | Success. |
-| 1 | Failure: no index (run `kscope scan`), a scan refused because of its [level](#levels), the workspace or index could not be read or written, an input such as a task file could not be used, an invalid [settings file](#settings-file) stopped `scan`, `benchmark` found its gate failed, or `skill` left alone a `kscope` folder it did not make. Run `kscope scan --rebuild` when the index is unreadable. |
-| 2 | Usage error or ambiguous node: an unknown command or option, an invalid value, a missing workspace directory, `--detail` or `--sections` where they do not apply, or several exact node candidates. |
+| 0 | Success. `status` also gives 0 for an index that is behind or not checked. |
+| 1 | Failure: no index (run `kscope scan`), a scan refused because of its [level](#levels), the workspace or index could not be read or written, an input such as a task file could not be used, an invalid [settings file](#settings-file) stopped `scan`, `status` found an index of another format or one that cannot be read, `benchmark` found its gate failed, or `skill` left alone a `kscope` folder it did not make. Run `kscope scan --rebuild` when the index is unreadable. |
+| 2 | Usage error or ambiguous node: an unknown command or option, an invalid value, a missing workspace directory, `--detail` or `--sections` where they do not apply (`--sections`, and `--detail` on other commands, with `--format json`), or several exact node candidates. |
 | 3 | `scan --verify` found that the incremental result differs from a clean rebuild. |
+
+`diagram` also ends with 2 when the symbol is not a type or a function, or `--characters` leaves no room for the
+diagram.
 
 Results go to standard output; progress and errors go to standard error. The exit codes do not depend on the output
 format or the progress options.
@@ -1076,7 +1339,8 @@ format or the progress options.
 
 The index lives in `.kscope` inside the workspace. It is derived data: delete it at any time and `kscope scan`
 rebuilds it. A scan that finds an index of another format discards and rebuilds it, while a command that only reads the
-index reports that there is none and leaves it alone. Only `scan` changes the index.
+index reports that there is none and leaves it alone; [`status`](#status) names the format instead. Only `scan` changes
+the index.
 
 | In `.kscope` | What it is |
 |---|---|
@@ -1084,5 +1348,157 @@ index reports that there is none and leaves it alone. Only `scan` changes the in
 | `gradle-model` | The cached build model of `--trust-build` scans. |
 | `token-counts.bin` | A cache of token counts for `analyze` and `context`. Output is the same with or without it. |
 | `serve.json`, `serve.lock` | The running [server](#safety-of-the-server) and its lock. |
+| `scan.json` | When the last scan started and finished, and for each Git repository the paths that Git reported as changed or untracked at the end of the scan (at most 10,000 per repository), for [How fresh the index is](#how-fresh-the-index-is). Every scan writes it; it is not part of the index. |
 | `repository-id` | The identity of a repository with no Git history. Keep it if that identity must stay stable. |
 | `.gitignore` | Written when a scan creates `.kscope`, ignoring the whole directory so a Git work tree stays clean. |
+
+### How fresh the index is
+
+A scan writes when it started and finished to `.kscope/scan.json`. `analyze`, `context`, `impact` and `info` then
+make a quick check of the workspace against that scan. It is made to cost little, so it does not look at everything:
+
+- **The commit of every repository** of the index is compared with the commit that was scanned. It is read from the
+  files of Git (`HEAD`, the reference file or `packed-refs`, also for a work tree or a submodule), so no process
+  starts. `packed-refs` is read line by line up to the reference, never whole. Where these files do not tell the
+  commit, Git is asked once for that repository: a reference that the files cannot resolve, and every repository with
+  a reftable layout (a `reftable` folder, or `extensions.refStorage` in `config`), for which no reference file is
+  read at all. A repository that has no commit yet is one that Git confirms as such; it is not checked.
+- **The working tree of one repository** is compared: the repository that holds the folder where the command was
+  asked. That is one `git status`. A changed or untracked path that Git reports counts when its file time is later
+  than the start of the scan. A path that Git reported at the scan and no longer reports counts too: the edit was
+  restored or reverted, or the untracked file was deleted, and the index still holds it. A rename is recorded with
+  both paths. A change that was there before the scan and is still there was scanned with it and does not count. A
+  file deleted after the scan, which Git still reports as deleted, does not count, and a changed path counts whether
+  or not a scan reads it. No content is read. Asked from the root of a workspace of several
+  repositories, no working tree is compared. When `scan.json` is missing, has no list of changed paths for the
+  repository (an index of an earlier version), or the scan found more than 10,000 and recorded only that, the
+  working tree cannot be compared with the scan. It is then not checked and the line says why, even when it is clean
+  now, until the next scan records the list. A changed or untracked path that is newer than the scan start is still
+  certain evidence when `scan.json` exists: the working tree is then behind, and the count is a lower bound.
+- **A folder that Git does not track** has no commit. As the repository of the current folder it is walked, and its
+  files with a later time than the start of the scan are counted. `.git`, `.gradle`, `.idea`, `.kscope`, `build`,
+  `out` and `node_modules` are skipped. This is an estimate, and the line and the field say so.
+
+[`kscope status`](#status) is the thorough form of this check: it compares every repository, its commit and its working
+tree, within 10 seconds, and prints one line.
+
+Each comparison has one of three outcomes, and they are never mixed: **behind**, **not behind** as far as it was
+checked, and **not checked**. A working tree that the quick check does not look at is not checked.
+
+`analyze`, `context` and `impact` check after they answered. Standard error then ends with one line, also with
+`--quiet`, in two cases only. When something is behind, such as
+`Index is behind: 2 repositories at another commit and 3 changed files since the scan of 2026-11-21T12:00:05Z.`
+(`another commit checked out` when the index has one repository). When the repository of the current folder could
+not be checked: `Index may be behind: <reason>.` The reasons are: this repository could not be checked in 300 ms;
+this repository could not be compared with the scan; the time of the scan is not known, where the line adds that the
+next scan records it; the scan did not record its changed files, where the next scan records them; and the scan
+found too many changed files to record them. When a working tree is behind and the scan did not record its list,
+the line says `at least` before the number and ends with the reason, such as
+`Index is behind: at least 1 changed file since the scan of 2026-11-21T12:00:05Z; <reason>.` There is no line for the
+working trees of other repositories. Standard output and the exit code do not change.
+
+JSON has no such line. In these two cases it has the object `indexFreshness` after `indexLevel` and `indexLocation`;
+when nothing is behind the object is absent. In `analyze`, `context` and `impact` an absent `indexFreshness` means
+that the index is current as far as kscope knows: either the check ran and found nothing behind, or a watching
+server answered, which keeps the index current itself. The answer stays
+lean for agents, as the text answer has no line then. The JSON of `info` always has it, and the text of `info` shows
+the same counts:
+
+```
+Freshness
+  Scanned        2026-11-21T12:00:05Z
+  Commits        2 behind, 6 not behind, 0 not checked
+  Working trees  1 behind, 0 not behind, 7 not checked (3 changed files)
+```
+
+| Field | Meaning |
+|---|---|
+| `state` | `behind` when a commit or a working tree is behind. Otherwise `not-checked` when the repository of the current folder could not be checked or nothing could be compared, and `not-behind` when nothing that was checked is behind. |
+| `scannedAt` | When the last scan finished. `null` when `scan.json` is missing, as for an index of an earlier version. |
+| `commits` | The repositories that had a commit at the scan, counted by outcome: `behind` (at another commit now), `notBehind`, `notChecked`. |
+| `workingTrees` | All repositories, counted by the outcome of their working tree: `behind`, `notBehind`, `notChecked`. |
+| `changedFiles` | The files changed after the scan started, in the working trees that were compared. When `reason` is set and `changedFiles` is more than 0, the count is a lower bound: files restored since the scan could not be counted. |
+| `estimate` | `true` when files were compared by their times alone, in a folder that Git does not track. |
+| `reason` | Why the repository of the current folder could not be checked, otherwise `null`. It is also set when the working tree is behind and the scan did not record its list; `changedFiles` is then a lower bound. |
+
+- **Time limit.** Reading `packed-refs`, the Git processes and the walk may take 300 ms together. What is not
+  answered by then is not checked: a walk that reaches the limit counts no file and gives no estimate.
+- **A watching server** ([`serve --watch`](#watching) or the [service](#service)) keeps its own account. Its line
+  `Index is behind: <reason>.` stays the only one, and the three commands add neither a line nor the field there.
+  `info` shows the scan time and the counts everywhere.
+
+### The index of a parent folder
+
+`info`, `analyze`, `context`, `impact`, `related`, `symbol`, `graph` and `diagram` read an index. Run without `--workspace` in a
+folder that has no index, they use the index of the nearest parent folder that has one. A folder has an index when a
+read command accepts it: the current format, with at least one file. An empty index and one of another format are
+passed over, also in the current folder. A folder that a running [server](#serve) keeps counts as having one, so that a
+served query opens no index in your own process.
+
+- **They say which index answered.** Text, Markdown and DOT add one line on standard error, also with `--quiet`:
+  `Using the index of a parent folder: /work/.kscope. The answer covers the whole workspace /work, and paths are
+  relative to it.` When the answer is limited to one repository, as described below, the
+  line says so instead: `Using the index of a parent folder: /work/.kscope. Paths are relative to /work. Answer
+  limited to app/; pass --workspace /work for the whole workspace.` A repository at the workspace root is named as
+  [`info`](#info) lists it, in its `name` field: `Answer limited to the repository work at the workspace root; ...`.
+  JSON has no such line. It has the field `indexLocation` right after `indexLevel`, and `narrowedTo` right after that
+  when the answer was limited; it holds the same name. The other fields of a limited search follow `narrowedTo`:
+  `outsideNarrowing`, `widenedFrom` and `incomplete`, each only when it applies, as the paragraph below says.
+  Standard output is otherwise what `--workspace /work` prints.
+- **Nothing else changes.** In a folder with its own index, and with `--workspace`, the output is as before and the
+  JSON of a query has no `indexLocation`. `info` and `scan` always have it.
+- **The found folder is the workspace.** Its `kscope.toml`, level, [trust](#trust), registered repositories and
+  [server](#serve) apply, as with `--workspace`.
+- **Most answers cover the whole workspace,** also below a root of
+  [several repositories](#workspaces-of-several-repositories). Two things follow the current folder:
+    - A file argument can be typed from the current folder, with `:line` where a location is allowed. A workspace path
+      still works. When both name a file, the file in the current folder is meant.
+    - A name that several repositories declare means the declaration in the repository that holds the current
+      folder, when that repository has exactly one. The command says so on standard error, in every format and
+      also with `--quiet`: `Using the declaration of "Record" in library, the repository of the current folder.
+      Other repositories declare this name too; --workspace /work lists them all.` With two or more declarations
+      in that repository, or none, the name is resolved as with `--workspace`, and several candidates exit with 2.
+      `symbol` differs below: it narrows a simple name first.
+- **A search answer is limited to one repository.** Below a root of several repositories, `analyze` of a task,
+  `context` and `symbol` search only the repository that holds the current folder. Hits and the files and symbols
+  that the graph adds to them outside that repository are left out, and more hits are read so that the limits (50
+  symbols, 30 files) are filled from inside it. Links across repositories still carry weight on the way. Nothing is
+  limited in an index of one repository, in a folder that belongs to no repository (the line then says the whole
+  workspace), with `--workspace`, or in a folder with its own index. `impact`, `related`, `graph`, the card of
+  `analyze` and `info` are not limited. Pass `--workspace /work` to search every repository. See
+  [ADR 0026](decisions/0026-repository-narrowing.md). Three things are worth knowing:
+    - **What you name in `symbol` is split by what you gave.** A symbol id, a full qualified name or `path:line` names
+      one declaration. It is shown also when it lies outside the repository, and the line says so, as in
+      `"sync.TaskSync" lies in library/, outside that limit.`; JSON adds `outsideNarrowing`, the name of that
+      repository, next to `narrowedTo`. A simple name is a search: declarations of the repository come first. Only
+      when no declaration of the repository bears the name, or a text matches nothing in it, the search is widened to
+      the whole workspace, and the line says `Nothing in app/ matches "TaskSync", so the search was widened to the
+      whole workspace.` JSON then has `widenedFrom`, the name of the repository, and no `narrowedTo`. When two or more
+      declarations of the repository bear the name, the answer is an ambiguity of those declarations only, with the
+      limit line in text and `narrowedTo` in JSON; declarations of other repositories are not listed. A search of the
+      repository that stopped at its cap before it found anything is not proof of a missing match, so it is not
+      widened; see the next point. A result of another repository is never shown without one of these two notes.
+    - **A search that reaches its cap says so.** The search reads more hits until the limits are filled, up to 50,000
+      candidates. When it reaches that number before the limits are filled, the line ends with `The search in app/
+      stopped at its limit of candidates and may be incomplete; pass --workspace /work to search everywhere.` and
+      JSON has `"incomplete": true`. The field is absent otherwise. This holds for a simple name in `symbol` too: when
+      the search of the repository stopped at the cap with no hit, the answer stays limited and empty, with
+      `narrowedTo` and `incomplete`, and is not widened.
+    - **The derived lists are not limited.** The tests, boundaries and risks of an analysis follow from the files that
+      the limited search chose. An impact that crosses into another repository is what you want to see, so these
+      lists may name files of other repositories that the chosen files link to.
+- **No index anywhere.** The command fails as before. When folders one or two levels below have an index, a second
+  line names up to five of them and counts the rest:
+  `Folders below with an index: app, tools/cli. Pass one with --workspace.` Hidden folders, `build`, `out` and
+  `node_modules` are not searched, and no symbolic link is followed.
+- **`scan` does not look up.** Before a first scan in a folder that the index of a parent folder covers, it prints on
+  standard error, unless `--quiet` is given or a server runs the scan:
+  `An index in a parent folder already covers this folder: /work/.kscope. This scan makes a separate index in
+  /work/app/.kscope.` Commands in that folder then use the new index. An index covers a folder when it holds one
+  repository, or when the folder lies in one of its repositories.
+- **`status` looks up the same way,** but it asks no server whether it keeps a folder, and it counts an index of
+  another format or one that cannot be read as the index of that folder, so that it can say what is wrong with it.
+- **The other commands** work on the current folder: `info --structure`, `doctor`, `trust`, `workspace`, `serve`,
+  `service`, `mcp` and `benchmark`.
+- A repository registered with [`kscope workspace add`](#workspace) lies outside the workspace root, so a command run
+  inside it does not find that workspace. Pass `--workspace`.

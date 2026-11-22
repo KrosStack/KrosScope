@@ -6,6 +6,7 @@ import java.nio.file.Files
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class IndexProbeTest {
@@ -49,4 +50,41 @@ class IndexProbeTest {
 
         assertFalse(IndexProbe.hasArtifacts(file))
     }
+
+    @Test
+    fun `a missing file, an empty file and an index without files are no index`() = TempDirectory().use { directory ->
+        val missing = directory.path.resolve("missing.db")
+        val empty = directory.path.resolve("empty.db").also { Files.write(it, ByteArray(0)) }
+        val withoutFiles = directory.path.resolve("index.db")
+        openedStore(withoutFiles).close()
+
+        assertEquals(IndexState.Absent, IndexProbe.inspect(missing))
+        assertEquals(IndexState.Absent, IndexProbe.inspect(empty))
+        assertEquals(IndexState.Absent, IndexProbe.inspect(withoutFiles))
+    }
+
+    @Test
+    fun `an index of another schema version says which version it has and is left as it is`() =
+        TempDirectory().use { directory ->
+            val file = directory.path.resolve("index.db")
+            openedStore(file).use { it.replace(Samples.batch) }
+            java.sql.DriverManager.getConnection("jdbc:sqlite:$file").use { connection ->
+                connection.createStatement().use { it.execute("PRAGMA user_version = ${Schema.VERSION - 1}") }
+            }
+            val before = Files.readAllBytes(file).contentHashCode()
+
+            assertEquals(IndexState.OtherFormat(Schema.VERSION - 1, Schema.VERSION), IndexProbe.inspect(file))
+            assertEquals(before, Files.readAllBytes(file).contentHashCode())
+        }
+
+    @Test
+    fun `a file that is not a database is damaged, and an index with files is readable`() =
+        TempDirectory().use { directory ->
+            val broken = directory.path.resolve("broken.db").also { Files.writeString(it, "not a database") }
+            val file = directory.path.resolve("index.db")
+            openedStore(file).use { it.replace(Samples.batch) }
+
+            assertIs<IndexState.Damaged>(IndexProbe.inspect(broken))
+            assertEquals(IndexState.Readable, IndexProbe.inspect(file))
+        }
 }

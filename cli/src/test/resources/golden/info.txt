@@ -32,6 +32,11 @@ Index health
   Diagnostics   3
   Search index  populated
 
+Freshness
+  Scanned        <scanned>
+  Commits        0 behind, 0 not behind, 0 not checked
+  Working trees  1 behind, 0 not behind, 0 not checked (1 changed file, estimated from file times)
+
 Settings
   File         none
   Level        resolved (default)

@@ -13,11 +13,15 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.lookup.askedFrom
+import io.github.krosstack.kscope.cli.lookup.fromFolder
+import io.github.krosstack.kscope.cli.lookup.parentIndex
+import io.github.krosstack.kscope.cli.noteChoice
 import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.reportAmbiguity
-import io.github.krosstack.kscope.cli.requireNoDot
+import io.github.krosstack.kscope.cli.requireNoDiagramFormat
 import io.github.krosstack.kscope.cli.requireSections
-import io.github.krosstack.kscope.cli.resolve
+import io.github.krosstack.kscope.cli.resolveReading
 import io.github.krosstack.kscope.cli.text.RelatedText
 import io.github.krosstack.kscope.cli.textContext
 import io.github.krosstack.kscope.cli.useService
@@ -47,25 +51,27 @@ internal class RelatedCommand : CliktCommand(name = "related") {
     ).joinToString("\n")
 
     override fun run() {
-        val options = resolve(common, presentation = true)
-        requireNoDot(options.format)
+        val options = resolveReading(common, presentation = true)
+        requireNoDiagramFormat(options.format)
         requireSections(options, RelatedText.SECTIONS)
         forward(options)
+        val target = options.fromFolder(node)
         val answer = guarded {
             withProgress(options) { listener ->
                 useService(options, OpenOptions(progress = listener)) { scope ->
-                    scope.answerAbout(node, scope::related)
+                    scope.answerAbout(target, options.askedFrom(), scope::related)
                 }
             }
         }
+        noteChoice(answer, target, options)
         when (answer) {
-            is NodeAnswer.Ambiguous -> reportAmbiguity(answer, options.format)
+            is NodeAnswer.Ambiguous -> reportAmbiguity(answer, options)
 
             is NodeAnswer.Found -> echoResult(
                 if (options.format == OutputFormat.JSON) {
-                    ServiceJson.encode(answer.value, answer.level)
+                    ServiceJson.encode(answer.value, answer.level, options.parentIndex())
                 } else {
-                    RelatedText.render(answer.value, node, textContext(options, answer.locations))
+                    RelatedText.render(answer.value, target, textContext(options, answer.locations))
                 },
                 options.format,
             )

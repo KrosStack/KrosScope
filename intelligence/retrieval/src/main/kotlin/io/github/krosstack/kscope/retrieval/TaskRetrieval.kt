@@ -3,6 +3,7 @@ package io.github.krosstack.kscope.retrieval
 import io.github.krosstack.kscope.model.ArtifactRef
 import io.github.krosstack.kscope.model.NodeRef
 import io.github.krosstack.kscope.model.Relationship
+import io.github.krosstack.kscope.model.RepositoryId
 import io.github.krosstack.kscope.model.Resolution
 import io.github.krosstack.kscope.model.SymbolId
 import io.github.krosstack.kscope.retrieval.analysis.AnalysisFacts
@@ -17,31 +18,34 @@ import io.github.krosstack.kscope.retrieval.ranking.GraphRanking
 import io.github.krosstack.kscope.retrieval.ranking.LexicalSeeds
 import io.github.krosstack.kscope.retrieval.ranking.SymbolRanking
 import io.github.krosstack.kscope.spi.graph.GraphReader
-import io.github.krosstack.kscope.spi.search.SearchHit
 import io.github.krosstack.kscope.spi.search.SearchIndex
-import io.github.krosstack.kscope.spi.search.SearchQuery
 import io.github.krosstack.kscope.spi.search.SearchScope
 
-public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) {
+public class TaskRetrieval internal constructor(graph: GraphReader, search: SearchIndex, mostCandidates: Int) {
+    public constructor(graph: GraphReader, search: SearchIndex) : this(graph, search, SeedSearch.MOST_CANDIDATES)
+
     private val graph = RetrievalGraph(graph)
     private val queries = QueryAnalyzer(search)
     private val facts = AnalysisFacts(this.graph)
+    private val seeds = SeedSearch(this.graph, search, mostCandidates)
 
     public fun analyze(
         text: String,
         stage: RetrievalStage = RetrievalStage.FULL,
         ml: MlMode = MlMode.ON,
+        within: RepositoryId? = null,
     ): AnalysisResult {
+        val scope = RepositoryScope(graph, within)
         val query = queries.analyze(text)
-        val symbols = search(query, SearchScope.SYMBOLS, SYMBOL_LIMIT)
-        val artifacts = search(query, SearchScope.ARTIFACTS, ARTIFACT_LIMIT)
+        val symbols = seeds.find(query, SearchScope.SYMBOLS, SYMBOL_LIMIT, scope)
+        val artifacts = seeds.find(query, SearchScope.ARTIFACTS, ARTIFACT_LIMIT, scope)
         val propagated = if (stage == RetrievalStage.LEXICAL) {
             emptyMap()
         } else {
-            GraphRanking(graph).rank(LexicalSeeds.weights(symbols, artifacts))
+            scope.scores(GraphRanking(graph).rank(LexicalSeeds.weights(symbols.hits, artifacts.hits)))
         }
-        val files = FileRanking(graph).rank(query, symbols, artifacts, stage, propagated)
-        val ranked = SymbolRanking(graph).rank(symbols, propagated, stage)
+        val files = FileRanking(graph, within).rank(query, symbols.hits, artifacts.hits, stage, propagated)
+        val ranked = scope.symbols(SymbolRanking(graph).rank(symbols.hits, propagated, stage))
         val edits = files.filter { it.role == FileRole.EDIT }
         val tests = TestSelection(graph).select(edits)
         val semantic = if (stage == RetrievalStage.LEXICAL || ml == MlMode.OFF) {
@@ -49,7 +53,11 @@ public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) 
         } else {
             SemanticStatus.NOT_INSTALLED
         }
-        return result(query, files, ranked, tests).copy(semantic = semantic, stage = stage.name.lowercase())
+        return result(query, files, ranked, tests).copy(
+            semantic = semantic,
+            stage = stage.name.lowercase(),
+            searchCapped = symbols.capped || artifacts.capped,
+        )
     }
 
     public fun withFileRanking(result: AnalysisResult, fused: List<FileRankFusion.Match>): AnalysisResult {
@@ -57,7 +65,11 @@ public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) 
         val selected = files.map { it.artifact }.toSet()
         val symbols = result.symbols.filter { canonicalFile(it.symbol.id) in selected }
         val tests = TestSelection(graph).select(files.filter { it.role == FileRole.EDIT })
-        return result(result.query, files, symbols, tests).copy(semantic = result.semantic, stage = result.stage)
+        return result(result.query, files, symbols, tests).copy(
+            semantic = result.semantic,
+            stage = result.stage,
+            searchCapped = result.searchCapped,
+        )
     }
 
     public fun canonicalFile(symbol: SymbolId): ArtifactRef? = graph.file(NodeRef.OfSymbol(symbol))
@@ -84,29 +96,19 @@ public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) 
         )
     }
 
-    public fun symbol(text: String): SymbolResult {
+    public fun symbol(text: String, within: RepositoryId? = null): SymbolResult {
+        val scope = RepositoryScope(graph, within)
         val query = queries.analyze(text)
         val exact = graph.resolve(text).filterIsInstance<NodeRef.OfSymbol>().mapNotNull { graph.symbols[it.id] }
-        val hits = search(query, SearchScope.SYMBOLS, SYMBOL_LIMIT)
-        val propagated = GraphRanking(graph).rank(LexicalSeeds.weights(hits, emptyList()))
-        val lexical = SymbolRanking(graph).rank(hits, propagated, RetrievalStage.FULL)
+        val hits = seeds.find(query, SearchScope.SYMBOLS, SYMBOL_LIMIT, scope)
+        val propagated = scope.scores(GraphRanking(graph).rank(LexicalSeeds.weights(hits.hits, emptyList())))
+        val lexical = scope.symbols(SymbolRanking(graph).rank(hits.hits, propagated, RetrievalStage.FULL))
         val highest = lexical.maxOfOrNull { it.score } ?: 0.0
-        return SymbolResult(query, (exact.map { RankedSymbol(it, highest + 1) } + lexical).distinctBy { it.symbol.id })
+        val symbols = (exact.map { RankedSymbol(it, highest + 1) } + lexical).distinctBy { it.symbol.id }
+        return SymbolResult(query, symbols, hits.capped)
     }
 
     public fun impact(text: String): ImpactResult = ImpactAnalysis(graph).analyze(text)
-
-    private fun search(query: AnalyzedQuery, scope: SearchScope, limit: Int): List<SearchHit> {
-        val candidates = if (scope == SearchScope.ARTIFACTS) ARTIFACT_CANDIDATES else limit
-        val matches = search.search(SearchQuery(QueryAnalyzer.searchTerms(query), scope, candidates))
-        return matches.filter { hit -> usableSeed(hit.node) }.take(limit)
-    }
-
-    private fun usableSeed(node: NodeRef): Boolean {
-        val artifact = (node as? NodeRef.OfArtifact)?.let { graph.artifacts[it.ref] }
-        val generated = artifact?.generated
-        return generated == null || generated.sourceOfTruth != null
-    }
 
     private fun confidence(files: List<RankedFile>): String {
         val first = files.firstOrNull() ?: return "none"
@@ -127,7 +129,6 @@ public class TaskRetrieval(graph: GraphReader, private val search: SearchIndex) 
     private companion object {
         const val SYMBOL_LIMIT = 50
         const val ARTIFACT_LIMIT = 30
-        const val ARTIFACT_CANDIDATES = 100
         const val DETAIL_LIMIT = 15
         const val CLEAR_MARGIN = 1.2
         val LEXICAL_SIGNALS = setOf(SignalKind.LEXICAL_SYMBOL, SignalKind.LEXICAL_ARTIFACT)

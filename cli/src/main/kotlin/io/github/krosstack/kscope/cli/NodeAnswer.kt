@@ -2,6 +2,8 @@ package io.github.krosstack.kscope.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
+import io.github.krosstack.kscope.cli.lookup.IndexNotes
+import io.github.krosstack.kscope.cli.lookup.parentIndex
 import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.text.format.Column
 import io.github.krosstack.kscope.cli.text.format.NodeLabels
@@ -13,32 +15,51 @@ import io.github.krosstack.kscope.service.NodeResolution
 import io.github.krosstack.kscope.service.ScanLevel
 import io.github.krosstack.kscope.service.ServiceJson
 import io.github.krosstack.kscope.service.indexLevel
+import io.github.krosstack.kscope.service.lookup.SearchOrigin
 import io.github.krosstack.kscope.service.resolveNode
 import io.github.krosstack.kscope.service.workspaceLocations
 
 /** What a command that names a node got back: the answer, or the several nodes that the name could mean. */
 internal sealed interface NodeAnswer<out T> {
-    class Found<T>(val value: T, val locations: WorkspaceLocations, val level: ScanLevel?) : NodeAnswer<T>
+    class Found<T>(
+        val value: T,
+        val locations: WorkspaceLocations,
+        val level: ScanLevel?,
+        val chosenIn: String? = null,
+    ) : NodeAnswer<T>
 
     class Ambiguous(val resolution: NodeResolution, val level: ScanLevel?) : NodeAnswer<Nothing>
 }
 
 /** Resolves [query] to one node and asks [ask] about it; several candidates are returned for the caller to report. */
-internal fun <T> KrosScope.answerAbout(query: String, ask: (String) -> T): NodeAnswer<T> {
+internal fun <T> KrosScope.answerAbout(query: String, askedFrom: String?, ask: (String) -> T): NodeAnswer<T> {
     requireIndex()
-    val resolution = resolveNode(query)
-    return if (resolution.candidates.size > 1) {
+    return answerAbout(resolveNode(query, askedFrom), ask)
+}
+
+internal fun <T> KrosScope.answerAbout(resolution: NodeResolution, ask: (String) -> T): NodeAnswer<T> =
+    if (resolution.candidates.size > 1) {
         NodeAnswer.Ambiguous(resolution, indexLevel())
     } else {
-        NodeAnswer.Found(ask(resolution.candidates.single()), workspaceLocations(), indexLevel())
+        val answer = ask(resolution.candidates.single())
+        NodeAnswer.Found(answer, workspaceLocations(), indexLevel(), resolution.chosenIn)
     }
+
+internal fun CliktCommand.noteChoice(answer: NodeAnswer<*>, name: String, options: ResolvedOptions) {
+    val repository = (answer as? NodeAnswer.Found)?.chosenIn ?: return
+    echo(IndexNotes.chosen(name, repository, options.workspace), err = true)
 }
 
 /** Prints the candidates of an ambiguous name and ends the command with the usage exit code. */
-internal fun CliktCommand.reportAmbiguity(ambiguous: NodeAnswer.Ambiguous, format: OutputFormat): Nothing {
+internal fun CliktCommand.reportAmbiguity(
+    ambiguous: NodeAnswer.Ambiguous,
+    options: ResolvedOptions,
+    origin: SearchOrigin = SearchOrigin(),
+): Nothing {
     val resolution = ambiguous.resolution
-    if (format == OutputFormat.JSON) {
-        echoResult(ServiceJson.encode(resolution, ambiguous.level), format)
+    if (options.format == OutputFormat.JSON) {
+        val index = options.parentIndex()
+        echoResult(ServiceJson.encode(resolution, ambiguous.level, index, search = origin), options.format)
     } else {
         echo(ambiguityText(resolution))
     }

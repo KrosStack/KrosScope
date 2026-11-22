@@ -1,0 +1,290 @@
+{
+    "$ref": "#/$defs/io_github_krosstack_kscope_diagram_Diagram",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "urn:kscope:diagram:1",
+    "$defs": {
+        "io_github_krosstack_kscope_diagram_Diagram": {
+            "type": "object",
+            "properties": {
+                "edges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_diagram_DiagramEdge"
+                    }
+                },
+                "groups": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_diagram_DiagramGroup"
+                    }
+                },
+                "kind": {
+                    "type": "string",
+                    "enum": [
+                        "MODULES",
+                        "COMPONENTS",
+                        "SYMBOL"
+                    ]
+                },
+                "legend": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "nodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_diagram_DiagramNode"
+                    }
+                },
+                "omitted": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_diagram_Omission"
+                },
+                "reasons": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_diagram_ReasonNode"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "schemaVersion": {
+                    "const": 1
+                },
+                "indexLevel": {
+                    "type": "string",
+                    "enum": [
+                        "syntax",
+                        "resolved",
+                        "exact"
+                    ]
+                },
+                "indexLocation": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "title",
+                "nodes",
+                "groups",
+                "edges",
+                "reasons",
+                "omitted",
+                "legend",
+                "schemaVersion",
+                "indexLevel"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_diagram_DiagramEdge": {
+            "type": "object",
+            "properties": {
+                "byEvidence": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "byKind": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "byState": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "from": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "position": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "to": {
+                    "type": "string"
+                },
+                "weakest": {
+                    "type": "string",
+                    "enum": [
+                        "EXACT",
+                        "PROBABLE",
+                        "HEURISTIC",
+                        "UNRESOLVED",
+                        "NOT_ANALYSED"
+                    ]
+                }
+            },
+            "required": [
+                "from",
+                "to",
+                "label",
+                "weakest",
+                "byState",
+                "byEvidence"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_diagram_DiagramGroup": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "id",
+                "label",
+                "members"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_diagram_DiagramNode": {
+            "type": "object",
+            "properties": {
+                "group": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "kind": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "selected": {
+                    "type": "boolean"
+                },
+                "symbolId": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "description": "The id of the symbol this node stands for; symbol diagrams only."
+                }
+            },
+            "required": [
+                "id",
+                "label",
+                "kind",
+                "group"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_diagram_Omission": {
+            "type": "object",
+            "properties": {
+                "beyondDepth": {
+                    "type": "integer",
+                    "description": "Links from a symbol the walk did not follow: the depth limit, or a caller followed upstream only."
+                },
+                "callsNotDrawn": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    },
+                    "description": "Calls to targets that are no callable, not drawn, by target kind. A by-kind view of part of notCallable."
+                },
+                "linksByState": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "membersNotRead": {
+                    "type": "integer",
+                    "description": "Members not read: the read limit left their links unread. Counts members."
+                },
+                "nodes": {
+                    "type": "integer"
+                },
+                "notCallable": {
+                    "type": "integer",
+                    "description": "Links with a caller or target that is no callable: the call level draws callables only."
+                },
+                "notExpanded": {
+                    "type": "integer",
+                    "description": "Symbols not expanded: the walk stopped before it read their links. Counts symbols."
+                },
+                "notInType": {
+                    "type": "integer",
+                    "description": "Links with an end in no type: a top-level function, a file facade or a class the index lacks."
+                },
+                "stopped": {
+                    "type": "integer",
+                    "description": "Links to symbols not reached: the walk stopped at the node limit or the read limit."
+                },
+                "withinType": {
+                    "type": "integer",
+                    "description": "Links between two members of one type: a type has no edge to itself."
+                },
+                "withoutSymbol": {
+                    "type": "integer",
+                    "description": "Links with an end that has no symbol: an external library or an id the index lacks."
+                }
+            },
+            "required": [
+                "nodes",
+                "linksByState"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_diagram_ReasonNode": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "reason",
+                "count"
+            ],
+            "additionalProperties": false
+        }
+    }
+}

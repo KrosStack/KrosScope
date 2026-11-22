@@ -191,7 +191,7 @@ The published results are in [benchmarks](benchmarks/README.md). Their charts ar
 | Detekt reports `SingleBehavingType` | A file holds two classes, objects or interfaces that each have two or more functions. Move one into its own file; see the [code guidelines](code-guidelines.md#files-and-packages). |
 | `verifyModuleDependencies` fails | A module depends on one that the dependency rules forbid. See [architecture.md](architecture.md#module-map). |
 | Gradle cannot find a Java 17 toolchain | Install a JDK 17 where Gradle can find it. |
-| A query fails with `No index found` and exit code 1 | The workspace has no usable index. Run `kscope scan` in it first. |
+| A query fails with `No index found` and exit code 1 | The folder and its parent folders have no usable index. Run `kscope scan` in the workspace first. |
 | `scan --trust-build` falls back to the static model with a Java version warning | The build needs a newer JDK than the one running `kscope`. Run `kscope` on that JDK, or set `KSCOPE_GRADLE_JAVA_HOME` to its home directory; see [cli.md](cli.md#--trust-build). |
 | The index is unreadable | Run `kscope scan --rebuild`. The index is derived data and can be deleted at any time. |
 | A scan fails with a worker error | Run `kscope doctor`. For an out-of-memory error, set `KSCOPE_WORKER_HEAP` (default `2g`) or lower `KSCOPE_WORKERS`; see [cli.md](cli.md#environment-variables). |

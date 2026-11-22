@@ -3,8 +3,12 @@ package io.github.krosstack.kscope.cli
 import com.github.ajalt.clikt.testing.CliktCommandTestResult
 import com.github.ajalt.clikt.testing.test
 import com.github.ajalt.mordant.rendering.AnsiLevel
+import io.github.krosstack.kscope.cli.command.ScanRunner
+import io.github.krosstack.kscope.cli.freshness.PatientScans
 import io.github.krosstack.kscope.cli.progress.ProgressScreen
 import io.github.krosstack.kscope.cli.progress.TickerFactory
+import io.github.krosstack.kscope.cli.serve.ServeClient
+import io.github.krosstack.kscope.service.lookup.IndexLookup
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
@@ -19,7 +23,7 @@ internal fun writeFile(root: Path, relative: String, text: String) {
 
 /** A workspace with one module, one Kotlin file and one document: four artifacts, one module, two units. */
 internal fun <T> inWorkspace(block: (Path) -> T): T {
-    val root = Files.createTempDirectory("kscope-cli")
+    val root = Files.createTempDirectory("kscope-cli").toRealPath()
     try {
         writeFile(root, "settings.gradle.kts", "include(\":lib\")\n")
         writeFile(root, "lib/build.gradle.kts", "")
@@ -37,8 +41,16 @@ internal fun <T> inScannedWorkspace(block: (Path) -> T): T = inWorkspace { root 
     block(root)
 }
 
+internal val temporaryRoot: Path = Path.of(System.getProperty("java.io.tmpdir")).toRealPath()
+
+internal fun isolatedExecution(
+    directory: Path = Path.of("").toAbsolutePath(),
+    scanRunner: ScanRunner = PatientScans,
+): CommandExecution =
+    CommandExecution(directory, scanRunner = scanRunner, lookup = IndexLookup(temporaryRoot, ServeClient::serving))
+
 internal fun runKscope(vararg arguments: String): CliktCommandTestResult {
-    val command = KscopeCommand()
+    val command = KscopeCommand(execution = isolatedExecution())
     return command.test(arguments.toList()) { command.parseWithExitCodes(it) }
 }
 
@@ -49,7 +61,7 @@ internal fun runKscopeOnTerminal(
     variables: Map<String, String> = emptyMap(),
     width: Int = 79,
 ): CliktCommandTestResult {
-    val command = KscopeCommand()
+    val command = KscopeCommand(execution = isolatedExecution())
     return command.test(arguments.toList(), envvars = variables, ansiLevel = ansiLevel, width = width) {
         command.parseWithExitCodes(it)
     }
@@ -88,7 +100,7 @@ internal fun runKscope(environment: CliEnvironment, vararg arguments: String): C
     runKscopeWith(environment, arguments.toList())
 
 internal fun runKscopeWith(environment: CliEnvironment, arguments: List<String>): CliktCommandTestResult {
-    val command = KscopeCommand(environment)
+    val command = KscopeCommand(environment, isolatedExecution())
     return command.test(arguments) { command.parseWithExitCodes(it) }
 }
 

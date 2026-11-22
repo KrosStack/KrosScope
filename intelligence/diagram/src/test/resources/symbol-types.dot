@@ -1,0 +1,34 @@
+digraph diagram {
+  graph [label="Type relations of app.Checkout: 8 of 8 nodes, 7 of 9 links", labelloc=t];
+  rankdir=LR;
+  n1 [label="app.Checkout", style=filled, fillcolor=gold, penwidth=2];
+  n2 [label="app.Base"];
+  n3 [label="app.Checkout.Step"];
+  n4 [label="app.Ledger"];
+  n5 [label="app.Payable"];
+  n6 [label="app.Report"];
+  n7 [label="lib.Receipt"];
+  subgraph cluster_g1 {
+    label=":app";
+    n1;
+    n2;
+    n3;
+    n4;
+    n5;
+    n6;
+  }
+  subgraph cluster_g2 {
+    label=":lib";
+    n7;
+  }
+  r1 [label="kotlin.unresolved-reference (1)", shape=box, style=dotted];
+  n1 -> r1 [label="? calls; compiler=1; unresolved=1", style=dotted];
+  n1 -> n2 [label="extends; compiler=1; exact=1", style=solid, penwidth=3];
+  n3 -> n1 [label="depends; compiler=1; exact=1", style=solid];
+  n1 -> n4 [label="depends; compiler=2; exact=2", style=solid];
+  n1 -> n5 [label="implements; compiler=1; exact=1", style=solid, penwidth=3];
+  n6 -> n1 [label="depends; compiler=1; exact=1", style=solid];
+  n1 -> n7 [label="depends; compiler=2; exact=2", style=solid];
+  legend [label="solid: exact; dashed: probable, heuristic; dotted ?: unresolved, not-analysed; labels: relation; evidence counts; state counts; selected: chosen symbol; thick: inheritance; numbered: call position; depends: calls, references and type-uses between two types", shape=note];
+  footer [label="Omitted links: exact=0, probable=0, heuristic=0, unresolved=0, not-analysed=0; 1 links with an end in no type: a top-level function, a file facade or a class the index lacks; 1 links between two members of one type: a type has no edge to itself; 1 links from a symbol the walk did not follow: the depth limit, or a caller followed upstream only", shape=note];
+}

@@ -34,6 +34,17 @@ class FormatTest {
     }
 
     @Test
+    fun `an age is given in the largest whole unit`() {
+        assertEquals("0s", Format.age(0))
+        assertEquals("59s", Format.age(59))
+        assertEquals("1m", Format.age(60))
+        assertEquals("59m", Format.age(3_599))
+        assertEquals("1h", Format.age(3_600))
+        assertEquals("23h", Format.age(86_399))
+        assertEquals("2d", Format.age(2 * 86_400 + 5))
+    }
+
+    @Test
     fun `nouns agree with their number`() {
         assertEquals("1 file", Format.noun(1, "file"))
         assertEquals("2 files", Format.noun(2, "file"))

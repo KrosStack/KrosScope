@@ -4,10 +4,12 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.Context
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.obj
 import com.github.ajalt.clikt.parameters.groups.provideDelegate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
+import io.github.krosstack.kscope.cli.CliSession
 import io.github.krosstack.kscope.cli.ClientPaths
 import io.github.krosstack.kscope.cli.CommandGroup
 import io.github.krosstack.kscope.cli.ExitCodes
@@ -18,8 +20,9 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.lookup.IndexNotes
 import io.github.krosstack.kscope.cli.output.echoResult
-import io.github.krosstack.kscope.cli.requireNoDot
+import io.github.krosstack.kscope.cli.requireNoDiagramFormat
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.scanService
 import io.github.krosstack.kscope.cli.service.home.ServiceDirectory
@@ -78,9 +81,10 @@ internal class ScanCommand(name: String = "scan", compatibilityAlias: Boolean = 
 
     override fun run() {
         val options = resolve(common)
-        requireNoDot(options.format)
+        requireNoDiagramFormat(options.format)
         val asked = askedLevel()
         forward(options)
+        noteOuterIndex(options)
         val result = guarded {
             withProgress(options) { listener ->
                 scanService(options, openOptions(asked, listener, options.ml), rebuild, verify)
@@ -91,6 +95,13 @@ internal class ScanCommand(name: String = "scan", compatibilityAlias: Boolean = 
             options.format,
         )
         if (result.verification?.matches == false) throw ProgramResult(ExitCodes.VERIFICATION_MISMATCH)
+    }
+
+    private fun noteOuterIndex(options: ResolvedOptions) {
+        val session = currentContext.parent?.obj as? CliSession
+        val lookup = session?.execution?.takeIf { !it.serving && !options.quiet }?.lookup
+        val outer = lookup?.covering(options.workspace)
+        if (outer != null) echo(IndexNotes.covered(outer, options.workspace), err = true)
     }
 
     private fun askedLevel(): ScanLevel? {

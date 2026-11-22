@@ -45,6 +45,16 @@
                 "diagnostics": {
                     "type": "integer"
                 },
+                "indexFreshness": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_IndexFreshness"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
                 "indexLocation": {
                     "type": "string"
                 },
@@ -175,6 +185,81 @@
                 "sourceSets",
                 "targets",
                 "variants"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_freshness_FreshnessCounts": {
+            "type": "object",
+            "properties": {
+                "behind": {
+                    "type": "integer"
+                },
+                "notBehind": {
+                    "type": "integer"
+                },
+                "notChecked": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "behind",
+                "notBehind",
+                "notChecked"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_freshness_IndexFreshness": {
+            "type": "object",
+            "properties": {
+                "changedFiles": {
+                    "type": "integer"
+                },
+                "commits": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_FreshnessCounts"
+                },
+                "estimate": {
+                    "type": "boolean"
+                },
+                "reason": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "scannedAt": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "behind",
+                        "not-behind",
+                        "not-checked"
+                    ]
+                },
+                "workingTrees": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_FreshnessCounts"
+                }
+            },
+            "required": [
+                "state",
+                "scannedAt",
+                "commits",
+                "workingTrees",
+                "changedFiles",
+                "estimate",
+                "reason"
             ],
             "additionalProperties": false
         },

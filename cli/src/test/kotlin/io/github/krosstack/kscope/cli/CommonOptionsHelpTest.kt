@@ -38,10 +38,10 @@ class CommonOptionsHelpTest {
     }
 
     @Test
-    fun `dot is advertised by graph and by no other command except the root`() {
+    fun `dot is advertised by graph and diagram and by no other command except the root`() {
         val advertising = allCommandPaths().filter { dotWord.containsMatchIn(helpOf(it)) }
 
-        assertEquals(listOf(listOf("graph")), advertising)
+        assertEquals(setOf(listOf("graph"), listOf("diagram")), advertising.toSet())
         assertTrue(dotWord.containsMatchIn(helpOf(emptyList())))
     }
 
@@ -67,7 +67,8 @@ class CommonOptionsHelpTest {
         val detail = runKscope("context", "a task", "--detail", "brief", "--workspace", root)
 
         assertEquals(2, dot.statusCode, dot.output)
-        assertTrue(dot.stderr.contains("--format dot is available for the graph command only."), dot.stderr)
+        val only = "--format dot is available for the graph and diagram commands only."
+        assertTrue(dot.stderr.contains(only), dot.stderr)
         assertEquals(2, detail.statusCode, detail.output)
         assertTrue(detail.stderr.contains("--detail and --sections are available for analyze"), detail.stderr)
     }
@@ -94,10 +95,12 @@ class CommonOptionsHelpTest {
             listOf("context") to query + listOf("--no-ml", "--ml"),
             listOf("impact") to query,
             listOf("graph") to query,
+            listOf("diagram") to query,
             listOf("analyze") to query + listOf("--detail", "--sections", "--no-ml", "--ml", "--stage"),
             listOf("symbol") to query + listOf("--detail", "--sections"),
             listOf("related") to query + listOf("--detail", "--sections"),
             listOf("info") to listOf("--workspace", "--format", "--no-server"),
+            listOf("status") to listOf("--workspace", "--format"),
             listOf("doctor") to listOf("--workspace", "--format"),
             listOf("benchmark") to listOf("--workspace", "--format"),
             listOf("mcp") to listOf("--workspace", "--no-server"),

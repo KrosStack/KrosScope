@@ -1,0 +1,205 @@
+{
+    "kind": "SYMBOL",
+    "title": "Type relations of app.Checkout: 8 of 8 nodes, 7 of 9 links",
+    "nodes": [
+        {
+            "id": "n1",
+            "label": "app.Checkout",
+            "kind": "kotlin.class",
+            "group": "g1",
+            "selected": true,
+            "symbolId": "kscope gradle alpha//:app main Checkout#"
+        },
+        {
+            "id": "n2",
+            "label": "app.Base",
+            "kind": "kotlin.class",
+            "group": "g1",
+            "symbolId": "kscope gradle alpha//:app main Base#"
+        },
+        {
+            "id": "n3",
+            "label": "app.Checkout.Step",
+            "kind": "kotlin.class",
+            "group": "g1",
+            "symbolId": "kscope gradle alpha//:app main Checkout#Step#"
+        },
+        {
+            "id": "n4",
+            "label": "app.Ledger",
+            "kind": "kotlin.class",
+            "group": "g1",
+            "symbolId": "kscope gradle alpha//:app main Ledger#"
+        },
+        {
+            "id": "n5",
+            "label": "app.Payable",
+            "kind": "kotlin.interface",
+            "group": "g1",
+            "symbolId": "kscope gradle alpha//:app main Payable#"
+        },
+        {
+            "id": "n6",
+            "label": "app.Report",
+            "kind": "kotlin.class",
+            "group": "g1",
+            "symbolId": "kscope gradle alpha//:app main Report#"
+        },
+        {
+            "id": "n7",
+            "label": "lib.Receipt",
+            "kind": "kotlin.class",
+            "group": "g2",
+            "symbolId": "kscope gradle alpha//:lib main Receipt#"
+        }
+    ],
+    "groups": [
+        {
+            "id": "g1",
+            "label": ":app",
+            "members": [
+                "n1",
+                "n2",
+                "n3",
+                "n4",
+                "n5",
+                "n6"
+            ]
+        },
+        {
+            "id": "g2",
+            "label": ":lib",
+            "members": [
+                "n7"
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "from": "n1",
+            "to": "r1",
+            "label": "calls; compiler=1; unresolved=1",
+            "weakest": "UNRESOLVED",
+            "byState": {
+                "UNRESOLVED": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n2",
+            "label": "extends; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            }
+        },
+        {
+            "from": "n3",
+            "to": "n1",
+            "label": "depends; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "byKind": {
+                "calls": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n4",
+            "label": "depends; compiler=2; exact=2",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 2
+            },
+            "byEvidence": {
+                "COMPILER": 2
+            },
+            "byKind": {
+                "calls": 2
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n5",
+            "label": "implements; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            }
+        },
+        {
+            "from": "n6",
+            "to": "n1",
+            "label": "depends; compiler=1; exact=1",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 1
+            },
+            "byEvidence": {
+                "COMPILER": 1
+            },
+            "byKind": {
+                "calls": 1
+            }
+        },
+        {
+            "from": "n1",
+            "to": "n7",
+            "label": "depends; compiler=2; exact=2",
+            "weakest": "EXACT",
+            "byState": {
+                "EXACT": 2
+            },
+            "byEvidence": {
+                "COMPILER": 2
+            },
+            "byKind": {
+                "references": 1,
+                "type-uses": 1
+            }
+        }
+    ],
+    "reasons": [
+        {
+            "id": "r1",
+            "reason": "kotlin.unresolved-reference",
+            "count": 1
+        }
+    ],
+    "omitted": {
+        "nodes": 0,
+        "linksByState": {
+            "EXACT": 0,
+            "PROBABLE": 0,
+            "HEURISTIC": 0,
+            "UNRESOLVED": 0,
+            "NOT_ANALYSED": 0
+        },
+        "notInType": 1,
+        "withinType": 1,
+        "beyondDepth": 1
+    },
+    "legend": [
+        "solid: exact",
+        "dashed: probable, heuristic",
+        "dotted ?: unresolved, not-analysed",
+        "labels: relation; evidence counts; state counts",
+        "selected: chosen symbol",
+        "thick: inheritance; numbered: call position",
+        "depends: calls, references and type-uses between two types"
+    ]
+}

@@ -16,8 +16,12 @@ import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.retrieval.RetrievalStage
 import io.github.krosstack.kscope.service.ArtifactKind
 import io.github.krosstack.kscope.service.KrosScope
+import io.github.krosstack.kscope.service.NodeResolution
 import io.github.krosstack.kscope.service.artifactKinds
 import io.github.krosstack.kscope.service.declarationsNamed
+import io.github.krosstack.kscope.service.lookup.RepositoryNarrowing
+import io.github.krosstack.kscope.service.lookup.SearchOrigin
+import io.github.krosstack.kscope.service.lookup.narrowingFor
 import io.github.krosstack.kscope.service.neighbourhood
 import io.github.krosstack.kscope.service.resolveNode
 import io.github.krosstack.kscope.service.workspaceLocations
@@ -25,6 +29,8 @@ import io.github.krosstack.kscope.service.workspaceLocations
 /** What `analyze` found out for its argument, with the first line that says how the argument was read. */
 internal sealed interface AnalyzeOutcome {
     val locations: WorkspaceLocations
+    val chosenIn: String? get() = null
+    val origin: SearchOrigin get() = SearchOrigin()
 
     fun render(text: String, context: TextContext): String
 
@@ -33,13 +39,18 @@ internal sealed interface AnalyzeOutcome {
         private val kinds: Map<ArtifactRef, ArtifactKind>,
         private val reading: String,
         override val locations: WorkspaceLocations,
+        override val origin: SearchOrigin,
     ) : AnalyzeOutcome {
         override fun render(text: String, context: TextContext): String =
             AnalyzeText.render(result, context, kinds, reading)
     }
 
-    class Card(private val card: UnitCard, private val reading: String, override val locations: WorkspaceLocations) :
-        AnalyzeOutcome {
+    class Card(
+        private val card: UnitCard,
+        private val reading: String,
+        override val locations: WorkspaceLocations,
+        override val chosenIn: String?,
+    ) : AnalyzeOutcome {
         override fun render(text: String, context: TextContext): String =
             UnitCardText.render(card, text, context, reading)
     }
@@ -53,16 +64,24 @@ internal sealed interface AnalyzeOutcome {
 }
 
 /** Asks the service what [routing] calls for: a card for a name or file, otherwise a task analysis. */
-internal fun KrosScope.analyzeAs(text: String, routing: Routing, ml: MlMode, stage: RetrievalStage): AnalyzeOutcome {
+internal fun KrosScope.analyzeAs(
+    text: String,
+    routing: Routing,
+    ml: MlMode,
+    stage: RetrievalStage,
+    askedFrom: String?,
+): AnalyzeOutcome {
+    val narrowing = narrowingFor(askedFrom)
     if (routing.reading == Reading.TASK) {
         if (!routing.requested) rejectPathWithoutDirectory(text)
-        return analyzeTask(text, Readings.TASK, ml, stage)
+        return analyzeTask(text, Readings.TASK, ml, stage, narrowing)
     }
-    val card = unitCard(routing.argument)
+    val resolution = resolveNode(routing.argument, askedFrom)
+    val card = unitCard(routing.argument, resolution)
     return when {
-        card != null -> AnalyzeOutcome.Card(card, readingOf(card, text), workspaceLocations())
+        card != null -> AnalyzeOutcome.Card(card, readingOf(card, text), workspaceLocations(), resolution.chosenIn)
         routing.requested -> AnalyzeOutcome.NoUnit
-        else -> analyzeTask(text, Readings.taskAfterMiss(text), ml, stage)
+        else -> analyzeTask(text, Readings.taskAfterMiss(text), ml, stage, narrowing)
     }
 }
 
@@ -74,13 +93,20 @@ private fun KrosScope.rejectPathWithoutDirectory(text: String) {
 private fun readingOf(card: UnitCard, text: String): String =
     if (card.kind == UnitCards.FILE_KIND) Readings.file(text) else Readings.name(text)
 
-private fun KrosScope.analyzeTask(text: String, reading: String, ml: MlMode, stage: RetrievalStage): AnalyzeOutcome {
-    val result = analyze(text, stage = stage, ml = ml)
-    return AnalyzeOutcome.Task(result, artifactKinds(AnalyzeText.relevantFiles(result)), reading, workspaceLocations())
+private fun KrosScope.analyzeTask(
+    text: String,
+    reading: String,
+    ml: MlMode,
+    stage: RetrievalStage,
+    narrowing: RepositoryNarrowing?,
+): AnalyzeOutcome {
+    val result = analyze(text, stage = stage, ml = ml, within = narrowing?.repository)
+    val kinds = artifactKinds(AnalyzeText.relevantFiles(result))
+    val origin = SearchOrigin.limited(narrowing, result.searchCapped)
+    return AnalyzeOutcome.Task(result, kinds, reading, workspaceLocations(), origin)
 }
 
-private fun KrosScope.unitCard(argument: String): UnitCard? {
-    val resolution = resolveNode(argument)
+private fun KrosScope.unitCard(argument: String, resolution: NodeResolution): UnitCard? {
     val node = resolution.candidates.first()
     val impact = impact(node)
     val neighbourhood = neighbourhood(node)

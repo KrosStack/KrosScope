@@ -13,10 +13,11 @@ import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ServeStatusTest {
-    private val documented = setOf("pid", "port", "token", "toolVersion", "protocol", "startTime")
+    private val documented = setOf("pid", "port", "token", "toolVersion", "protocol", "startTime", "processStart")
 
     private fun stored(root: Path): JsonObject =
         ServeWire.json.parseToJsonElement(Files.readString(ServeMetadata.file(root))).jsonObject
@@ -25,6 +26,25 @@ class ServeStatusTest {
     fun `serve json holds the same fields whether the server watches or not`() = inScannedWorkspace { root ->
         withTestServer(root) { assertEquals(documented, stored(root).keys) }
         withTestServer(root, ServeSettings(watchEnabled = true)) { assertEquals(documented, stored(root).keys) }
+    }
+
+    @Test
+    fun `serve json holds the start of the process of the server`() = inScannedWorkspace { root ->
+        withTestServer(root) { server ->
+            val started = ProcessHandle.current().info().startInstant().get()
+
+            assertEquals(started.toString(), server.metadata.processStart)
+            assertEquals(started.toString(), assertNotNull(ServeMetadata.read(root)).processStart)
+        }
+    }
+
+    @Test
+    fun `serve json written before the start of the process was recorded is still read`() = inScannedWorkspace { root ->
+        val earlier = """{"pid":1,"port":2,"token":"secret","toolVersion":"tool","protocol":1,"startTime":"then"}"""
+        Files.createDirectories(ServeMetadata.file(root).parent)
+        Files.writeString(ServeMetadata.file(root), earlier)
+
+        assertNull(assertNotNull(ServeMetadata.read(root)).processStart)
     }
 
     @Test
