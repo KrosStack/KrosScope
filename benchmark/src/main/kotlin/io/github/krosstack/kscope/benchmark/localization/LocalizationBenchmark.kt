@@ -3,6 +3,7 @@ package io.github.krosstack.kscope.benchmark.localization
 import io.github.krosstack.kscope.benchmark.graph.WorkspaceNames
 import io.github.krosstack.kscope.retrieval.AnalysisResult
 import io.github.krosstack.kscope.retrieval.FileRole
+import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.service.KrosScope
 import io.github.krosstack.kscope.spi.graph.WorkspaceStructure
 import kotlinx.serialization.json.Json
@@ -145,7 +146,12 @@ private class LocalizationEvaluator(
     }
 
     private fun retrieval(task: LocalizationTask, method: BenchmarkMethod): LocalizationMethodResult {
-        val result = scope.analyze(task.statement, requireNotNull(method.stage), includeContextEstimates = false)
+        val result = scope.analyze(
+            task.statement,
+            requireNotNull(method.stage),
+            includeContextEstimates = false,
+            ml = MlMode.OFF,
+        )
         val ranked = result.files.map { names.of(it.artifact) }
         val edits = result.files.filter { it.role == FileRole.EDIT }.map { names.of(it.artifact) }
         val scores = LocalizationMetrics.score(ranked, task, edits).copy(

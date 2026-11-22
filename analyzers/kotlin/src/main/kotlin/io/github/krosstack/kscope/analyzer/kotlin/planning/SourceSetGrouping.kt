@@ -15,12 +15,15 @@ internal class SourceSetGroup(
     val module: ModuleId,
     val members: List<SourceSet>,
     val platform: Platform,
+    owned: Set<SourceSetId> = members.map { it.id }.toSet(),
 ) {
     val isMainSide: Boolean = members.all { it.role == SourceSetRole.MAIN }
 
-    val ids: Set<SourceSetId> = members.map { it.id }.toSet()
+    val ids: Set<SourceSetId> = owned
 
-    fun contains(sourceSetName: String): Boolean = members.any { it.name == sourceSetName }
+    val hasContext: Boolean get() = members.any { it.id !in ids }
+
+    fun contains(sourceSetName: String): Boolean = members.any { it.id in ids && it.name == sourceSetName }
 }
 
 /** A source set's platform follows from its targets: one platform is that platform, several are common. */
@@ -56,7 +59,7 @@ internal object SourceSetGrouping {
         return ModuleLayout(listOfNotNull(defaultGroup) + others, defaultGroup)
     }
 
-    private fun defaultVariantOf(variants: List<Variant>): Variant? {
+    fun defaultVariantOf(variants: List<Variant>): Variant? {
         val sorted = variants.sortedBy { it.name }
         return sorted.firstOrNull { it.buildType == DEBUG } ?: sorted.firstOrNull()
     }

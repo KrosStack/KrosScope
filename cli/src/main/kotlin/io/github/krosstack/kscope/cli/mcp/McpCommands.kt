@@ -11,6 +11,7 @@ import io.github.krosstack.kscope.cli.KscopeCommand
 import io.github.krosstack.kscope.cli.parseWithExitCodes
 import io.github.krosstack.kscope.cli.progress.ProgressScreen
 import io.github.krosstack.kscope.cli.progress.TickerFactory
+import io.github.krosstack.kscope.retrieval.MlMode
 import java.io.Writer
 import java.nio.file.Path
 
@@ -34,7 +35,8 @@ internal class McpCommands(
         val command = KscopeCommand(environment, CommandExecution(workspace, scanRunner = settings.scanRunner))
         command.configureContext { readArgumentFile = null }
         val flags = listOf("--workspace", workspace.toString(), "--progress", "never") +
-            if (settings.noServer) listOf("--no-server") else emptyList()
+            (if (settings.noServer) listOf("--no-server") else emptyList()) +
+            if (settings.serve.ml == MlMode.OFF) listOf("--no-ml") else emptyList()
         val code = runCatching {
             command.parseWithExitCodes(flags + arguments)
             0

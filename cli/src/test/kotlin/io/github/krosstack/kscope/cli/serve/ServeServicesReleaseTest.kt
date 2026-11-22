@@ -20,7 +20,7 @@ class ServeServicesReleaseTest {
         changes: MutableList<Boolean> = mutableListOf(),
         block: (ServeServices) -> T,
     ): T {
-        val services = ServeServices(root, fakeScan, onLoadChange = { changes.add(it) })
+        val services = ServeServices(root, fakeScan, settings = ServeSettings(onLoadChange = { changes.add(it) }))
         try {
             services.warm()
             return block(services)

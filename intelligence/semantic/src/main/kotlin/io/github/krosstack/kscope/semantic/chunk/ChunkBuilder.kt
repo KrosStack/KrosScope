@@ -24,11 +24,33 @@ public class ChunkBuilder(cap: (String, Int) -> String) {
         }.sortedWith(compareBy({ it.key }, { KscopeJson.encodeToString(it.nodes) }))
 
     private fun chunks(artifact: Artifact, source: String, reader: GraphReader): List<Chunk> {
-        val symbols = reader.symbols(SymbolQuery(artifact = artifact.ref, limit = Int.MAX_VALUE))
+        val cursor = cursor(
+            artifact,
+            reader.symbols(SymbolQuery(artifact = artifact.ref, limit = Int.MAX_VALUE)),
+            source,
+        )
+        return buildList { while (!cursor.complete) addAll(cursor.next(1, MAX_SOURCE_BYTES)) }
+    }
+
+    public fun cursor(artifact: Artifact, symbols: List<Symbol>, source: String): ChunkCursor {
+        val canonical = symbols
             .filter { it.declaration?.artifact == artifact.ref && it.origin == SymbolOrigin.Source }
             .sortedBy { KscopeJson.encodeToString(it) }
+        return ChunkCursor(chunks(artifact, canonical, source).iterator())
+    }
+
+    private fun chunks(artifact: Artifact, symbols: List<Symbol>, source: String): Sequence<Chunk> = sequence {
         val lines = source.split('\n')
-        val chunks = symbols.mapNotNull { symbol -> symbolChunk(symbol, symbols, lines, artifact) }
+        for (siblings in symbols.groupBy { it.container }.values) {
+            val chunks = siblings.asSequence().mapNotNull {
+                symbolChunk(it, symbols, lines, artifact)
+            }
+            yieldAll(ChunkGroups(text).merge(chunks))
+        }
+        yield(fileChunk(artifact, symbols))
+    }
+
+    private fun fileChunk(artifact: Artifact, symbols: List<Symbol>): Chunk {
         val packages = symbols.filter { it.container == null }.mapNotNull {
             if (it.kind.category == SymbolCategory.PACKAGE) {
                 it.qualifiedName ?: it.name
@@ -37,13 +59,12 @@ public class ChunkBuilder(cap: (String, Int) -> String) {
             }
         }.filter { it.isNotEmpty() }.distinct().sorted()
             .joinToString("\n") { "package $it" }
-        val file = text.chunk(
+        return text.chunk(
             ChunkKind.FILE,
             text.outline("${artifact.ref.path.value}\n$packages", symbols),
             listOf(NodeRef.OfArtifact(artifact.ref)),
             artifact.ref,
         )
-        return ChunkGroups(text).merge(chunks, symbols) + file
     }
 
     private fun symbolChunk(symbol: Symbol, symbols: List<Symbol>, lines: List<String>, artifact: Artifact): Chunk? {

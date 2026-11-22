@@ -8,6 +8,7 @@ import io.github.krosstack.kscope.cli.text.format.Format
 import io.github.krosstack.kscope.cli.text.format.MatchStrength
 import io.github.krosstack.kscope.cli.text.format.RelevanceCutoff
 import io.github.krosstack.kscope.cli.text.format.Section
+import io.github.krosstack.kscope.cli.text.format.Selection
 import io.github.krosstack.kscope.cli.text.format.Table
 import io.github.krosstack.kscope.cli.text.format.TextContext
 import io.github.krosstack.kscope.cli.text.format.TextDocument
@@ -15,6 +16,7 @@ import io.github.krosstack.kscope.model.ArtifactRef
 import io.github.krosstack.kscope.retrieval.AnalysisResult
 import io.github.krosstack.kscope.retrieval.FileRole
 import io.github.krosstack.kscope.retrieval.RankedFile
+import io.github.krosstack.kscope.retrieval.SemanticStatus
 import io.github.krosstack.kscope.service.ArtifactKind
 
 /** The relevant files of a task analysis, split by what they are. */
@@ -31,7 +33,11 @@ internal data class Listing(
 
     companion object {
         fun of(result: AnalysisResult, kinds: Map<ArtifactRef, ArtifactKind>): Listing {
-            val selection = RelevanceCutoff.select(result.files) { it.score }
+            val selection = if (SemanticAnalyzeText.isApplied(result.semantic)) {
+                Selection(result.files, result.files.size)
+            } else {
+                RelevanceCutoff.select(result.files) { it.score }
+            }
             val byKind = selection.relevant.groupBy { kinds[it.artifact] ?: ArtifactKind.CODE }
             return Listing(
                 code = byKind[ArtifactKind.CODE].orEmpty(),
@@ -51,8 +57,8 @@ internal object AnalyzeLists {
     private const val SIGNALS_SHOWN = 2
     private const val MORE_RELEVANT = "more relevant (use --detail full to list them)"
 
-    fun render(listing: Listing, context: TextContext, document: TextDocument) {
-        top(listing, context, document)
+    fun render(listing: Listing, context: TextContext, document: TextDocument, semantic: SemanticStatus) {
+        if (!SemanticAnalyzeText.isApplied(semantic)) top(listing, context, document)
         files("Files to edit", Section.EDIT, listing.edit, context, document)
         files("Files to read", Section.READ, listing.read, context, document)
         documents(listing, context, document)

@@ -1,5 +1,6 @@
 package io.github.krosstack.kscope.benchmark.schema
 
+import io.github.krosstack.kscope.benchmark.context.ContextBenchmarkResult
 import io.github.krosstack.kscope.model.context.TokenCount
 import io.github.krosstack.kscope.retrieval.AnalysisResult
 import io.github.krosstack.kscope.service.ScanLevel
@@ -31,7 +32,13 @@ private class SchemaBuilder {
         val root = reference(descriptor)
         val key = key(descriptor)
         val shape = definitions.getValue(key)
-        val version = if (descriptor.serialName == AnalysisResult.serializer().descriptor.serialName) 2 else 1
+        val version = when (descriptor.serialName) {
+            AnalysisResult.serializer().descriptor.serialName,
+            ContextBenchmarkResult::class.java.name,
+            -> 2
+
+            else -> 1
+        }
         val own = shape.getValue("properties").jsonObject.filterKeys { level == LevelField.NONE || it != "indexLevel" }
         val properties = own + ("schemaVersion" to obj("const" to JsonPrimitive(version))) + levelProperty(level)
         val required = shape.getValue("required").jsonArray + JsonPrimitive("schemaVersion") +

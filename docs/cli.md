@@ -18,12 +18,12 @@ ones listed for it here.
 | `--sections LIST` | Prints only these sections, a comma-separated list. Text and markdown only. | All | `analyze`, `symbol`, `related` |
 | `--task-file FILE` | Reads the task from a UTF-8 file; see [Text encodings](#text-encodings). | None | `analyze`, `context` |
 | `--no-server` | Answers without the server that [`serve`](#serve) or the [service](#service) runs for the workspace. | Off | `scan`, `context`, `analyze`, `info`, `symbol`, `impact`, `related`, `graph`, `mcp` |
-| `--no-ml`, `--ml on\|off` | Answers without learned signals when off; the JSON `semantic.state` says `off`. | `on` | `analyze` |
+| `--no-ml`, `--ml on\|off` | Answers without learned signals when off. Analysis JSON reports `semantic.state` as `off`; context JSON has no semantic status. A `scan` with it off builds no semantic index. | `on` | `analyze`, `context`, `scan` |
 | `--version`, `-h`, `--help` | Print the version, or the help of the tool or a command, and exit. | | |
 
 `--detail` and `--sections` on any other command, or with `--format json`, exit with 2. `--no-ml` wins over
-`--ml on` wherever they appear. With no learned provider installed, turning ML off changes only the JSON semantic
-status; rankings, context estimates and text output stay the same. `context` does not expose this control.
+`--ml on` wherever they appear. With no learned provider installed, turning ML off changes only the analysis JSON
+semantic status; rankings, context estimates and text output stay the same. Context output stays unchanged.
 
 ## Output formats
 
@@ -61,7 +61,7 @@ line for each stage that took a second or more, such as `Analysing sources: 68 u
 Builds the index in `.kscope`, or brings it up to date. It is the one command that indexes, and it is incremental.
 
 ```
-kscope scan [--rebuild] [--verify] [--level syntax|resolved|exact] [--trust-build]
+kscope scan [--rebuild] [--verify] [--level syntax|resolved|exact] [--trust-build] [--no-ml]
 ```
 
 Inside a Git work tree the files come from `git ls-files`, so `.gitignore` applies. Elsewhere the scan skips `.git`,
@@ -82,6 +82,31 @@ Inside a Git work tree the files come from `git ls-files`, so `.gitignore` appli
 Errors and warnings are listed under `Problems`; notes are only counted, and `--format json` lists all. An invalid
 [`kscope.toml`](#settings-file) stops the scan with exit 1 before it touches the index. `update` is a hidden alias of
 `scan` for old scripts.
+
+### Semantic index
+
+With the `semantic` and `semantic-model` [components](#components) installed and ML on, a scan also builds the
+semantic index of the code, the vectors that learned signals read. No other command builds it, and `--no-ml` or
+`--ml off` makes a scan skip it without opening the components. Nothing is added to the scan output or its JSON.
+
+- **A scan you run yourself** finishes the index before it returns, so it takes longer when many chunks changed. Only
+  chunks that no earlier vectors cover are embedded; a later scan of a nearby revision reuses the rest.
+- **A scan that [`serve`](#serve) runs**, forwarded or by `--watch`, returns once the graph is saved. The server then
+  finishes the semantic index between requests, one bounded batch at a time, even without `--watch`. A new scan takes
+  precedence: the unfinished work is dropped and planned again. A server works on a workspace only while its graph is
+  loaded, so one started without a scan finishes missing vectors after its first request, and one whose workspace was
+  released waits for the next request. `scan --no-ml` through a server stops this work until the next scan with ML on,
+  and a server started with `--no-ml` does none until then.
+- **The previous vectors stay in use** until a complete new set replaces them. A failed or interrupted job never
+  changes them and never fails the scan, which exits as it would without ML.
+- **Notices.** A failed job, or an installed worker that does not start, is reported on standard error after a scan
+  you run yourself, and `kscope serve --status` prints the same sentence for a server. Nothing is printed when there
+  is nothing to say, including when the components are not installed.
+- **Memory.** A worker holds 1.5 GiB of an allowance shared by all `kscope` processes on the machine: the larger of
+  1 GiB and a quarter of the physical memory, or the `worker-memory-mib` of
+  [`service.toml`](#the-files-of-the-service); a scan or a server that cannot read that file uses the default. A
+  server applies a changed value to a workspace when it next opens it, after its next scan or release. When the
+  allowance is used up, no worker starts and the notice says so.
 
 ### Levels
 
@@ -318,12 +343,26 @@ budget. Run `scan` first.
 
 ```
 kscope context [TASK] [--task-file FILE] [--budget TOKENS] [--level minimal|recommended|deep|full]
-               [--estimator o200k_base|cl100k_base|chars]
+               [--estimator o200k_base|cl100k_base|chars] [--no-ml | --ml on|off]
 kscope context "greet a person by name" --budget 4000 --format markdown > context.md
 ```
 
 The text format summarizes what was chosen, `--format markdown` prints the context itself for a prompt, and
 `--format json` prints the fragments with their evidence, source ranges, token counts and omissions with reasons.
+
+Learned ranking is on by default when the semantic components and a usable index generation are available.
+`--no-ml` or `--ml off` returns the structural package with unchanged JSON, Markdown and text output; no query worker
+starts. `--no-ml` wins over `--ml on`, including when given before the command. Without usable semantic data, the
+structural package is also unchanged. Queries never download components or build a semantic index.
+
+Context JSON remains schema 1: it contains the context package only, with no semantic status. Applied ranking can
+change the chosen fragments and relevance values. Service callers needing the request's status use
+`contextResult(ContextRequest)`; that status is separate from the package and its counted Markdown.
+Text prints `Semantic ranking: used` or `Semantic ranking: behind N chunks` only when ranking was applied. The
+status describes this request; it adds nothing to the Markdown package or its token count.
+
+A one-shot ML-on query opens and closes its query resources for that command. Use [`serve`](#serve) or the
+[service](#service) for repeated queries to reuse the loaded index and semantic worker between requests.
 
 | Option | What it does | Default |
 |---|---|---|
@@ -369,6 +408,16 @@ kscope analyze [TASK] [--task-file FILE] [--as task|symbol] [--stage full|lexica
 Task-analysis JSON includes `stage: "lexical"` only for lexical analysis; full analysis omits `stage`. Lexical
 analysis reports `semantic.state` as `"off"`, including with `--ml on`. Text, JSON and context estimates use the selected ranking.
 
+When learned ranking is applied, the `top` section is one **Ranked files** table in fused order, including code,
+documents and binary paths with their kinds. Standard and full detail show the complete fused top ten; brief shows
+the first five and points to full detail. A smaller candidate set shows fewer files. The relevance cut-off does not
+trim this list, and full detail does not append a structural tail. Text also reports `Semantic ranking: used` or
+`Semantic ranking: behind N chunks`, the number of current chunks without published vectors.
+
+Explicit `edit`, `read` and `documents` sections remain filtered views in the same relative order. Analysis JSON
+stays at schema 2 and contains the complete result regardless of text detail. Without applied ranking, text and JSON
+keep their existing output. A one-shot query may start the optional worker; `serve` reuses it across queries.
+
 ### Task or name
 
 The argument is read as a name when it is one token, without a space, and any of these holds:
@@ -398,7 +447,7 @@ to run, documents, the predicted scope of the change, gaps and the estimated con
 
 #### Relevance cut-off
 
-A ranked list shows only the items that pass one rule, using the scores of the result alone: an item is relevant when
+Except for applied task analysis, a ranked list shows only the items that pass one rule: an item is relevant when
 its score is at least 30% of the best score, and the three best always are. For `symbol` and `related` the node you
 asked about (an exact match, the node itself, the file that declares it) is always listed and the 30% is taken of the
 best of the others. A list longer than its row limit says `showing 10 of 25` and ends with `15 more relevant`; items
@@ -440,6 +489,7 @@ reading does not have exits with 2 and lists the available ones.
 `--sections a,b` prints only those sections, in their usual order; the first line belongs to `headline`. For example,
 `kscope analyze "..." --sections tests` prints the tests to run and nothing else. `top` is the short list `brief`
 shows; `standard` does not print it.
+Applied task analysis prints `top` at every detail level and shows the role and kind sections only when requested.
 
 | Command | Section names |
 |---|---|
@@ -725,25 +775,26 @@ They live in one directory: the system property `kscope.service.home`, else `KSC
 
 | File | What it holds |
 |---|---|
-| `service.toml` | The workspaces the service keeps and its two limits. You can edit it. |
+| `service.toml` | The workspaces the service keeps and its limits. You can edit it. |
 | `trust.toml` | The workspaces you trusted, by real path. Written by [`trust`](#trust). |
 | `workspaces.toml` | Registered repositories and artifact folders per workspace. Written by [`workspace`](#workspace) and [`workspace artifacts`](#workspace-artifacts). |
 | `scanned-checkouts.json` | The registered checkouts the last scan indexed, so a removed repository stays readable until the next scan. |
 | `service.json` | Process id, port, token and version of the running service. Deleted on stop; one left by a crash is ignored. |
 | `service.log`, `service.log.1`, `launch.args` | The log of a service started with `--log` (each line starts with the UTC time; the file starts anew with the service and moves to `service.log.1` at 1 MiB), and the arguments of the session entry. |
 
-`service.toml` has three keys, and `add` and `remove` keep them:
+`service.toml` has four keys, and `add` and `remove` keep them:
 
 | Key | What it does | Default |
 |---|---|---|
 | `workspaces` | A list of absolute paths with `/` as the separator: the workspaces to keep. | None |
 | `idle-minutes` | A whole number of minutes. A workspace with no request for this long is [released](#releasing-memory). 0 never releases for idleness. | 30 |
 | `memory-mib` | A whole number of MiB: the ceiling for the heap of the service. The service also releases when the heap in use after a collection is above 80% of the smaller of this and the maximum heap, checked every 10 seconds. 0 means no ceiling of its own. | None |
+| `worker-memory-mib` | A whole number of MiB, at least 1: the allowance for the [semantic workers](#semantic-index) of all `kscope` processes on the machine, scans you run yourself included. It does not limit a heap and is unrelated to `memory-mib`. | The larger of 1 GiB and a quarter of the physical memory |
 
 - `add` and `remove` write the list sorted and without duplicates. A running service reads the file again after each,
   so a hand-edited limit applies then or at the next start. Entries are compared as the directory they name.
-- A file that cannot be read, an unknown key, a wrong type, a negative number or a syntax error is reported with the
-  file and line, and the command exits with 1. A running service then keeps its workspaces and limits.
+- A file that cannot be read, an unknown key, a wrong type, a negative number, a `worker-memory-mib` of 0 or a
+  syntax error is reported with the file and line, and the command exits with 1. A running service then keeps its workspaces and limits.
 
 ### What the service is and is not
 
@@ -797,7 +848,7 @@ not start the server in the workspace directory needs `--workspace`.
 
 | Tool | Arguments | What the agent gets |
 |---|---|---|
-| `context` | `task`; `budget` (500 to 200,000 tokens, optional) | The source worth reading for the task, as Markdown. |
+| `context` | `task`; `budget` (500 to 200,000 tokens, optional); `ml` (boolean, optional, default `true`), forwarded as `--ml on\|off` | The source worth reading for the task, as Markdown. |
 | `analyze` | `query`; `detail` (`brief`, `standard` or `full`, optional); `ml` (boolean, optional, default `true`), forwarded as `--ml on\|off`; `stage` (`full` or `lexical`, optional, default `full`), forwarded as `--stage full\|lexical` | The files, modules and tests a task touches, or the card of one name or file. |
 | `symbol` | `name` | The declarations that match a name. |
 | `impact` | `node` | What a change to a symbol, file or module can affect. |
@@ -807,6 +858,9 @@ not start the server in the workspace directory needs `--workspace`.
 
 A result is one block of text: what the command prints on standard output, in Markdown where it has that, followed by
 any standard error line such as `Index is behind: ...`. A failing command gives a tool error with its message.
+
+Starting MCP with `--no-ml` or `--ml off` disables learned ranking for the session, including when a context or
+analyze call supplies `ml: true`.
 
 ### What an agent can and cannot do
 

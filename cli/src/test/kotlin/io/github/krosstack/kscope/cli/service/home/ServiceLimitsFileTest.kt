@@ -108,10 +108,13 @@ class ServiceLimitsFileTest {
     }
 
     @Test
-    fun `an unknown key is refused and the message lists the three keys`() = inServiceHome { home ->
+    fun `an unknown key is refused and the message lists the four keys`() = inServiceHome { home ->
         val message = refused(home, "idle-minute = 5\n")
 
         assertTrue(message.contains("unknown key \"idle-minute\""), message)
-        assertTrue(message.contains("\"workspaces\", \"idle-minutes\" and \"memory-mib\""), message)
+        assertTrue(
+            message.contains("\"workspaces\", \"idle-minutes\", \"memory-mib\" and \"worker-memory-mib\""),
+            message,
+        )
     }
 }

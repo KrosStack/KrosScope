@@ -1,0 +1,35 @@
+Read as a task (use --as symbol to look it up as a name).
+0 files to edit and 0 to read; 10 files scored; no strong match.
+  Semantic ranking  used
+
+  Task   anchor
+  Terms  anchor
+
+Ranked files
+  score  role  kind      file
+  0.032  edit  document  lib/docs/anchor-0.md
+  0.031  read  document  lib/docs/anchor-4.md
+  0.031  read  document  lib/docs/anchor-7.md
+  0.031  read  document  lib/docs/anchor-3.md
+  0.031  read  document  lib/docs/anchor-9.md
+  0.031  read  document  lib/docs/anchor-2.md
+  0.030  read  document  lib/docs/anchor-1.md
+  0.030  read  document  lib/docs/anchor-5.md
+  0.029  read  document  lib/docs/anchor-6.md
+  0.028  read  document  lib/docs/anchor-8.md
+
+Scope of the change
+  Crosses modules  no
+
+Boundaries and gaps
+  Boundary links     0
+  Boundary chains    0 paths
+  Unresolved nearby  0
+
+Context size
+  Minimal      144 tokens
+  Recommended  228 tokens
+  Deep         228 tokens
+  Full         284 tokens
+
+Next: kscope context "<task>" --budget 8000 compiles the source of these files.

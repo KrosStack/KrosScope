@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.cli.serve
 
 import io.github.krosstack.kscope.cli.serve.watch.WatchSettings
+import io.github.krosstack.kscope.retrieval.MlMode
 
 internal data class ServeSettings(
     val idleTimeoutMillis: Long = 0,
@@ -14,4 +15,6 @@ internal data class ServeSettings(
     val hosted: Boolean = false,
     val onLoadChange: (Boolean) -> Unit = {},
     val beforeExitResponse: () -> Unit = {},
+    val workerMemoryMib: () -> Long? = { null },
+    val ml: MlMode = MlMode.ON,
 )

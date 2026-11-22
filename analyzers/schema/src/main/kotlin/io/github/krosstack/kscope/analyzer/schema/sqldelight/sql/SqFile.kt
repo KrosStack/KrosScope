@@ -38,7 +38,12 @@ internal class SqStatement(
 }
 
 internal class SqFile(val imports: List<SqImport>, val statements: List<SqStatement>) {
-    val queries: List<SqStatement> get() = statements.filter { it.label != null && it.kind != SqKind.OTHER }
+    private val labelled: List<SqStatement> get() = statements.filter { it.label != null && it.kind != SqKind.OTHER }
+
+    val queries: List<SqStatement> get() = labelled.distinctBy { it.label }
+
+    /** The labelled statements that repeat the label of an earlier one; they are not queries. */
+    val repeatedQueries: List<SqStatement> get() = labelled - queries.toSet()
     val tables: List<SqStatement> get() = statements.filter { it.kind == SqKind.CREATE_TABLE }
 }
 

@@ -3,7 +3,9 @@ package io.github.krosstack.kscope.cli.mcp
 import io.github.krosstack.kscope.cli.command.ScanRunner
 import io.github.krosstack.kscope.cli.inScannedWorkspace
 import io.github.krosstack.kscope.cli.serve.ServeSettings
+import io.github.krosstack.kscope.retrieval.MlMode
 import io.github.krosstack.kscope.service.KrosScope
+import io.github.krosstack.kscope.service.semantic.SemanticIndexingMode
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.put
@@ -49,6 +51,24 @@ class McpSafetyTest {
             }
         }
     }
+
+    @Test
+    fun `a session started without ml scans without semantic indexing through either execution path`() =
+        inScannedWorkspace { root ->
+            val modes = mutableListOf<SemanticIndexingMode>()
+            val runner = ScanRunner { workspace, options, rebuild, verify ->
+                modes += options.semanticIndexing
+                KrosScope.open(workspace, options).use { it.scan(rebuild, verify) }
+            }
+            for (noServer in listOf(false, true)) {
+                val settings = McpSettings(noServer, ServeSettings(ml = MlMode.OFF), runner)
+                val lines = listOf(initialize(), rpc("tools/call", callParams("scan")))
+                val (replies, _) = mcpTranscript(root, lines, settings)
+                val result = replies[1].getValue("result").jsonObject
+                assertToolResult(result, false, false, toolText(result))
+            }
+            assertTrue(modes.size >= 2 && modes.all { it == SemanticIndexingMode.OFF }, modes.toString())
+        }
 
     @Test
     fun `scans never receive build trust rebuild or verify through either execution path`() =

@@ -121,7 +121,7 @@ class McpTranscriptTest {
             else -> emptyList()
         }
         val optional = when (name) {
-            "context" -> listOf("budget")
+            "context" -> listOf("budget", "ml")
             "analyze" -> listOf("detail", "ml", "stage")
             else -> emptyList()
         }

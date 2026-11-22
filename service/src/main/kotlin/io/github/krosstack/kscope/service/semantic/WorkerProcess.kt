@@ -1,26 +1,34 @@
 package io.github.krosstack.kscope.service.semantic
 
+import io.github.krosstack.kscope.service.semantic.process.WorkerDiagnostics
+import io.github.krosstack.kscope.service.semantic.query.QueryDeadline
 import io.github.krosstack.kscope.spi.embedding.EmbeddingProtocol
 import io.github.krosstack.kscope.spi.embedding.EmbeddingRequest
 import io.github.krosstack.kscope.spi.embedding.EmbeddingResponse
 import java.io.IOException
-import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.concurrent.thread
+import java.util.concurrent.locks.ReentrantLock
 import kotlin.time.Duration
 
-internal class WorkerProcess(command: List<String>, private val redact: (String) -> String = { it }) : AutoCloseable {
+internal class WorkerProcess(
+    command: List<String>,
+    private val redact: (String) -> String = { it },
+    routing: WorkerDiagnostics.Routing = WorkerDiagnostics.Routing(),
+    deadline: QueryDeadline? = null,
+) : AutoCloseable {
     private val process = try {
+        if (deadline?.expired() == true) throw IOException("Semantic query deadline expired before launch")
         ProcessBuilder(command).start()
     } catch (failure: IOException) {
         throw IOException(redact(failure.message.orEmpty()), failure)
     }
     private val closed = AtomicBoolean()
+    private val exchangeLock = ReentrantLock()
     private val input = process.inputStream.bufferedReader(Charsets.UTF_8)
     private val output = process.outputStream.bufferedWriter(Charsets.UTF_8)
     private val exchanges = Executors.newSingleThreadExecutor {
@@ -29,41 +37,31 @@ internal class WorkerProcess(command: List<String>, private val redact: (String)
     private val cleanup = Thread(::terminate, "semantic-cleanup")
     private val diagnostic = AtomicReference("")
     private var omittedCauses = 0
-    private val forwarded = ArrayBlockingQueue<String>(DIAGNOSTIC_LINES)
-    private val diagnostics = thread(isDaemon = true, name = "semantic-stderr") {
-        process.errorStream.bufferedReader(Charsets.UTF_8).use { stream ->
-            try {
-                stream.forEachLine {
-                    if (it.isNotBlank()) retainDiagnostic(redact(it).trim())
-                    forwarded.offer(it)
-                }
-            } catch (_: IOException) {
-                forwarded.offer("Semantic diagnostics stream closed")
-            }
-        }
-    }
+    private val queried = AtomicBoolean(deadline != null)
+    private val diagnostics = WorkerDiagnostics(
+        process,
+        routing,
+        { line -> if (line.isNotBlank()) retainDiagnostic(redact(line).trim()) },
+        closed::get,
+        deadline != null,
+    )
+    private val indexingDiagnostics = routing.indexing
 
     init {
         Runtime.getRuntime().addShutdownHook(cleanup)
-        thread(isDaemon = true, name = "semantic-stderr-forwarding") {
-            val target = System.err
-            while (!closed.get() || forwarded.isNotEmpty()) {
-                forwarded.poll(DIAGNOSTIC_DRAIN_MILLIS, TimeUnit.MILLISECONDS)?.let { target.println(it) }
-            }
-        }
     }
 
     private fun retainDiagnostic(line: String) {
         val previous = diagnostic.get()
-        val retained = (previous.removeSuffix(truncationMarker()) + "\n" + line).trim().lines().toMutableList()
+        val retained = (previous.removeSuffix(truncationMarker) + "\n" + line).trim().lines().toMutableList()
         var truncated = previous.endsWith(TRUNCATED)
         while (retained.indices.count { it != 0 && !retained[it].startsWith("Caused by:") } > DIAGNOSTIC_LINES ||
-            retained.joinToString("\n").length > DIAGNOSTIC_CHARACTERS - if (truncated) truncationMarker().length else 0
+            retained.joinToString("\n").length > DIAGNOSTIC_CHARACTERS - if (truncated) truncationMarker.length else 0
         ) {
             compactDiagnostic(retained)
             truncated = true
         }
-        diagnostic.set(retained.joinToString("\n") + if (truncated) truncationMarker() else "")
+        diagnostic.set(retained.joinToString("\n") + if (truncated) truncationMarker else "")
     }
 
     private fun compactDiagnostic(retained: MutableList<String>) {
@@ -78,7 +76,7 @@ internal class WorkerProcess(command: List<String>, private val redact: (String)
     }
 
     private fun shortenProtectedDiagnostics(retained: MutableList<String>) {
-        val budget = DIAGNOSTIC_CHARACTERS - truncationMarker().length - retained.size + 1
+        val budget = DIAGNOSTIC_CHARACTERS - truncationMarker.length - retained.size + 1
         var prefixCharacters = DIAGNOSTIC_PREFIX_CHARACTERS
         while (prefixCharacters > DIAGNOSTIC_MIN_PREFIX_CHARACTERS &&
             retained.sumOf { minOf(it.length, prefixCharacters) } > budget
@@ -101,11 +99,11 @@ internal class WorkerProcess(command: List<String>, private val redact: (String)
         retained.indices.forEach { retained[it] = retained[it].take(maxOf(prefixes[it], lower)) }
     }
 
-    private fun truncationMarker(): String =
-        (if (omittedCauses == 0) "" else "\n[$omittedCauses cause headers omitted]") + TRUNCATED
+    private val truncationMarker: String
+        get() = (if (omittedCauses == 0) "" else "\n[$omittedCauses cause headers omitted]") + TRUNCATED
 
-    fun failureReason(reason: String): String {
-        val failure = runCatching { close() }.exceptionOrNull()
+    fun failureReason(reason: String, deadline: QueryDeadline? = null): String {
+        val failure = runCatching { close(deadline) }.exceptionOrNull()
         val retained = diagnostic.get()
         val original = if (retained.isNotEmpty() && reason.endsWith(retained)) {
             reason.removeSuffix(retained).removeSuffix("\n")
@@ -117,47 +115,119 @@ internal class WorkerProcess(command: List<String>, private val redact: (String)
         return detail
     }
 
-    @Synchronized
-    fun exchange(request: EmbeddingRequest, deadline: Duration): EmbeddingResponse {
-        check(!closed.get()) { "Semantic process is closed" }
-        val pending = exchanges.submit<EmbeddingResponse> {
-            output.write(EmbeddingProtocol.encode(request))
-            output.newLine()
-            output.flush()
-            EmbeddingProtocol.decodeResponse(input.readLine() ?: throw IOException("Semantic process exited"))
+    fun exchange(
+        request: EmbeddingRequest,
+        deadline: Duration,
+        absoluteQuery: QueryDeadline? = null,
+        queryDiagnostics: ((String) -> Unit)? = null,
+        ownsProcess: Boolean = true,
+    ): EmbeddingResponse {
+        val limit = System.nanoTime() + deadline.inWholeNanoseconds
+        val remaining = { absoluteQuery?.remaining()?.inWholeNanoseconds ?: maxOf(limit - System.nanoTime(), 0L) }
+        val acquired = try {
+            remaining().let { it > 0 && exchangeLock.tryLock(it, TimeUnit.NANOSECONDS) }
+        } catch (failure: InterruptedException) {
+            Thread.currentThread().interrupt()
+            throw IOException("Semantic process exchange interrupted", failure)
         }
+        if (!acquired) {
+            val reason = "Semantic process deadline exceeded while waiting for the previous exchange"
+            throw if (absoluteQuery == null) IOException(reason) else TimeoutException(reason)
+        }
+        try {
+            return exchangeLocked(request, remaining, absoluteQuery, queryDiagnostics, ownsProcess)
+        } finally {
+            exchangeLock.unlock()
+        }
+    }
+
+    private fun exchangeLocked(
+        request: EmbeddingRequest,
+        remainingNanos: () -> Long,
+        deadline: QueryDeadline?,
+        queryDiagnostics: ((String) -> Unit)?,
+        ownsProcess: Boolean,
+    ): EmbeddingResponse {
+        check(!closed.get()) { "Semantic process is closed" }
+        val limit = System.nanoTime() + remainingNanos()
+        val remaining = { maxOf(limit - System.nanoTime(), 0L) }
+        val pending = submit(request, remaining, deadline, queryDiagnostics)
         val failure = try {
-            val reply = pending.get(deadline.inWholeMilliseconds, TimeUnit.MILLISECONDS)
-            return if (reply is EmbeddingResponse.Failed) reply.copy(reason = failureReason(reply.reason)) else reply
+            val reply = pending.get(remaining(), TimeUnit.NANOSECONDS)
+            deadline?.requireRemaining()
+            return if (reply is EmbeddingResponse.Failed && deadline == null) {
+                reply.copy(reason = failureReason(reply.reason))
+            } else {
+                reply
+            }
         } catch (failure: TimeoutException) {
-            IOException("Semantic process deadline exceeded", failure)
+            failure
         } catch (failure: ExecutionException) {
             val cause = failure.cause
-            cause as? IOException ?: IOException("Semantic process exchange failed: ${cause?.message}", failure)
+            cause as? IOException ?: cause as? TimeoutException
+                ?: IOException("Semantic process exchange failed: ${cause?.message}", failure)
         } catch (failure: InterruptedException) {
             Thread.currentThread().interrupt()
             IOException("Semantic process exchange interrupted", failure)
+        } finally {
+            if (deadline != null) pending.cancel(false)
         }
-        val reason = runCatching { failureReason(failure.message.orEmpty()) }
-        reason.exceptionOrNull()?.let(failure::addSuppressed)
-        throw IOException(reason.getOrElse { it.message.orEmpty() }, failure)
+        throw exchangeFailure(failure, deadline, ownsProcess)
     }
 
-    override fun close() {
+    private fun submit(
+        request: EmbeddingRequest,
+        remainingNanos: () -> Long,
+        deadline: QueryDeadline?,
+        queryDiagnostics: ((String) -> Unit)?,
+    ) = exchanges.submit<EmbeddingResponse> {
+        check(!closed.get()) { "Semantic process is closed" }
+        deadline?.requireRemaining()
+        if (deadline != null) queried.set(true)
+        diagnostics.route(deadline != null, queryDiagnostics ?: indexingDiagnostics, remainingNanos)
+        output.write(EmbeddingProtocol.encode(request))
+        output.newLine()
+        output.flush()
+        EmbeddingProtocol.decodeResponse(input.readLine() ?: throw IOException("Semantic process exited"))
+    }
+
+    private fun exchangeFailure(failure: Exception, deadline: QueryDeadline?, ownsProcess: Boolean): Exception {
+        val reason = if (ownsProcess) {
+            runCatching { failureReason(failure.message ?: "Semantic process deadline exceeded", deadline) }
+        } else {
+            Result.success(failure.message.orEmpty())
+        }
+        reason.exceptionOrNull()?.let(failure::addSuppressed)
+        return deadline?.let { failure as? TimeoutException }
+            ?: IOException(reason.getOrElse { it.message.orEmpty() }, failure)
+    }
+
+    override fun close(): Unit = close(null)
+
+    fun close(deadline: QueryDeadline?) {
         if (!closed.compareAndSet(false, true)) return
         var interrupted = false
+        val remaining = {
+            deadline?.remaining()?.inWholeNanoseconds ?: TimeUnit.MILLISECONDS.toNanos(WorkerDiagnostics.DRAIN_MILLIS)
+        }
+        val closeStream: (AutoCloseable) -> Unit = if (deadline == null) {
+            { it.close() }
+        } else {
+            { stream -> exchanges.submit { stream.close() } }
+        }
         val steps = listOf<() -> Unit>(
             ::terminate,
             {
                 try {
-                    diagnostics.join(DIAGNOSTIC_DRAIN_MILLIS)
+                    diagnostics.await(remaining, queried.get())
                 } catch (_: InterruptedException) {
                     interrupted = true
                 }
             },
-            { exchanges.shutdownNow() },
-            { input.close() },
-            { output.close() },
+            { if (deadline == null) exchanges.shutdownNow() },
+            { closeStream(input) },
+            { closeStream(output) },
+            { exchanges.shutdown() },
             {
                 try {
                     Runtime.getRuntime().removeShutdownHook(cleanup)
@@ -188,7 +258,6 @@ internal class WorkerProcess(command: List<String>, private val redact: (String)
     }
 
     private companion object {
-        const val DIAGNOSTIC_DRAIN_MILLIS = 1000L
         const val DIAGNOSTIC_LINES = 16
         const val DIAGNOSTIC_CHARACTERS = 2048
         const val DIAGNOSTIC_PREFIX_CHARACTERS = 160

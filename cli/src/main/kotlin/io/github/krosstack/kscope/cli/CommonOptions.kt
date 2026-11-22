@@ -29,7 +29,7 @@ internal class RootOptions(
 ) : OptionGroup(COMMON_OPTIONS) {
     val noMl: Boolean by option(
         "--no-ml",
-        help = "Answers without learned signals; the `semantic` object of the JSON says `off`",
+        help = "Answers without learned signals.",
         hidden = hides(SharedOption.ML),
     ).flag()
 

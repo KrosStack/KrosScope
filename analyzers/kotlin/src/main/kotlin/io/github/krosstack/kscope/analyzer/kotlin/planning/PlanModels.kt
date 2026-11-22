@@ -28,8 +28,10 @@ internal class AnalysisPlan(
     val modules: List<WorkerModule>,
     val dependenciesAssumed: Boolean,
     val reach: HeuristicReach,
+    ownedSourceSets: Set<SourceSetId>,
 ) {
     val fingerprints: Map<SourceSetId, Fingerprint> =
-        modules.flatMap { it.sourceSets }.associate { it.sourceSet to it.fingerprint }
+        modules.flatMap { it.sourceSets }.filter { it.sourceSet in ownedSourceSets }
+            .associate { it.sourceSet to it.fingerprint }
     val assumptionAnnouncer: SourceSetId? = fingerprints.keys.minByOrNull { it.value }.takeIf { dependenciesAssumed }
 }

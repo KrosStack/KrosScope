@@ -76,6 +76,17 @@ object FakeEmbeddingMain {
         is EmbeddingRequest.Cancel -> null
 
         EmbeddingRequest.Shutdown -> null
+    }.also { writeDiagnostic(request, mode) }
+
+    private fun writeDiagnostic(request: EmbeddingRequest, mode: String) {
+        if (mode == "burst-stderr" && request is EmbeddingRequest.Embed) {
+            repeat(64) { System.err.println("Diagnostic $it: " + "x".repeat(1024)) }
+        } else if (mode == "partial-stderr" && request is EmbeddingRequest.Embed && request.query) {
+            System.err.print("partial requestId=query")
+            System.err.flush()
+        } else if (mode == "request-stderr" || (mode == "partial-stderr" && request is EmbeddingRequest.Handshake)) {
+            System.err.println("Request: $request")
+        }
     }
 
     private fun embedding(request: EmbeddingRequest.Embed, mode: String): EmbeddingResponse? = when {

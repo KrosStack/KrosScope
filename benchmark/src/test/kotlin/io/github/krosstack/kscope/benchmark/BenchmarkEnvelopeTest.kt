@@ -39,6 +39,6 @@ class BenchmarkEnvelopeTest {
         )
         val encoded = Json.parseToJsonElement(BenchmarkJson.encode(context)).jsonObject
 
-        assertEquals("1", encoded.getValue("schemaVersion").jsonPrimitive.content)
+        assertEquals("2", encoded.getValue("schemaVersion").jsonPrimitive.content)
     }
 }

@@ -2,7 +2,11 @@ package io.github.krosstack.kscope.cli.service.home
 
 import java.util.concurrent.TimeUnit
 
-internal data class ServiceLimits(val idleMinutes: Long? = null, val memoryMib: Long? = null) {
+internal data class ServiceLimits(
+    val idleMinutes: Long? = null,
+    val memoryMib: Long? = null,
+    val workerMemoryMib: Long? = null,
+) {
     val idleMillis: Long get() = TimeUnit.MINUTES.toMillis(idleMinutes ?: DEFAULT_IDLE_MINUTES)
     val memoryBytes: Long get() = (memoryMib ?: 0L).coerceAtMost(MAXIMUM_MIB) * BYTES_PER_MIB
 

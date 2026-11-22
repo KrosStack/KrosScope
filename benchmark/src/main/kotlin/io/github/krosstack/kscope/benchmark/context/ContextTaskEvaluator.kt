@@ -1,5 +1,7 @@
 package io.github.krosstack.kscope.benchmark.context
 
+import io.github.krosstack.kscope.benchmark.context.identity.ContextAnalysisKey
+import io.github.krosstack.kscope.benchmark.context.identity.ContextPipelineIdentity
 import io.github.krosstack.kscope.benchmark.graph.WorkspaceNames
 import io.github.krosstack.kscope.benchmark.localization.BenchmarkSet
 import io.github.krosstack.kscope.benchmark.localization.PlainTextSearch
@@ -9,9 +11,14 @@ import io.github.krosstack.kscope.model.context.ContextInput
 import io.github.krosstack.kscope.model.context.ContextLevel
 import io.github.krosstack.kscope.model.context.ContextPackage
 import io.github.krosstack.kscope.model.context.TokenCount
-import io.github.krosstack.kscope.retrieval.RetrievalStage
+import io.github.krosstack.kscope.retrieval.MlMode
+import io.github.krosstack.kscope.retrieval.SemanticState
+import io.github.krosstack.kscope.retrieval.SemanticStatus
+import io.github.krosstack.kscope.semantic.store.GenerationCurrent
+import io.github.krosstack.kscope.semantic.store.GenerationStore
 import io.github.krosstack.kscope.service.KrosScope
 import io.github.krosstack.kscope.service.contextInput
+import java.nio.file.Path
 
 internal class ContextTaskEvaluator(
     private val scope: KrosScope,
@@ -21,11 +28,15 @@ internal class ContextTaskEvaluator(
     private val baselines: ContextBaselineIndexes,
 ) {
     private val names = WorkspaceNames.of(scope.graph())
+    private val generations = options.selection.pipeline?.let { GenerationStore(Path.of(scope.info().indexLocation)) }
+
+    private data class Input(val context: ContextInput, val semantic: SemanticStatus, val complete: Boolean)
 
     fun evaluate(
         task: ContextBenchmarkTask,
         gold: ResolvedContextGold,
         set: BenchmarkSet,
+        acceptsAbsentGold: Boolean,
     ): Map<TokenCount, TaskContextResult> {
         val trace = ContextProgressTrace(set, task.id, options.progress)
         val inputs = inputs(task.statement, trace)
@@ -37,7 +48,8 @@ internal class ContextTaskEvaluator(
                 trace.emit(ContextProgressBoundary.METHOD_STARTED, budget, method)
                 val context = packageFor(task.statement, method, budget, inputs, paths)
                 val scores = ContextMetrics.score(context, gold, documents, options.estimator, names)
-                ContextMethodResult(scores, context, costs[method] ?: compilerCosts()).also {
+                val semantic = options.selection.analysisKey(method)?.let { inputs.getValue(it).semantic }
+                ContextMethodResult(scores, context, costs[method] ?: compilerCosts(), semantic).also {
                     trace.emit(ContextProgressBoundary.METHOD_FINISHED, budget, method)
                 }
             }
@@ -50,7 +62,7 @@ internal class ContextTaskEvaluator(
                 gold.excludedMissingFiles,
                 gold.unmappedSymbols,
                 gold.files.map(names::of).sorted(),
-                valid(task, gold, methods),
+                valid(task, gold, methods, acceptsAbsentGold) && inputs.values.all { it.complete },
             )
         }
         return CompilerCoverageCosts.annotate(measured, options.methods)
@@ -71,29 +83,44 @@ internal class ContextTaskEvaluator(
         }
     }
 
-    private fun inputs(task: String, trace: ContextProgressTrace): Map<RetrievalStage, ContextInput> =
-        options.methods.mapNotNull { it.stage }.distinct().associateWith { stage ->
-            val method = options.methods.first { it.stage == stage }
+    private fun inputs(task: String, trace: ContextProgressTrace): Map<ContextAnalysisKey, Input> =
+        options.selection.analysisKeys.associateWith { key ->
+            val method = options.methods.first { options.selection.analysisKey(it) == key }
             trace.emit(ContextProgressBoundary.ANALYSIS_STARTED, method = method)
-            scope.analyze(task, stage, includeContextEstimates = false).contextInput().also {
+            val selected = key.ml == MlMode.OFF || matchesGeneration()
+            val analysis = scope.analyze(task, key.stage, includeContextEstimates = false, ml = key.ml)
+            val complete = key.ml == MlMode.OFF ||
+                (selected && complete(analysis.semantic, options.selection.pipeline) && matchesGeneration())
+            Input(scope.contextInput(analysis), analysis.semantic, complete).also {
                 trace.emit(ContextProgressBoundary.ANALYSIS_FINISHED, method = method)
             }
         }
+
+    private fun matchesGeneration(): Boolean {
+        val pipeline = options.selection.pipeline ?: return false
+        val selected = generations?.tryCurrent(pipeline.provider) as? GenerationCurrent.Current
+        return pipeline.generation?.let { selected?.name == "embeddings-${pipeline.provider}-${it.value}.bin" } ?: false
+    }
 
     private fun packageFor(
         task: String,
         method: ContextBenchmarkMethod,
         budget: TokenCount,
-        inputs: Map<RetrievalStage, ContextInput>,
+        inputs: Map<ContextAnalysisKey, Input>,
         paths: Map<ContextBenchmarkMethod, List<String>>,
-    ): ContextPackage = method.stage?.let { compiler.compile(inputs.getValue(it), ContextLevel.RECOMMENDED, budget) }
+    ): ContextPackage = options.selection.analysisKey(method)?.let {
+        compiler.compile(inputs.getValue(it).context, ContextLevel.RECOMMENDED, budget)
+    }
         ?: ContextFilePacker(documents, options.estimator, names).pack(task, paths.getValue(method), budget)
 
     private fun valid(
         task: ContextBenchmarkTask,
         gold: ResolvedContextGold,
         methods: Map<ContextBenchmarkMethod, ContextMethodResult>,
-    ): Boolean = task.id.isNotBlank() && task.statement.isNotBlank() && gold.files.size + gold.symbols.size > 0 &&
+        acceptsAbsentGold: Boolean,
+    ): Boolean = task.id.isNotBlank() && task.statement.isNotBlank() &&
+        task.gold.files.size + task.gold.symbols.size > 0 &&
+        (gold.files.size + gold.symbols.size > 0 || acceptsAbsentGold) &&
         methods.values.all { it.scores.sourceIssues.isEmpty() }
 
     private fun compilerCosts(): FullFileCoverageCosts = FullFileCoverageCosts(
@@ -101,8 +128,12 @@ internal class ContextTaskEvaluator(
         reason100 = COMPILER_COST_REASON,
     )
 
-    private companion object {
-        const val COMPILER_COST_REASON =
+    companion object {
+        fun complete(status: SemanticStatus?, pipeline: ContextPipelineIdentity?): Boolean =
+            status?.state == SemanticState.USED && status.behindChunks == 0 && pipeline != null &&
+                status.provider == pipeline.provider && status.model == pipeline.model
+
+        private const val COMPILER_COST_REASON =
             "The greedy compiler's minimal required budget was not measured; selection can be nonmonotonic."
     }
 }

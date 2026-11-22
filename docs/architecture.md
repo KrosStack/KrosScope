@@ -68,7 +68,8 @@ Dependency rules (enforced by the build):
 - `core/engine` depends on `core/model`, `core/spi`, `core/store`.
 - `components/semantic-worker` depends on `core/model` and `core/spi` only. ONNX Runtime is confined to that module.
 - `service` is the only module that sees everything except `cli` and `benchmark`. Product frontends depend on
-  `service`. The CLI also depends on `benchmark` for `kscope benchmark`; evaluation code and disposable lexical
+  `service`. The benchmark also reads `intelligence/semantic` for production chunking and indexing sessions.
+  The CLI also depends on `benchmark` for `kscope benchmark`; evaluation code and disposable lexical
   baselines live in `benchmark`, which reads the graph through `service`, `core/model` and `core/spi`.
 
 ## Internal representation

@@ -17,6 +17,7 @@ import io.github.krosstack.kscope.cli.RootOptions
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.SharedOption
 import io.github.krosstack.kscope.cli.resolve
+import io.github.krosstack.kscope.cli.service.home.ServiceDirectory
 import java.util.concurrent.TimeUnit
 
 internal class ServeCommand : CliktCommand(name = "serve") {
@@ -89,7 +90,14 @@ internal class ServeCommand : CliktCommand(name = "serve") {
     }
 
     private fun start(options: ResolvedOptions) = guarded {
-        val settings = ServeSettings(TimeUnit.MINUTES.toMillis(idleTimeout), watchEnabled = watch, mapEnabled = map)
+        val directory = ServiceDirectory.of(this)
+        val settings = ServeSettings(
+            TimeUnit.MINUTES.toMillis(idleTimeout),
+            watchEnabled = watch,
+            mapEnabled = map,
+            workerMemoryMib = { directory.file.workerMemoryMib() },
+            ml = options.ml,
+        )
         ServeServer.open(options.workspace, settings).use { server ->
             val hook = Thread({
                 server.requestStop()
