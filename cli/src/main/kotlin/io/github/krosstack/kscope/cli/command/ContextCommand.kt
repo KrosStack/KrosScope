@@ -16,18 +16,24 @@ import io.github.krosstack.kscope.cli.Located
 import io.github.krosstack.kscope.cli.OutputFormat
 import io.github.krosstack.kscope.cli.ResolvedOptions
 import io.github.krosstack.kscope.cli.RootOptions
-import io.github.krosstack.kscope.cli.forward
+import io.github.krosstack.kscope.cli.forwardWithoutNote
+import io.github.krosstack.kscope.cli.freshness.Staleness
+import io.github.krosstack.kscope.cli.freshness.warnBehind
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.lookup.Narrowed
+import io.github.krosstack.kscope.cli.lookup.askedFrom
+import io.github.krosstack.kscope.cli.lookup.parentIndex
 import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireIndex
-import io.github.krosstack.kscope.cli.requireNoDot
-import io.github.krosstack.kscope.cli.resolve
+import io.github.krosstack.kscope.cli.requireNoDiagramFormat
+import io.github.krosstack.kscope.cli.resolveReading
 import io.github.krosstack.kscope.cli.taskInput
 import io.github.krosstack.kscope.cli.text.ContextText
 import io.github.krosstack.kscope.cli.textContext
 import io.github.krosstack.kscope.cli.useService
+import io.github.krosstack.kscope.cli.withIndexNote
 import io.github.krosstack.kscope.cli.withProgress
 import io.github.krosstack.kscope.context.TokenEstimators
 import io.github.krosstack.kscope.model.context.ContextLevel
@@ -41,6 +47,8 @@ import io.github.krosstack.kscope.service.context.ContextRequest
 import io.github.krosstack.kscope.service.context.ContextResult
 import io.github.krosstack.kscope.service.contextResult
 import io.github.krosstack.kscope.service.leveled
+import io.github.krosstack.kscope.service.lookup.SearchOrigin
+import io.github.krosstack.kscope.service.lookup.narrowingFor
 import io.github.krosstack.kscope.service.workspaceLocations
 
 internal class ContextCommand : CliktCommand(name = "context") {
@@ -74,6 +82,8 @@ internal class ContextCommand : CliktCommand(name = "context") {
             "per token).",
     ).choice("o200k_base", "cl100k_base", "chars").default("o200k_base")
 
+    private val staleness = Staleness(this)
+
     override val helpTags = CommandGroup.tag(CommandGroup.ASK)
 
     override fun help(context: Context) = "Gathers the code worth reading for a task, within a token budget.\n\n" +
@@ -88,33 +98,57 @@ internal class ContextCommand : CliktCommand(name = "context") {
     ).joinToString("\n")
 
     override fun run() {
-        val options = resolve(common)
-        requireNoDot(options.format)
+        val options = resolveReading(common)
+        requireNoDiagramFormat(options.format)
         val text = guarded { taskInput(task, taskFile) }
-        forward(options)
-        val answer = guarded {
+        forwardWithoutNote(options)
+        val narrowed = guarded {
             withProgress(options) { listener -> compile(options, text, listener) }
         }
+        val answer = narrowed.value
         val located = answer.value
         val result = located.value
+        val behind = staleness.behind()
         echoResult(
             when (options.format) {
-                OutputFormat.JSON -> ServiceJson.encode(result.context, answer.level)
+                OutputFormat.JSON -> ServiceJson.encode(
+                    result.context,
+                    answer.level,
+                    options.parentIndex(),
+                    behind,
+                    narrowed.origin,
+                )
+
                 OutputFormat.MARKDOWN -> result.context.markdown
+
                 else -> ContextText.render(result.context, textContext(options, located.locations), result.semantic)
             },
             options.format,
         )
+        warnBehind(behind, options.format)
     }
 
     private fun compile(
         options: ResolvedOptions,
         text: String,
         listener: ProgressListener,
-    ): Leveled<Located<ContextResult>> = useService(options, OpenOptions(progress = listener)) {
-        it.requireIndex()
-        val tokens = TokenEstimators.create(TokenizerId(estimator))
-        val compiled = it.contextResult(ContextRequest(text, budget?.let(::TokenCount), level, tokens, ml = options.ml))
-        it.leveled(Located(compiled, it.workspaceLocations()))
+    ): Narrowed<Leveled<Located<ContextResult>>> = useService(options, OpenOptions(progress = listener)) { scope ->
+        withIndexNote(options) {
+            scope.requireIndex()
+            staleness.read(scope, options)
+            val narrowing = scope.narrowingFor(options.askedFrom())
+            val tokens = TokenEstimators.create(TokenizerId(estimator))
+            val request = ContextRequest(
+                text,
+                budget?.let(::TokenCount),
+                level,
+                tokens,
+                ml = options.ml,
+                within = narrowing?.repository,
+            )
+            val compiled = scope.contextResult(request)
+            val origin = SearchOrigin.limited(narrowing, compiled.searchCapped)
+            Narrowed(scope.leveled(Located(compiled, scope.workspaceLocations())), origin)
+        }
     }
 }

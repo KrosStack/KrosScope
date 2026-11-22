@@ -28,7 +28,7 @@
   0.053  README.md  lexical symbol, graph
 <ESC>[2m  Not listed: 2 images and other binary files.<ESC>[0m
 
-<ESC>[2m  20 more files scored below 30% of the best score (--format json lists all).<ESC>[0m
+<ESC>[2m  20 more files scored below 30% of the best score (--format json --detail full lists them).<ESC>[0m
 
 <ESC>[1mTests to run (2)<ESC>[0m
   data/settings/src/test/kotlin/sample/tasktide/data/settings/RoomPreferenceRepositoryTest.kt

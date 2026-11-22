@@ -88,5 +88,22 @@
       "origin": "default",
       "trusted": false
     }
+  },
+  "indexFreshness": {
+    "state": "not-behind",
+    "scannedAt": "<scanned>",
+    "commits": {
+      "behind": 0,
+      "notBehind": 0,
+      "notChecked": 0
+    },
+    "workingTrees": {
+      "behind": 0,
+      "notBehind": 1,
+      "notChecked": 0
+    },
+    "changedFiles": 0,
+    "estimate": true,
+    "reason": null
   }
 }

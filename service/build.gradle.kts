@@ -23,6 +23,7 @@ val kotlinWorkerRuntime = configurations.resolvable("kotlinWorkerRuntime") {
 dependencies {
     api(project(":intelligence:retrieval"))
     api(project(":intelligence:context"))
+    api(project(":intelligence:diagram"))
     implementation(project(":intelligence:semantic"))
     implementation(project(":core:model"))
     implementation(project(":core:spi"))

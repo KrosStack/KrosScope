@@ -1,0 +1,71 @@
+@media (min-width: 861px) {
+  .stage.wide { grid-template-columns: minmax(0, 0.36fr) minmax(0, 0.64fr); }
+}
+
+@media (max-width: 860px) {
+  .diagram-tools .widen { display: none; }
+}
+
+.diagram-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 6px 0 8px; font-size: 13px; }
+
+.depth { display: flex; border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+
+.depth button { border: 0; background: none; padding: 1px 11px; cursor: pointer; color: var(--ink-soft); }
+
+.depth button:hover { background: var(--glass-deep); }
+
+.depth button[aria-pressed="true"] { background: var(--glass-deep); color: var(--ink); box-shadow: inset 0 -2px 0 var(--hematoxylin); }
+
+.diagram-scroll { overflow: auto; max-height: 68vh; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; }
+
+.diagram-scroll svg { display: block; }
+
+.diagram-legend { display: flex; flex-wrap: wrap; gap: 3px 14px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--ink-soft); }
+
+.swatch { display: inline-block; width: 22px; margin-right: 5px; vertical-align: middle; border-top: 2px solid var(--ink-soft); }
+
+.swatch.probable { border-top-style: dashed; }
+
+.swatch.open { border-top: 2px dotted var(--eosin); }
+
+.swatch.inherit { border-top: 4px solid var(--ink); }
+
+.diagram-scroll .group rect { fill: none; stroke: var(--rule); stroke-width: 1; }
+
+.diagram-scroll .caption { fill: var(--ink-soft); font: 11px var(--mono); }
+
+.diagram-scroll .node rect { fill: var(--sheet); stroke: var(--ink-soft); stroke-width: 1; }
+
+.diagram-scroll .node text { fill: var(--ink); font: 12px var(--mono); pointer-events: none; }
+
+.diagram-scroll .node.clickable { cursor: pointer; }
+
+.diagram-scroll .node.clickable:hover rect { stroke: var(--hematoxylin); stroke-width: 2; }
+
+.diagram-scroll .node:focus { outline: none; }
+
+.diagram-scroll .node:focus-visible rect { stroke: var(--eosin); stroke-width: 3; }
+
+.diagram-scroll .node.selected rect { fill: var(--hematoxylin); stroke: var(--hematoxylin); stroke-width: 2; }
+
+.diagram-scroll .node.selected text { fill: var(--sheet); font-weight: 700; }
+
+.diagram-scroll .node.reason rect { stroke: var(--eosin); stroke-dasharray: 2 3; }
+
+.diagram-scroll .node.reason text { fill: var(--eosin); }
+
+.diagram-scroll .edge .line { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; }
+
+.diagram-scroll .edge.probable .line { stroke-dasharray: 6 4; }
+
+.diagram-scroll .edge.open .line { stroke: var(--eosin); stroke-dasharray: 1.5 4; stroke-linecap: round; }
+
+.diagram-scroll .edge.inherit .line { stroke: var(--ink); stroke-width: 3.5; }
+
+.diagram-scroll .edge .hit { fill: none; stroke: transparent; stroke-width: 12; pointer-events: stroke; }
+
+.diagram-scroll .edge:hover .line { stroke: var(--hematoxylin); }
+
+.diagram-scroll .edge-label { fill: var(--ink); font: 11px var(--mono); stroke: var(--sheet); stroke-width: 3px; stroke-linejoin: round; paint-order: stroke; pointer-events: none; }
+
+.diagram-scroll .arrow { fill: var(--ink-soft); }

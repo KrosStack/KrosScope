@@ -33,7 +33,7 @@ Status: Accepted · Date: YYYY-MM-DD
 | [0012](0012-context-package-and-budget.md) | Context package format and budget algorithm | Accepted |
 | [0013](0013-token-estimation.md) | Token estimation | Accepted |
 | [0014](0014-api-digests.md) | API digests for incremental analysis | Accepted |
-| [0015](0015-resident-service-and-settings.md) | A resident service, scan levels and a settings file per workspace | Accepted, implemented in 0.1.0 except the MCP arguments that narrow one query (decision 5); decision 2 amended by 0017; one item of decision 3 superseded by 0018 |
+| [0015](0015-resident-service-and-settings.md) | A resident service, scan levels and a settings file per workspace | Accepted, implemented in 0.1.0 except the MCP arguments that narrow one query (decision 5), though the command line narrows a search to the repository of the current folder since [0026](0026-repository-narrowing.md); decision 2 amended by 0017; one item of decision 3 superseded by 0018 |
 | [0016](0016-multi-repository-workspace.md) | A workspace of several repositories, linked by Maven coordinates | Accepted, implemented in 0.1.0; its coordinate links have gold classes and rows in the support matrix since [ADR 0020](0020-links-through-built-artifacts.md) |
 | [0017](0017-row-order-dropped.md) | Ordering on the query path without stored row order | Accepted |
 | [0018](0018-stored-trust-for-exact.md) | Stored trust per workspace for the exact level | Accepted |
@@ -41,4 +41,6 @@ Status: Accepted · Date: YYYY-MM-DD
 | [0020](0020-links-through-built-artifacts.md) | Repositories registered anywhere, linked through what they build for each other | Accepted; registration, JAR files, native library loads, OpenAPI and Wire specs, and web bundles implemented |
 | [0021](0021-browser-map.md) | A read-only map in the browser, served by `serve --map` | Accepted |
 | [0022](0022-optional-components.md) | Optional components from a pinned manifest | Proposed |
-| [0023](0023-semantic-search.md) | Semantic search and ranking | Accepted on DEV; TEST not yet scored |
+| [0023](0023-semantic-search.md) | Semantic search and ranking | Accepted on DEV; TEST scored 2026-11-22 |
+| [0024](0024-diagrams-from-links.md) | Diagrams of symbols, drawn only from stored links | Accepted |
+| [0026](0026-repository-narrowing.md) | A search answer is limited to the repository of the current folder | Accepted |

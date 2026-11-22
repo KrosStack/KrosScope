@@ -20,7 +20,7 @@ import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
 import io.github.krosstack.kscope.cli.output.echoResult
-import io.github.krosstack.kscope.cli.requireNoDot
+import io.github.krosstack.kscope.cli.requireNoDiagramFormat
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.text.BenchmarkText
 import io.github.krosstack.kscope.cli.textContext
@@ -70,7 +70,7 @@ internal class BenchmarkCommand : CliktCommand(name = "benchmark") {
 
     override fun run() {
         val options = resolve(common)
-        requireNoDot(options.format)
+        requireNoDiagramFormat(options.format)
         if (originalOnly && heldOut != null) throw UsageError("--original-only and --held-out cannot be combined.")
         val result = guarded {
             KrosScope.open(options.workspace).use { scope ->

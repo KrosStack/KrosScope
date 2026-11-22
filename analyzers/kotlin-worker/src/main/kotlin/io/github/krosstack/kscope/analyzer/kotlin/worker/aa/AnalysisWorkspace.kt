@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.analyzer.kotlin.worker.aa
 
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiJavaFile
 import io.github.krosstack.kscope.analyzer.kotlin.worker.plan.FileOwner
 import io.github.krosstack.kscope.analyzer.kotlin.worker.plan.FileOwners
 import io.github.krosstack.kscope.analyzer.kotlin.worker.plan.PlanProblem
@@ -33,5 +34,9 @@ internal class AnalysisWorkspace(
     val planProblems: List<PlanProblem>,
     private val release: () -> Unit,
 ) : AutoCloseable {
+    val javaPackages: JavaSourcePackages by lazy {
+        JavaSourcePackages(session.modulesWithFiles.values.flatten().filterIsInstance<PsiJavaFile>())
+    }
+
     override fun close() = release()
 }

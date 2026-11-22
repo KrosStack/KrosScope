@@ -2,12 +2,12 @@ package io.github.krosstack.kscope.cli.serve
 
 import com.github.ajalt.clikt.testing.test
 import io.github.krosstack.kscope.cli.ClientRendering
-import io.github.krosstack.kscope.cli.CommandExecution
 import io.github.krosstack.kscope.cli.KscopeCommand
 import io.github.krosstack.kscope.cli.RecordedEnvironment
 import io.github.krosstack.kscope.cli.command.ScanRunner
 import io.github.krosstack.kscope.cli.inScannedWorkspace
 import io.github.krosstack.kscope.cli.inWorkspace
+import io.github.krosstack.kscope.cli.isolatedExecution
 import io.github.krosstack.kscope.cli.parseWithExitCodes
 import io.github.krosstack.kscope.cli.runKscope
 import io.github.krosstack.kscope.cli.writeFile
@@ -29,7 +29,7 @@ class ServeScanTest {
             KrosScope.open(workspace, options).use { it.scan(rebuild, verify) }.copy(stageMillis = emptyMap())
         }
         val args = listOf("scan", "--rebuild", "--verify", "--progress", "never", "--format", "json")
-        val command = KscopeCommand(execution = CommandExecution(root, scanRunner = scan))
+        val command = KscopeCommand(execution = isolatedExecution(root, scan))
         val local = command.test(args) { command.parseWithExitCodes(it) }
         withTestServer(root, scanRunner = scan) { server ->
             for (name in listOf("scan", "update")) {

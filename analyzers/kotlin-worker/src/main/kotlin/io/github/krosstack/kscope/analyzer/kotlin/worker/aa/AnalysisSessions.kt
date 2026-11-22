@@ -22,7 +22,8 @@ import java.nio.file.Path
 /**
  * Builds one standalone session per request: a source module per [WorkerModule], with `dependsOn` edges kept,
  * regular dependencies expanded with each dependency's `dependsOn` closure, friends visible, and the Kotlin and Java
- * files of all its source sets together.
+ * files of all its source sets together. Java code resolves within the scope of its own module, as Kotlin does
+ * ([ModuleResolveScopes]).
  */
 internal object AnalysisSessions {
     fun open(modules: List<WorkerModule>): AnalysisWorkspace {
@@ -34,6 +35,7 @@ internal object AnalysisSessions {
             val session = buildStandaloneAnalysisAPISession(disposable, false) {
                 buildKtModuleProvider { addSourceModules(plan, synthetic, built) }
             }
+            ModuleResolveScopes.install(session.project)
             val owners = FileOwners(claims(modules, synthetic))
             val sourceSets = modules.flatMap { module ->
                 val found = session.modulesWithFiles[built[module.name]].orEmpty()

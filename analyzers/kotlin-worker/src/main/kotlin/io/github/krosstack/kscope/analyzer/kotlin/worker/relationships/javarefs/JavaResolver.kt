@@ -6,23 +6,26 @@ import com.intellij.psi.PsiField
 import com.intellij.psi.PsiJavaCodeReferenceElement
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiNewExpression
+import com.intellij.psi.PsiPackage
 import com.intellij.psi.PsiPolyVariantReference
 import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.Attempt
+import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.kotlinrefs.VisiblePackages
 import org.jetbrains.kotlin.asJava.elements.KtLightElement
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
  * Asks the Java front end what a reference stands for. A failure inside it is counted and the reference is left out,
  * so one odd construct cannot take the rest of the file with it.
  */
-internal class JavaResolver {
+internal class JavaResolver(private val packages: VisiblePackages) {
     var failures = 0
         private set
 
     /** Several valid results are ambiguous unless [severalAreFine], as with the members a static import names. */
     fun attemptOf(reference: PsiPolyVariantReference, severalAreFine: Boolean = false): Attempt<PsiElement> {
         val attempt = guarded {
-            val results = reference.multiResolve(false)
+            val results = reference.multiResolve(false).filter { isVisible(it.element) }
             val valid = results.filter { it.isValidResult }.mapNotNull { it.element }
             val isAccepted = valid.size == 1 || (valid.isNotEmpty() && severalAreFine)
             when {
@@ -63,6 +66,9 @@ internal class JavaResolver {
             else -> Constructor.Explicit(Attempt.Erroneous(declared.constructors.toList()))
         }
     }
+
+    private fun isVisible(element: PsiElement?): Boolean =
+        element !is PsiPackage || packages.exist(FqName(element.qualifiedName))
 
     private fun <T : Any> guarded(block: () -> T): T? = runCatching(block).getOrElse {
         if (it is OutOfMemoryError) throw it

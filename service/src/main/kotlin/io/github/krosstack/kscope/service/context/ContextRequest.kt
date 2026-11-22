@@ -1,6 +1,7 @@
 package io.github.krosstack.kscope.service.context
 
 import io.github.krosstack.kscope.context.TokenEstimators
+import io.github.krosstack.kscope.model.RepositoryId
 import io.github.krosstack.kscope.model.context.ContextLevel
 import io.github.krosstack.kscope.model.context.TokenCount
 import io.github.krosstack.kscope.retrieval.MlMode
@@ -14,4 +15,5 @@ public data class ContextRequest(
     public val estimator: TokenEstimator = TokenEstimators.create(),
     public val stage: RetrievalStage = RetrievalStage.FULL,
     public val ml: MlMode = MlMode.ON,
+    public val within: RepositoryId? = null,
 )

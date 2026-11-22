@@ -34,14 +34,20 @@ public fun KrosScope.context(request: ContextRequest): ContextPackage = compileC
 public fun KrosScope.contextResult(request: ContextRequest): ContextResult = compileContext(request)
 
 private fun KrosScope.compileContext(request: ContextRequest): ContextResult {
-    val ranked = rankedAnalysis(request.task, request.stage, includeContextEstimates = false, ml = request.ml)
+    val ranked = rankedAnalysis(
+        request.task,
+        request.stage,
+        includeContextEstimates = false,
+        ml = request.ml,
+        within = request.within,
+    )
     val analysis = ranked.result
     val context = progress.stage(QueryStages.COMPILE) {
         val compiler = ContextCompiler(graph(), readWorkspaceFiles(), request.estimator, countStore())
         compiler.compile(contextInput(analysis, null, ranked.structural), request.level, request.budget)
             .also { tokenCounts?.flush() }
     }
-    return ContextResult(context, analysis.semantic)
+    return ContextResult(context, analysis.semantic, analysis.searchCapped)
 }
 
 internal fun KrosScope.withContextEstimates(

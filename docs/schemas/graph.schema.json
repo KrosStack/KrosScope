@@ -394,6 +394,9 @@
                         "resolved",
                         "exact"
                     ]
+                },
+                "indexLocation": {
+                    "type": "string"
                 }
             },
             "required": [

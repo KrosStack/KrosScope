@@ -1,7 +1,7 @@
 {
-    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_AnalysisResult",
+    "$ref": "#/$defs/io_github_krosstack_kscope_service_analysis_AnalysisJson",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "urn:kscope:analysis:2",
+    "$id": "urn:kscope:analysis:3",
     "$defs": {
         "io_github_krosstack_kscope_model_ArtifactRef": {
             "type": "object",
@@ -602,120 +602,6 @@
             ],
             "additionalProperties": false
         },
-        "io_github_krosstack_kscope_retrieval_AnalysisResult": {
-            "type": "object",
-            "properties": {
-                "boundaries": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/io_github_krosstack_kscope_model_Relationship"
-                    }
-                },
-                "boundaryPaths": {
-                    "type": "array",
-                    "items": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/$defs/io_github_krosstack_kscope_model_Relationship"
-                        }
-                    }
-                },
-                "boundaryPathsTruncated": {
-                    "type": "boolean"
-                },
-                "confidence": {
-                    "type": "string"
-                },
-                "contextEstimates": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "integer",
-                        "minimum": 0
-                    }
-                },
-                "evidence": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "integer"
-                    }
-                },
-                "files": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedFile"
-                    }
-                },
-                "modules": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedModule"
-                    }
-                },
-                "query": {
-                    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_AnalyzedQuery"
-                },
-                "risks": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RiskFact"
-                    }
-                },
-                "scope": {
-                    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_ChangeScope"
-                },
-                "semantic": {
-                    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_SemanticStatus"
-                },
-                "stage": {
-                    "type": "string"
-                },
-                "symbols": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedSymbol"
-                    }
-                },
-                "tests": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedFile"
-                    }
-                },
-                "unresolved": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/io_github_krosstack_kscope_model_Relationship"
-                    }
-                },
-                "schemaVersion": {
-                    "const": 2
-                },
-                "indexLevel": {
-                    "type": "string",
-                    "enum": [
-                        "syntax",
-                        "resolved",
-                        "exact"
-                    ]
-                }
-            },
-            "required": [
-                "query",
-                "files",
-                "symbols",
-                "modules",
-                "tests",
-                "boundaries",
-                "scope",
-                "risks",
-                "unresolved",
-                "evidence",
-                "confidence",
-                "schemaVersion",
-                "indexLevel"
-            ],
-            "additionalProperties": false
-        },
         "io_github_krosstack_kscope_retrieval_AnalyzedQuery": {
             "type": "object",
             "properties": {
@@ -996,6 +882,219 @@
             "required": [
                 "signal",
                 "score"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_analysis_AnalysisJson": {
+            "type": "object",
+            "properties": {
+                "boundaries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_model_Relationship"
+                    }
+                },
+                "boundaryPaths": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/$defs/io_github_krosstack_kscope_model_Relationship"
+                        }
+                    }
+                },
+                "boundaryPathsTruncated": {
+                    "type": "boolean"
+                },
+                "confidence": {
+                    "type": "string"
+                },
+                "contextEstimates": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                },
+                "evidence": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedFile"
+                    }
+                },
+                "filesOmitted": {
+                    "type": "integer"
+                },
+                "modules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedModule"
+                    }
+                },
+                "query": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_AnalyzedQuery"
+                },
+                "risks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RiskFact"
+                    }
+                },
+                "scope": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_ChangeScope"
+                },
+                "semantic": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_SemanticStatus"
+                },
+                "stage": {
+                    "type": "string"
+                },
+                "symbols": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedSymbol"
+                    }
+                },
+                "symbolsOmitted": {
+                    "type": "integer"
+                },
+                "tests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_retrieval_RankedFile"
+                    }
+                },
+                "unresolved": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/io_github_krosstack_kscope_model_Relationship"
+                    }
+                },
+                "schemaVersion": {
+                    "const": 3
+                },
+                "indexLevel": {
+                    "type": "string",
+                    "enum": [
+                        "syntax",
+                        "resolved",
+                        "exact"
+                    ]
+                },
+                "indexLocation": {
+                    "type": "string"
+                },
+                "narrowedTo": {
+                    "type": "string"
+                },
+                "outsideNarrowing": {
+                    "type": "string"
+                },
+                "widenedFrom": {
+                    "type": "string"
+                },
+                "incomplete": {
+                    "type": "boolean"
+                },
+                "indexFreshness": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_IndexFreshness"
+                }
+            },
+            "required": [
+                "query",
+                "files",
+                "symbols",
+                "modules",
+                "tests",
+                "boundaries",
+                "scope",
+                "risks",
+                "unresolved",
+                "evidence",
+                "confidence",
+                "schemaVersion",
+                "indexLevel"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_freshness_FreshnessCounts": {
+            "type": "object",
+            "properties": {
+                "behind": {
+                    "type": "integer"
+                },
+                "notBehind": {
+                    "type": "integer"
+                },
+                "notChecked": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "behind",
+                "notBehind",
+                "notChecked"
+            ],
+            "additionalProperties": false
+        },
+        "io_github_krosstack_kscope_service_freshness_IndexFreshness": {
+            "type": "object",
+            "properties": {
+                "changedFiles": {
+                    "type": "integer"
+                },
+                "commits": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_FreshnessCounts"
+                },
+                "estimate": {
+                    "type": "boolean"
+                },
+                "reason": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "scannedAt": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "state": {
+                    "type": "string",
+                    "enum": [
+                        "behind",
+                        "not-behind",
+                        "not-checked"
+                    ]
+                },
+                "workingTrees": {
+                    "$ref": "#/$defs/io_github_krosstack_kscope_service_freshness_FreshnessCounts"
+                }
+            },
+            "required": [
+                "state",
+                "scannedAt",
+                "commits",
+                "workingTrees",
+                "changedFiles",
+                "estimate",
+                "reason"
             ],
             "additionalProperties": false
         },

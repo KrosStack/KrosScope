@@ -1,0 +1,24 @@
+digraph diagram {
+  graph [label="Call flow of app.Checkout.pay: 5 of 7 nodes, 4 of 8 links", labelloc=t];
+  rankdir=LR;
+  n1 [label="fun pay()", style=filled, fillcolor=gold, penwidth=2];
+  n2 [label="fun validate()"];
+  n3 [label="fun record()"];
+  subgraph cluster_g2 {
+    label="app.Checkout";
+    n1;
+    n2;
+  }
+  subgraph cluster_g3 {
+    label="app.Ledger";
+    n3;
+  }
+  r1 [label="jni.native-side-not-analysed (1)", shape=box, style=dotted];
+  r2 [label="kotlin.unresolved-reference (1)", shape=box, style=dotted];
+  n1 -> r1 [label="5: ? calls; compiler=1; not-analysed=1", style=dotted];
+  n1 -> r2 [label="4: ? calls; compiler=1; unresolved=1", style=dotted];
+  n1 -> n2 [label="1: calls; compiler=2; exact=2", style=solid];
+  n1 -> n3 [label="2: calls; compiler=1; exact=1", style=solid];
+  legend [label="solid: exact; dashed: probable, heuristic; dotted ?: unresolved, not-analysed; labels: relation; evidence counts; state counts; selected: chosen symbol; thick: inheritance; numbered: call position", shape=note];
+  footer [label="Omitted links: exact=3, probable=0, heuristic=0, unresolved=0, not-analysed=0; 2 symbols not expanded: the walk stopped before it read their links; 1 links to symbols not reached: the walk stopped at the node limit or the read limit", shape=note];
+}

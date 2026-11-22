@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.retrieval.ranking
 
 import io.github.krosstack.kscope.model.ArtifactRef
 import io.github.krosstack.kscope.model.NodeRef
+import io.github.krosstack.kscope.model.RepositoryId
 import io.github.krosstack.kscope.retrieval.AnalyzedQuery
 import io.github.krosstack.kscope.retrieval.FileRole
 import io.github.krosstack.kscope.retrieval.RankedFile
@@ -11,7 +12,7 @@ import io.github.krosstack.kscope.retrieval.SignalContribution
 import io.github.krosstack.kscope.retrieval.SignalKind
 import io.github.krosstack.kscope.spi.search.SearchHit
 
-internal class FileRanking(private val graph: RetrievalGraph) {
+internal class FileRanking(private val graph: RetrievalGraph, private val within: RepositoryId? = null) {
     fun rank(
         query: AnalyzedQuery,
         symbols: List<SearchHit>,
@@ -31,12 +32,14 @@ internal class FileRanking(private val graph: RetrievalGraph) {
         val ranked = (candidates + exact(query, stage).keys).map { file ->
             val reasons = signals.mapNotNull { it[file] }
             RankedFile(file, reasons.sumOf { it.score }, FileRole.READ, reasons)
-        }.filter { it.score > 0 && graph.artifacts[it.artifact]?.generated == null }
+        }.filter { it.score > 0 && graph.artifacts[it.artifact]?.generated == null && holds(it.artifact) }
             .sortedWith(compareByDescending<RankedFile> { it.score }.thenBy { graph.locations.pathOf(it.artifact) })
         val cut = editCut(ranked)
         val edits = ranked.take(cut).map { it.artifact }.toSet()
         return ranked.map { if (it.artifact in edits) it.copy(role = FileRole.EDIT) else it }
     }
+
+    private fun holds(file: ArtifactRef): Boolean = within == null || file.repository == within
 
     private fun signals(
         query: AnalyzedQuery,

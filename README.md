@@ -61,10 +61,12 @@ delete. Every command explains itself with `kscope <command> --help`.
 | Command | What it does |
 |---|---|
 | `kscope info` | Summarizes what the index holds. `--structure` describes the directory before anything is indexed. |
+| `kscope status` | Says in one line whether the index is current: its level, its age, how far behind it is and whether a server runs. |
 | `kscope symbol <name>` | Looks up declarations by name, or by a location such as `path/File.kt:42`. |
 | `kscope impact <target>` | Lists what a change to a symbol, file or module can affect, nearest first. |
 | `kscope related <target>` | Lists the files and symbols closest to a target in the graph, even with no words in common. |
 | `kscope graph` | Shows how modules depend on each other. `--scope neighborhood --node <target>` zooms in; `--format dot` draws it with Graphviz. |
+| `kscope diagram modules\|components\|symbol [<node>]` | Draws module dependencies, repositories, or the types or calls around one symbol, as Mermaid, DOT or JSON, within a size you set. |
 
 ### Keep it ready
 
@@ -93,7 +95,7 @@ delete. Every command explains itself with `kscope <command> --help`.
 
 | Option | What it does |
 |---|---|
-| `--workspace <dir>` | The project to work on. Defaults to the current directory. |
+| `--workspace <dir>` | The project to work on. Defaults to the current directory; a command that reads the index also looks for one in the parent folders. |
 | `--format text\|json\|markdown` | Text for people, JSON for programs ([schemas](docs/schemas/README.md)), Markdown for prompts. `graph` also has `dot`. |
 | `--detail brief\|standard\|full` | How much `analyze`, `symbol` and `related` print. |
 | `--sections <list>` | Prints only these sections of `analyze`, `symbol` and `related`. |

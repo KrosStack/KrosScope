@@ -14,8 +14,6 @@ import io.github.krosstack.kscope.engine.pipeline.LevelUnit
 import io.github.krosstack.kscope.engine.scope.AnalyzerUnit
 import io.github.krosstack.kscope.engine.scope.ScopeUnit
 import io.github.krosstack.kscope.model.Fingerprint
-import io.github.krosstack.kscope.model.OwnershipKind
-import io.github.krosstack.kscope.spi.graph.GraphStore
 import java.nio.file.Files
 import java.nio.file.LinkOption
 import java.nio.file.Path
@@ -129,21 +127,4 @@ private fun digestAttributes(digest: FingerprintBuilder, file: Path) {
     }.onFailure {
         digest.add("attributes-unavailable")
     }
-}
-
-/** Whether a persisted repository model belongs to a registered provider that requires build execution. */
-public fun ScanEngine.indexRequiresTrust(): Boolean {
-    if (!hasIndexedFiles()) return false
-    val trusted = registry.buildModelProviders.filter { it.requiresTrust }.map { it.producer.id }.toSet()
-    return (graph() as GraphStore).units().any {
-        it.owner.kind == OwnershipKind.REPOSITORY && it.producer.id in trusted
-    }
-}
-
-/** The level the persisted index was built at, or null when the workspace has no index with files in it. */
-public fun ScanEngine.indexLevel(): ScanLevel? = when {
-    !hasIndexedFiles() -> null
-    indexRequiresTrust() -> ScanLevel.EXACT
-    LevelUnit.recordedIn(graph() as GraphStore) -> ScanLevel.SYNTAX
-    else -> ScanLevel.RESOLVED
 }

@@ -13,6 +13,24 @@ internal object TemporaryTree : SimpleFileVisitor<Path>() {
         Files.walkFileTree(root, this)
     }
 
+    fun deleteEventually(root: Path) {
+        repeat(ATTEMPTS) {
+            if (deleted(root)) return
+            Thread.sleep(PAUSE_MILLIS)
+        }
+        delete(root)
+    }
+
+    private fun deleted(root: Path): Boolean = try {
+        delete(root)
+        !Files.exists(root)
+    } catch (_: IOException) {
+        false
+    }
+
+    private const val ATTEMPTS = 50
+    private const val PAUSE_MILLIS = 100L
+
     override fun visitFile(file: Path, attributes: BasicFileAttributes): FileVisitResult {
         file.toFile().setWritable(true)
         Files.deleteIfExists(file)

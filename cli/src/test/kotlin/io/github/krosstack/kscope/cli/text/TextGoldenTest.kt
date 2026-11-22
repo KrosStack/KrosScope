@@ -12,10 +12,12 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TextGoldenTest {
+    private val scanTime = Regex("[0-9]{4}(-[0-9]{2}){2}T[0-9]{2}(:[0-9]{2}){2}Z")
+
     private fun printed(root: Path, arguments: List<String>, expectedStatus: Int = 0): String {
         val result = runKscopeWith(arguments + listOf("--workspace", root.toString()))
         assertEquals(expectedStatus, result.statusCode, result.output)
-        return result.stdout.replace(KrosScope.toolVersion(), "<version>")
+        return result.stdout.replace(KrosScope.toolVersion(), "<version>").replace(scanTime, "<scanned>")
     }
 
     @Test

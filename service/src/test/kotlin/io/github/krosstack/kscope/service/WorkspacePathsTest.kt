@@ -31,7 +31,12 @@ class WorkspacePathsTest {
             repository(
                 root,
                 "first",
-                mapOf("settings.gradle.kts" to build, "lib/src/main/kotlin/First.kt" to "class First\n".toByteArray()),
+                mapOf(
+                    "settings.gradle.kts" to build,
+                    "lib/src/main/kotlin/First.kt" to "class First\n".toByteArray(),
+                    "lib/src/main/kotlin/Shared.kt" to "class Shared\n".toByteArray(),
+                    "lib/src/main/kotlin/other/Shared.kt" to "package other\n\nclass Shared\n".toByteArray(),
+                ),
             )
             repository(
                 root,
@@ -39,6 +44,7 @@ class WorkspacePathsTest {
                 mapOf(
                     "settings.gradle.kts" to build,
                     "lib/src/main/kotlin/Second.kt" to "class Second\n".toByteArray(),
+                    "lib/src/main/kotlin/Shared.kt" to "class Shared\n".toByteArray(),
                     "lib/image.png" to byteArrayOf(1, 0, 2),
                 ),
             )
@@ -75,6 +81,28 @@ class WorkspacePathsTest {
             val failure = assertFailsWith<WorkspacePathException> { service.resolveNode("settings.gradle.kts") }
             val names = "first/settings.gradle.kts, second/settings.gradle.kts"
             assertTrue(names in failure.message.orEmpty(), failure.message)
+        }
+
+    @Test
+    fun `the one declaration of a shared name in the repository it is asked from is chosen by name`() =
+        inTwoRepositories { service ->
+            val everywhere = service.resolveNode("Shared")
+            val asked = service.resolveNode("Shared", "second/lib")
+            assertEquals(3, everywhere.candidates.size)
+            assertEquals(null, everywhere.chosenIn)
+            assertEquals("second", asked.chosenIn)
+            val declared = service.declarationsNamed(asked.candidates.single()).single().declaration?.artifact
+            assertEquals("second/lib/src/main/kotlin/Shared.kt", declared?.let(service.workspaceLocations()::pathOf))
+        }
+
+    @Test
+    fun `two declarations inside or none or a folder outside every repository keep every candidate`() =
+        inTwoRepositories { service ->
+            val everywhere = service.resolveNode("Shared")
+            assertEquals(everywhere, service.resolveNode("Shared", "first/lib"))
+            assertEquals(everywhere, service.resolveNode("Shared", "notes"))
+            assertEquals(everywhere, service.resolveNode("Shared", "sec"))
+            assertEquals(service.resolveNode("First"), service.resolveNode("First", "second"))
         }
 
     @Test

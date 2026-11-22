@@ -37,7 +37,7 @@ class SettingsInfoJsonTest {
                 listOf(
                     "schemaVersion", "indexLevel", "toolVersion", "indexLocation", "indexed", "structure",
                     "artifactsByType", "symbolsByKind", "coverage", "diagnostics", "metricsByName",
-                    "searchIndexPopulated", "settings",
+                    "searchIndexPopulated", "settings", "indexFreshness",
                 ),
                 json.keys.toList(),
             )

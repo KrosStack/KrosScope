@@ -1,9 +1,9 @@
 package io.github.krosstack.kscope.cli.command
 
 import com.github.ajalt.clikt.testing.test
-import io.github.krosstack.kscope.cli.CommandExecution
 import io.github.krosstack.kscope.cli.KscopeCommand
 import io.github.krosstack.kscope.cli.inWorkspace
+import io.github.krosstack.kscope.cli.isolatedExecution
 import io.github.krosstack.kscope.cli.parseWithExitCodes
 import io.github.krosstack.kscope.cli.service.home.ServiceDirectory
 import io.github.krosstack.kscope.service.DiagnosticSummary
@@ -20,7 +20,7 @@ class ScanSemanticIndexingTest {
     private val unchanged = ScanResult(0, 0, 0, 0, DiagnosticSummary(0, 0, 0, emptyList()), null, emptyMap(), "")
 
     private fun scan(root: Path, home: Path, runner: ScanRunner, vararg arguments: String): Int {
-        val command = KscopeCommand(execution = CommandExecution(root, scanRunner = runner))
+        val command = KscopeCommand(execution = isolatedExecution(root, runner))
         val args = listOf("scan", "--progress", "never") + arguments
         return command.test(args, envvars = mapOf(ServiceDirectory.VARIABLE to home.toString())) {
             command.parseWithExitCodes(it)

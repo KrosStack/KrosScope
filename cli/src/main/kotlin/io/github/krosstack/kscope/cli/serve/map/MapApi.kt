@@ -4,6 +4,8 @@ import io.github.krosstack.kscope.cli.serve.ServeServices
 import io.github.krosstack.kscope.service.NotIndexedException
 import io.github.krosstack.kscope.service.WorkspacePathException
 import io.github.krosstack.kscope.service.map.MapJson
+import io.github.krosstack.kscope.service.map.diagram.MapDiagramJson
+import io.github.krosstack.kscope.service.map.diagram.mapDiagram
 import io.github.krosstack.kscope.service.map.mapImpact
 import io.github.krosstack.kscope.service.map.mapTask
 
@@ -14,6 +16,7 @@ internal class MapApi(private val host: MapHost) {
         "node" -> node(query["id"])
         "impact" -> impact(query["id"], query["symbol"])
         "task" -> task(query["text"])
+        "diagram" -> diagram(query)
         "events" -> MapResponse.Events
         else -> MapResponse.error(NOT_FOUND, "Not Found")
     }
@@ -41,6 +44,15 @@ internal class MapApi(private val host: MapHost) {
         text.isNullOrBlank() -> bad("Name a task with text.")
         text.length > MAX_TASK_CHARACTERS -> bad("A task is at most $MAX_TASK_CHARACTERS characters.")
         else -> question { services, snapshot -> MapJson.encode(services.use { it.mapTask(snapshot.map, text) }) }
+    }
+
+    private fun diagram(query: Map<String, String>): MapResponse = when (val ask = DiagramAsks.of(query)) {
+        is DiagramAsk.Refused -> bad(ask.message)
+
+        is DiagramAsk.Valid -> question { services, snapshot ->
+            val answer = services.use { it.mapDiagram(snapshot.map, ask.node, ask.depth, ask.links) }
+            MapDiagramJson.encode(answer)
+        }
     }
 
     private fun question(ask: (ServeServices, MapSnapshot) -> String): MapResponse = reply(

@@ -23,6 +23,7 @@ internal object ProgressLabels {
         QueryStages.IMPACT to "Tracing impact",
         QueryStages.RELATED to "Following relationships",
         QueryStages.GRAPH_VIEW to "Building the graph",
+        QueryStages.DIAGRAM to "Drawing the diagram",
     )
 
     fun stage(stage: ProgressStage): String {

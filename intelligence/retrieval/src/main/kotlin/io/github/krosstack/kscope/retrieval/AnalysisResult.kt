@@ -12,6 +12,7 @@ import io.github.krosstack.kscope.model.context.TokenCount
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 public data class QueryExpansion(public val term: String, public val replacement: String, public val reason: String)
@@ -78,6 +79,7 @@ public data class AnalysisResult(
     public val contextEstimates: Map<ContextLevel, TokenCount> = emptyMap(),
     public val semantic: SemanticStatus = SemanticStatus.NOT_INSTALLED,
     @EncodeDefault(EncodeDefault.Mode.NEVER) public val stage: String = "full",
+    @Transient public val searchCapped: Boolean = false,
 )
 
 @Serializable
@@ -99,4 +101,8 @@ public data class ImpactResult(
 )
 
 @Serializable
-public data class SymbolResult(public val query: AnalyzedQuery, public val symbols: List<RankedSymbol>)
+public data class SymbolResult(
+    public val query: AnalyzedQuery,
+    public val symbols: List<RankedSymbol>,
+    @Transient public val searchCapped: Boolean = false,
+)

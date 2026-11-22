@@ -19,5 +19,8 @@ export const fetchImpact = (node) => {
   return getJson(`api/impact?${query}`).then(withLists(["affected", "tests"]));
 };
 
+export const fetchDiagram = (sid, depth) =>
+  getJson(`api/diagram?node=${encodeURIComponent(sid)}&depth=${encodeURIComponent(depth)}`);
+
 export const fetchTask = (text) =>
   getJson(`api/task?text=${encodeURIComponent(text)}`).then(withLists(["files", "tests", "symbols", "modules", "terms"]));

@@ -2,6 +2,7 @@ package io.github.krosstack.kscope.analyzer.kotlin.worker.relationships
 
 import com.intellij.psi.PsiJavaFile
 import io.github.krosstack.kscope.analyzer.kotlin.worker.aa.AnalysisWorkspace
+import io.github.krosstack.kscope.analyzer.kotlin.worker.aa.JavaSourcePackages
 import io.github.krosstack.kscope.analyzer.kotlin.worker.aa.OwnedFile
 import io.github.krosstack.kscope.analyzer.kotlin.worker.aa.SourceSetFiles
 import io.github.krosstack.kscope.analyzer.kotlin.worker.aa.readAccess
@@ -21,6 +22,7 @@ import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.kotlinref
 import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.kotlinrefs.KotlinSyntheticMembers
 import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.kotlinrefs.KotlinTargets
 import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.kotlinrefs.KotlinWorkspaceTargets
+import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.kotlinrefs.VisiblePackages
 import io.github.krosstack.kscope.analyzer.kotlin.worker.relationships.libraries.KotlinLibraryIds
 import io.github.krosstack.kscope.model.Diagnostic
 import io.github.krosstack.kscope.model.DiagnosticSeverity
@@ -28,6 +30,7 @@ import io.github.krosstack.kscope.model.Fact
 import io.github.krosstack.kscope.model.NodeRef
 import io.github.krosstack.kscope.model.ReasonCode
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinProjectStructureProvider
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -38,7 +41,10 @@ import org.jetbrains.kotlin.psi.KtFile
 internal class RelationshipPass {
     fun factsOf(workspace: AnalysisWorkspace, sourceSet: SourceSetFiles, collisions: IdentityCollisions): List<Fact> {
         val factory = SymbolIdFactory(workspace.owners)
-        return sourceSet.files.flatMap { factsOf(it, factory, collisions, sourceSet.hasClasspath) }
+        val javaPackages = workspace.javaPackages
+        return sourceSet.files.flatMap { owned ->
+            factsOf(owned, factory, collisions, sourceSet.hasClasspath, javaPackages)
+        }
     }
 
     private fun factsOf(
@@ -46,41 +52,59 @@ internal class RelationshipPass {
         factory: SymbolIdFactory,
         collisions: IdentityCollisions,
         hasClasspath: Boolean,
+        javaPackages: JavaSourcePackages,
     ): List<Fact> {
         val context = FileContext(owned.owner, owned.psi)
         val fileRef = owned.owner.artifact?.let { NodeRef.OfArtifact(it) } ?: return emptyList()
         val reporter = ReferenceReporter(context, hasClasspath, collisions)
         val ids = WorkspaceIds(factory, owned.owner.moduleName, collisions)
-        val outcome = runCatching { resolve(owned, ids, reporter, fileRef) }
+        val outcome = runCatching { resolve(owned, ids, reporter, fileRef, javaPackages) }
         val relationships = reporter.relationships().map { Fact.OfRelationship(it) }
         return relationships + diagnosticsOf(context, outcome)
     }
 
-    private fun resolve(owned: OwnedFile, ids: WorkspaceIds, reporter: ReferenceReporter, fileRef: NodeRef): Int =
-        when (val file = owned.psi) {
-            is KtFile -> resolveKotlin(file, ids, reporter, fileRef)
-            is PsiJavaFile -> readAccess { resolveJava(file, ids, reporter, fileRef) }
-            else -> 0
-        }
+    private fun resolve(
+        owned: OwnedFile,
+        ids: WorkspaceIds,
+        reporter: ReferenceReporter,
+        fileRef: NodeRef,
+        javaPackages: JavaSourcePackages,
+    ): Int = when (val file = owned.psi) {
+        is KtFile -> resolveKotlin(file, ids, reporter, fileRef, javaPackages)
+        is PsiJavaFile -> readAccess { resolveJava(file, ids, reporter, fileRef, javaPackages) }
+        else -> 0
+    }
 
-    private fun resolveKotlin(file: KtFile, ids: WorkspaceIds, reporter: ReferenceReporter, fileRef: NodeRef): Int =
-        analyze(file) {
-            val resolver = KotlinResolver(this)
-            val targets = KotlinTargets(this, KotlinWorkspaceTargets(ids), KotlinLibraryIds(this))
-            val synthetic = KotlinSyntheticMembers(resolver, ids)
-            val references = KotlinReferences(resolver, targets, reporter, KotlinAliases(this), synthetic)
-            val walker = KotlinFileWalker(
-                ids,
-                references,
-                KotlinCallLikes(resolver, targets, reporter),
-                KotlinDeclarationLinks(resolver, targets, reporter),
-            )
-            walker.walk(file, fileRef)
-            resolver.failures
-        }
+    private fun resolveKotlin(
+        file: KtFile,
+        ids: WorkspaceIds,
+        reporter: ReferenceReporter,
+        fileRef: NodeRef,
+        javaPackages: JavaSourcePackages,
+    ): Int = analyze(file) {
+        val resolver = KotlinResolver(this, javaPackages)
+        val targets = KotlinTargets(this, KotlinWorkspaceTargets(ids), KotlinLibraryIds(this))
+        val synthetic = KotlinSyntheticMembers(resolver, ids)
+        val references = KotlinReferences(resolver, targets, reporter, KotlinAliases(this), synthetic)
+        val walker = KotlinFileWalker(
+            ids,
+            references,
+            KotlinCallLikes(resolver, targets, reporter),
+            KotlinDeclarationLinks(resolver, targets, reporter),
+        )
+        walker.walk(file, fileRef)
+        resolver.failures
+    }
 
-    private fun resolveJava(file: PsiJavaFile, ids: WorkspaceIds, reporter: ReferenceReporter, fileRef: NodeRef): Int {
-        val resolver = JavaResolver()
+    private fun resolveJava(
+        file: PsiJavaFile,
+        ids: WorkspaceIds,
+        reporter: ReferenceReporter,
+        fileRef: NodeRef,
+        javaPackages: JavaSourcePackages,
+    ): Int {
+        val module = KotlinProjectStructureProvider.getModule(file.project, file, null)
+        val resolver = JavaResolver(VisiblePackages(module, javaPackages))
         val references = JavaReferences(resolver, JavaTargets(ids), reporter, JavaSyntheticMembers(resolver, ids))
         JavaFileWalker(ids, references).walk(file, fileRef)
         return resolver.failures

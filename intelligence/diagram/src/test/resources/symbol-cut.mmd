@@ -1,0 +1,28 @@
+---
+title: "Call flow of app.Checkout.pay: 5 of 7 nodes, 4 of 8 links"
+config:
+  layout: dagre
+  theme: neutral
+---
+flowchart LR
+  subgraph g2["app.Checkout"]
+    n1["fun pay()"]:::selected
+    n2["fun validate()"]
+  end
+  subgraph g3["app.Ledger"]
+    n3["fun record()"]
+  end
+  r1["jni.native-side-not-analysed (1)"]:::reason
+  r2["kotlin.unresolved-reference (1)"]:::reason
+  n1 -.->|"5: ? calls; compiler=1; not-analysed=1"| r1
+  linkStyle 0 stroke-dasharray:2 3
+  n1 -.->|"4: ? calls; compiler=1; unresolved=1"| r2
+  linkStyle 1 stroke-dasharray:2 3
+  n1 -->|"1: calls; compiler=2; exact=2"| n2
+  n1 -->|"2: calls; compiler=1; exact=1"| n3
+  legend["solid: exact; dashed: probable, heuristic; dotted ?: unresolved, not-analysed; labels: relation; evidence counts; state counts; selected: chosen symbol; thick: inheritance; numbered: call position"]:::metadata
+  footer["Omitted links: exact=3, probable=0, heuristic=0, unresolved=0, not-analysed=0; 2 symbols not expanded: the walk stopped before it read their links; 1 links to symbols not reached: the walk stopped at the node limit or the read limit"]:::metadata
+  classDef reason stroke-dasharray:2 3
+  classDef aggregate stroke-dasharray:6 3
+  classDef metadata fill:#fff,stroke:#999
+  classDef selected fill:#ffe9a8,stroke:#000,stroke-width:3px

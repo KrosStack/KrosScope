@@ -12,6 +12,7 @@ import kotlin.test.assertEquals
 class JsonGoldenTest {
     private val repositoryId = Regex("[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}")
     private val indexLocation = Regex("\"indexLocation\": \"[^\"]*\"")
+    private val scannedAt = Regex("\"scannedAt\": \"[^\"]*\"")
 
     @Test
     fun `commands print their json on a scanned workspace of one repository`() = inGreeterWorkspace { root ->
@@ -29,6 +30,7 @@ class JsonGoldenTest {
             result.stdout.replace(KrosScope.toolVersion(), "<version>")
                 .replace(repositoryId, "<repository>")
                 .replace(indexLocation, "\"indexLocation\": \"<index>\"")
+                .replace(scannedAt, "\"scannedAt\": \"<scanned>\"")
         }.let(Golden::assertAllMatch)
     }
 }

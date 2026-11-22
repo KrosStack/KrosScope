@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 
 class SemanticSchemaTest {
     @Test
-    fun `analysis wire version is two with and without an index level`() {
+    fun `analysis wire version is three with and without an index level`() {
         SampleWorkspace("tests").use { sample ->
             KrosScope.open(sample.root).use { scope ->
                 scope.scan()
@@ -20,7 +20,7 @@ class SemanticSchemaTest {
                 val documents = listOf(ServiceJson.encode(result), ServiceJson.encode(result, null))
 
                 assertEquals(
-                    listOf("2", "2"),
+                    listOf("3", "3"),
                     documents.map {
                         Json.parseToJsonElement(it).jsonObject.getValue("schemaVersion").jsonPrimitive.content
                     },

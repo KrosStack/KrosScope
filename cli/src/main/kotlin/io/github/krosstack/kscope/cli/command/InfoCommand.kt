@@ -19,10 +19,12 @@ import io.github.krosstack.kscope.cli.forward
 import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
+import io.github.krosstack.kscope.cli.lookup.askedFrom
 import io.github.krosstack.kscope.cli.output.echoResult
 import io.github.krosstack.kscope.cli.requireIndex
-import io.github.krosstack.kscope.cli.requireNoDot
+import io.github.krosstack.kscope.cli.requireNoDiagramFormat
 import io.github.krosstack.kscope.cli.resolve
+import io.github.krosstack.kscope.cli.resolveReading
 import io.github.krosstack.kscope.cli.text.InfoText
 import io.github.krosstack.kscope.cli.text.StructureText
 import io.github.krosstack.kscope.cli.textContext
@@ -32,6 +34,7 @@ import io.github.krosstack.kscope.service.InfoResult
 import io.github.krosstack.kscope.service.KrosScope
 import io.github.krosstack.kscope.service.ServiceJson
 import io.github.krosstack.kscope.service.describeStructure
+import io.github.krosstack.kscope.service.freshness.freshness
 
 internal class InfoCommand : CliktCommand(name = "info") {
     private val common by RootOptions(
@@ -64,8 +67,8 @@ internal class InfoCommand : CliktCommand(name = "info") {
             "  kscope info --structure --structure-depth 2 --format json"
 
     override fun run() {
-        val options = resolve(common)
-        requireNoDot(options.format)
+        val options = if (structure) resolve(common) else resolveReading(common)
+        requireNoDiagramFormat(options.format)
         if (structure) {
             val session = currentContext.parent?.obj as? CliSession
             session?.execution?.refuseStructure(this)
@@ -76,7 +79,7 @@ internal class InfoCommand : CliktCommand(name = "info") {
         val result = guarded {
             useService(options) {
                 it.requireIndex()
-                it.info()
+                it.info().copy(indexFreshness = it.freshness(options.askedFrom()))
             }
         }
         echoResult(

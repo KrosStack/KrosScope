@@ -10,8 +10,8 @@ They work before or after the command name.
 | Option | Meaning |
 |---|---|
 | `--workspace DIR` | The project directory. Defaults to the current directory. |
-| `--format text\|json\|markdown\|dot` | `text` (default) for reading, `json` for fields (`schemaVersion: 1`), `markdown` for `context` packages, `dot` for `graph`. |
-| `--detail brief\|standard\|full` | `analyze`, `symbol`, `related` only: one screen, the default, or every relevant item. Not with `--format json`. |
+| `--format text\|json\|markdown\|dot` | `text` (default) for reading, `json` for fields (`schemaVersion` says which version of the result; 3 for `analyze`, 1 for the others), `markdown` for `context` packages, `dot` for `graph`. |
+| `--detail brief\|standard\|full` | `analyze`, `symbol`, `related` only: one screen, the default, or every relevant item. With `--format json` only `analyze` accepts it, to set how many symbols and files it lists. |
 | `--sections LIST` | `analyze`, `symbol`, `related` only: print just these sections, for example `--sections tests`. |
 | `-q`, `--quiet` | No progress on standard error; errors still appear. |
 | `--no-server` | Answer without a running `kscope serve`. A scan is refused with it while a server runs. |
@@ -68,7 +68,9 @@ kscope analyze [TASK] [--task-file FILE] [--as task|symbol]
   - the context size per level, and a next step.
 - **One token** is read as a name or file and gives a card: a CamelCase or snake_case identifier, a qualified
   name, a workspace path or `path:line`.
-- **`--format json`** is always the task analysis.
+- **`--format json`** is always the task analysis. It lists the top 50 symbols (10 with `--detail brief`, up to
+  1,000 with `--detail full`) and the relevant files (all with `--detail full`); `symbolsOmitted` and `filesOmitted`
+  say what is left out.
 - **Sections** for `--sections`:
   - a task: `headline`, `top`, `query`, `edit`, `read`, `documents`, `cutoff`, `tests`, `scope`, `gaps`,
     `connectedness`, `context`, `next`;
@@ -95,11 +97,13 @@ kscope context [TASK] [--task-file FILE] [--budget TOKENS] [--level minimal|reco
 
 | Command | What it answers |
 |---|---|
+| `kscope status` | One line: which index answers, its level, how long ago it was scanned, how far behind it is (every repository, its commit and its working tree) and whether a server runs. It only reads, starts no server and exits with 0 for any index it can read, also a behind one. It exits with 1 for no index, a damaged one or another format. `--format json` has the same facts as fields. |
 | `kscope info` | What the index holds: files, modules, symbols, relationships by state, the index level, the settings and whether the workspace is trusted. `--structure` describes the directory instead. |
 | `kscope symbol NAME` | Declarations matching a simple or qualified name, a symbol id or `path:line`: exact matches first, then ranked ones. |
 | `kscope impact NODE` | What a change to a file, `path:line`, symbol or module (`:core:model`) can affect, nearest first, with certainty, modules and covering tests. An ambiguous name exits with 2 and lists the values to pass. |
 | `kscope related NODE` | The files and symbols closest to a node through the stored relationships, up to 50 of each. |
 | `kscope graph [--scope modules\|workspace\|neighborhood] [--node NODE] [--depth 0-3] [--limit N]` | Module dependencies by default. `neighborhood` shows the surroundings of `--node`. `--format dot` prints Graphviz. |
+| `kscope diagram modules\|components\|symbol [NODE] [--depth N] [--links N] [--characters N] [--format mermaid\|dot\|json]` | A diagram of module dependencies, of repositories, or of the types or calls around a symbol, as Mermaid by default. It stays within `--characters`; `symbol` needs a NODE. |
 
 ## Keep it ready
 
@@ -115,7 +119,8 @@ kscope serve --stop
   default, never stops).
 - **`--watch`** rescans changed files by itself, and says `Index is behind: ...` on standard error while it catches
   up. It runs the build only in a trusted workspace whose `kscope.toml` asks for `level = "exact"`.
-- **`--status`** exits with 0 when a server runs, and 1 when none does.
+- **`--status`** exits with 0 when a server runs, and 1 when none does. With a server that watches, the index needs no
+  `kscope scan` by hand.
 
 ```
 kscope mcp [--watch]
@@ -148,6 +153,6 @@ user's session, so run them only at the user's request.
 | Code | Meaning |
 |---|---|
 | 0 | Success. |
-| 1 | Failure. `No index found` means run `kscope scan`, and an unreadable index means `kscope scan --rebuild`. It also covers a scan refused because of its level, a workspace that cannot be read, an invalid `kscope.toml`, and a skill folder that kscope did not make. |
+| 1 | Failure. `No index found` or `kscope: no index in ...` means run `kscope scan`, and an unreadable index means `kscope scan --rebuild`. It also covers a scan refused because of its level, a workspace that cannot be read, an invalid `kscope.toml`, and a skill folder that kscope did not make. |
 | 2 | A usage error: an unknown option, an invalid value, `--detail` or `--sections` where they do not apply, or a name that matches several declarations. |
 | 3 | `scan --verify` found a difference from a clean rebuild. |

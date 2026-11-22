@@ -68,14 +68,14 @@ class ContextSemanticSchemaTest {
     }
 
     @Test
-    fun `analysis v2 and context v1 schemas remain byte identical`() {
+    fun `analysis v3 and context v1 schemas remain byte identical`() {
         val root = Path.of(requireNotNull(System.getProperty("kscope.gold"))).parent.parent
         val documents = ApiSchemas.documents()
         val digests = mapOf(
-            "analysis" to "50731a2a2e1ea6cfb1c8c1592ecc9f1cd4928bbec07de022cc93c5afd6db20cb",
-            "context" to "25b37392358300e96321fa772d7ccebe256046c1af0f99240c6d90eafeab7aa8",
+            "analysis" to "5741c1fb06341732e3cc6e4231fb65691f9b4de8223d0ff971dfc9a61272da98",
+            "context" to "0d165fe2756ab08e682ebe1a5f1175ee7dbf7d1aaa221d190a3ee26cbf257061",
         )
-        for ((name, version) in mapOf("analysis" to 2, "context" to 1)) {
+        for ((name, version) in mapOf("analysis" to 3, "context" to 1)) {
             val expected = Files.readString(root.resolve("docs/schemas/$name.schema.json")).replace("\r\n", "\n")
             assertEquals(expected, documents.getValue(name), name)
             val digest = MessageDigest.getInstance("SHA-256").digest(documents.getValue(name).toByteArray())

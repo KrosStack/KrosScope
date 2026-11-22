@@ -1,6 +1,6 @@
 # ADR 0015: A resident service, scan levels and a settings file per workspace
 
-Status: Accepted, implemented in 0.1.0, except that no MCP query tool takes an argument that narrows one query to a module or a path (decision 5) · Date: 2026-10-10 · Decision 2 amended by [ADR 0017](0017-row-order-dropped.md) · Decision 3, the item "exact needs the user to start the scan", superseded by [ADR 0018](0018-stored-trust-for-exact.md), so the service runs the build of a workspace that the user trusted
+Status: Accepted, implemented in 0.1.0, except that no MCP query tool takes an argument that narrows one query to a module or a path (decision 5); the command line narrows a search to the repository of the current folder, see [ADR 0026](0026-repository-narrowing.md) · Date: 2026-10-10 · Decision 2 amended by [ADR 0017](0017-row-order-dropped.md) · Decision 3, the item "exact needs the user to start the scan", superseded by [ADR 0018](0018-stored-trust-for-exact.md), so the service runs the build of a workspace that the user trusted
 
 ## In short
 

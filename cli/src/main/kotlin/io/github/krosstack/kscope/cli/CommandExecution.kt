@@ -6,6 +6,9 @@ import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.obj
 import com.github.ajalt.clikt.core.terminal
 import io.github.krosstack.kscope.cli.command.ScanRunner
+import io.github.krosstack.kscope.cli.lookup.IndexNotes
+import io.github.krosstack.kscope.cli.lookup.IndexSource
+import io.github.krosstack.kscope.cli.lookup.Narrowed
 import io.github.krosstack.kscope.cli.serve.ServeClient
 import io.github.krosstack.kscope.cli.serve.ServeMetadata
 import io.github.krosstack.kscope.cli.serve.ServeRefusals
@@ -16,15 +19,19 @@ import io.github.krosstack.kscope.service.OpenOptions
 import io.github.krosstack.kscope.service.ScanLevel
 import io.github.krosstack.kscope.service.ScanResult
 import io.github.krosstack.kscope.service.indexLevel
+import io.github.krosstack.kscope.service.lookup.IndexLookup
+import io.github.krosstack.kscope.service.lookup.SearchOrigin
 import java.nio.file.Path
 
 internal class CommandExecution(
     val directory: Path = Path.of("").toAbsolutePath(),
     private val service: ServeServices? = null,
-    private val serverWorkspace: Path? = null,
+    val serverWorkspace: Path? = null,
     private val scanRunner: ScanRunner = ScanRunner.DEFAULT,
+    val lookup: IndexLookup = IndexLookup(ready = ServeClient::serving),
 ) {
     val serving: Boolean get() = service != null
+    val watched: Boolean get() = service?.watched == true
     var arguments: List<String> = emptyList()
         private set
 
@@ -103,8 +110,36 @@ internal class CommandExecution(
 }
 
 internal fun CliktCommand.forward(options: ResolvedOptions) {
+    forwardWithoutNote(options)
+    noteParentIndex(options)
+}
+
+internal fun CliktCommand.forwardWithoutNote(options: ResolvedOptions) {
     val session = currentContext.parent?.obj as? CliSession
     session?.execution?.forward(this, options)
+}
+
+internal fun CliktCommand.noteParentIndex(
+    options: ResolvedOptions,
+    origin: SearchOrigin = SearchOrigin(),
+    query: String = "",
+) {
+    if (options.source is IndexSource.Parent && options.format != OutputFormat.JSON) {
+        echo(IndexNotes.parent(options.workspace, origin, query), err = true)
+    }
+}
+
+internal fun <T> CliktCommand.withIndexNote(
+    options: ResolvedOptions,
+    query: String = "",
+    work: () -> Narrowed<T>,
+): Narrowed<T> {
+    var origin = SearchOrigin()
+    try {
+        return work().also { origin = it.origin }
+    } finally {
+        noteParentIndex(options, origin, query)
+    }
 }
 
 internal fun <T> CliktCommand.useService(
@@ -113,7 +148,11 @@ internal fun <T> CliktCommand.useService(
     work: (KrosScope) -> T,
 ): T {
     val session = currentContext.parent?.obj as? CliSession
-    return (session?.execution ?: CommandExecution()).useService(options, opening) { scope ->
+    val execution = session?.execution ?: CommandExecution()
+    if (options.source == IndexSource.Missing) {
+        throw InputFailure(IndexNotes.missing(options.workspace, execution.lookup.below(options.workspace)))
+    }
+    return execution.useService(options, opening) { scope ->
         work(scope).also { noteSyntaxLevel(scope, options) }
     }
 }

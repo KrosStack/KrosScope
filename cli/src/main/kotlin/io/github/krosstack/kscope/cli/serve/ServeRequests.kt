@@ -47,6 +47,10 @@ internal class ServeRequests(
     val lastScan: ScanRecord? get() = service.lastScan
     val indexLevel: String? get() = service.indexLevel
     var watch: WatchState? = null
+        set(value) {
+            field = value
+            service.watched = value != null
+        }
     var map: MapHost? = null
     var watchSettings = WatchSettings()
 

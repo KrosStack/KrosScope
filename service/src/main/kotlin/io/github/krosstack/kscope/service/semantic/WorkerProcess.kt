@@ -20,10 +20,11 @@ internal class WorkerProcess(
     private val redact: (String) -> String = { it },
     routing: WorkerDiagnostics.Routing = WorkerDiagnostics.Routing(),
     deadline: QueryDeadline? = null,
+    launch: (List<String>) -> Process = { ProcessBuilder(it).start() },
 ) : AutoCloseable {
     private val process = try {
         if (deadline?.expired() == true) throw IOException("Semantic query deadline expired before launch")
-        ProcessBuilder(command).start()
+        launch(command)
     } catch (failure: IOException) {
         throw IOException(redact(failure.message.orEmpty()), failure)
     }
@@ -103,6 +104,7 @@ internal class WorkerProcess(
         get() = (if (omittedCauses == 0) "" else "\n[$omittedCauses cause headers omitted]") + TRUNCATED
 
     fun failureReason(reason: String, deadline: QueryDeadline? = null): String {
+        diagnostics.drain(deadline)
         val failure = runCatching { close(deadline) }.exceptionOrNull()
         val retained = diagnostic.get()
         val original = if (retained.isNotEmpty() && reason.endsWith(retained)) {
@@ -216,6 +218,7 @@ internal class WorkerProcess(
             { stream -> exchanges.submit { stream.close() } }
         }
         val steps = listOf<() -> Unit>(
+            { diagnostics.drain(deadline) },
             ::terminate,
             {
                 try {

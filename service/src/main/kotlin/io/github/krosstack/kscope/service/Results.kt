@@ -1,5 +1,6 @@
 package io.github.krosstack.kscope.service
 
+import io.github.krosstack.kscope.service.freshness.IndexFreshness
 import io.github.krosstack.kscope.service.settings.SettingsReport
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -114,4 +115,5 @@ public data class InfoResult(
     public val settings: SettingsReport,
     @EncodeDefault(EncodeDefault.Mode.NEVER) public val repositories: List<RepositoryEntry> = emptyList(),
     public val indexLevel: String? = null,
+    public val indexFreshness: IndexFreshness? = null,
 )

@@ -1,6 +1,6 @@
 # ADR 0023: Semantic search and ranking
 
-Status: Accepted on DEV; TEST not yet scored · Date: 2026-11-20
+Status: Accepted on DEV; TEST scored 2026-11-22 · Date: 2026-11-20
 
 ## In short
 
@@ -10,7 +10,7 @@ Status: Accepted on DEV; TEST not yet scored · Date: 2026-11-20
   Hybrid search combines lexical and semantic file ranks. Its design is accepted; this build exposes no standalone
   `search` command.
 - **Decide on DEV.** The method was frozen before TEST scoring. The DEV gains support shipping, with the context
-  and cost exceptions stated below. TEST will be scored once and published whatever it says.
+  and cost exceptions stated below. TEST, scored once, reached the same verdicts with slightly larger gains.
 - **Keep the failures visible.** Hybrid search gained about half of the +10 points first proposed. The pooled
   context result decides acceptance despite per-repository failures. Full embedding exceeds the memory limit;
   Linux context latency exceeds its limit with ranking both on and off.
@@ -144,6 +144,27 @@ each environment retained 1,206 samples with 0 rejected. One-shot medians cover 
 Windows memory is peak working set; Linux embedding memory is kernel VmHWM. Linux concurrent host load met the
 prewritten load rule; it was not a completely idle host.
 
+A second machine was measured on 2026-11-20, after the acceptance: Windows 11 with 31.5 GB of memory and real-time
+malware scanning on, pinned to four performance cores with one thread each,
+Corretto 21.0.11, the same build built there from the same commit, Now in Android at the same commit and the same
+30 queries. It retained 1,206 samples with 0 rejected; other load during the steps stayed below 2 %.
+
+| Measurement | Second machine, four performance cores |
+|---|---|
+| Full scan and embedding, process start to exit | 559.3 s |
+| Embedding worker peak working set | 2,376 MB |
+| Query worker peak working set | 388 MB |
+| Warm analyze ON / OFF, p50/p95 | 104.6/116.0 ms / 61.9/70.0 ms |
+| Warm analyze with estimates ON / OFF, p50/p95 | 243.6/264.0 ms / 205.6/226.0 ms |
+| Warm context at 8,000 tokens ON / OFF, p50/p95 | 223.8/279.3 ms / 235.9/288.3 ms |
+| One-shot info, analyze ON, analyze OFF, medians | 1,496 ms, 6,316 ms, 3,834 ms |
+
+Against the 200 ms ceiling, warm analyze stays within it there; analyze with estimates and context at 8,000 tokens
+exceed it with ranking on and off alike. With Java runtimes that bundle the Visual C++ runtime 14.29 or 14.36 the
+worker crashed inside ONNX Runtime, and the component self-test reported the requirement of 14.40 or newer; with a
+runtime bundling 14.44 it passed. int8 vector generations built from the same inputs were not bit-identical across
+the two machines' processors, so TEST ran on one machine.
+
 ## Exceptions accepted
 
 - **Search bar, 2026-11-10.** The bar first proposed for hybrid search was +10 points of R@10 or hit@10 over
@@ -161,7 +182,8 @@ prewritten load rule; it was not a completely idle host.
   is within 30 minutes. These ceilings were accepted after measurement, before TEST scoring.
 - **Unmeasured scope.** A separate, slower four-core Linux machine; replicated 100,000- and 300,000-vector
   generations; retained generation disk; and timings with indexing active remain unmeasured. The maintainer
-  accepted these gaps rather than treating the available measurements as proof of those boundaries.
+  accepted these gaps rather than treating the available measurements as proof of those boundaries. A second
+  Windows machine was measured after the acceptance (see Evidence); it narrows the gap but is not Linux.
 
 ## Consequences
 
@@ -180,6 +202,30 @@ status contract; replacing the model requires fresh vectors and another DEV deci
 
 ## TEST
 
-TEST has not been scored. It will be scored once on the pinned build, the build measured for both DEV items, with
-the frozen method and identities. Its result will be published whatever it says and will never change this
-decision. The number will be added here once scored.
+TEST was scored once, on 2026-11-22, on the pinned build (the build measured for both DEV items) with the frozen
+method and identities. It does not change this decision.
+
+All 6,392 TEST tasks of the 218 repositories ran with fp16 on the GPU and none failed; two paraphrases had no query
+text and count as unresolved, not as zero. The int8 CPU subset ran all 1,200 of its tasks: 30 TEST tasks from each
+of the same 40 repositories as the DEV subset, whose draw rule was not recorded. Gains in percentage points, with
+task-paired bootstrap 95 % intervals (10,000 resamples, seed 20261005):
+
+| Comparison | Query set | Metric | TEST [95 % interval] | DEV |
+|---|---|---|---|---|
+| Structural + semantic minus structural | Original | R@10 | +6.0 [+5.1, +6.9] | +5.5 |
+| Structural + semantic minus structural | Original | NDCG@10 | +5.8 [+5.2, +6.3] | +5.3 |
+| Hybrid search minus lexical | Paraphrase | R@10 | +5.8 [+5.0, +6.7] | +5.2 |
+| Hybrid search minus lexical | Paraphrase | hit@10 | +6.5 [+5.5, +7.5] | +5.6 |
+| Hybrid search minus lexical | Original | R@10 | +4.7 [+4.0, +5.5] | +4.4 to +4.9 on all metrics |
+
+- **Ranking passes:** the gain is significant on R@10 and NDCG@10.
+- **Hybrid search passes the bar as replaced on 2026-11-10:** a significant paired gain on paraphrases, and the
+  originals gain on every metric. Against the +10 points first proposed it still falls short, as on DEV: the upper
+  end of the R@10 interval is +6.7.
+- **int8 against fp16 on the 1,200 shared tasks**, fp16 minus int8 in R@10: 0.0 [-0.7, +0.7] for hybrid search on
+  originals, +1.3 [+0.4, +2.2] for structural + semantic on originals, and +1.6 [+0.3, +3.0] for semantic alone on
+  paraphrases. int8 loses one to two points where the semantic list carries most weight and nothing measurable in
+  the hybrid search arm. It reaches the same verdicts.
+
+Each task's record is computed and saved on its own, so no result depends on the order in which tasks ran or on how
+often a task was attempted.

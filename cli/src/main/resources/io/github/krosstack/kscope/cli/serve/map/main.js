@@ -2,6 +2,7 @@ import { fetchImpact, fetchMap, fetchNode, fetchTask } from "./api.js";
 import { Camera } from "./camera.js";
 import { CommandBox } from "./command.js";
 import { Filters } from "./controls.js";
+import { DiagramView } from "./diagram.js";
 import { Lens, tracePath } from "./lens.js";
 import { Links } from "./links.js";
 import { diffModels, Live, renderChanges } from "./live.js";
@@ -16,6 +17,8 @@ const MORPH_MILLIS = 800;
 const WHEEL_SPEED = 0.0016;
 const DRAG_THRESHOLD = 4;
 const THEME_KEY = "kscope-map-theme";
+const SYMBOLS_WAIT_MILLIS = 3000;
+const SYMBOLS_POLL_MILLIS = 50;
 
 const byId = (id) => document.getElementById(id);
 
@@ -33,6 +36,7 @@ class MapApp {
     this.scene = new Scene(this, this.context);
     this.links = new Links(this);
     this.lens = new Lens(this);
+    this.diagram = new DiagramView(this);
     this.panel = new Panel(this, byId("panel"));
     this.command = new CommandBox(this, byId("command"), byId("results"));
     this.live = new Live(this, () => this.#reload());
@@ -87,6 +91,12 @@ class MapApp {
 
   selectById(id) {
     const node = this.model?.byId.get(id);
+    if (node) this.select(node, { fly: true });
+  }
+
+  async selectSymbol({ id, file }) {
+    const holder = file ? this.model?.byId.get(file) : null;
+    const node = holder ? await this.#symbolNode(holder, id) : null;
     if (node) this.select(node, { fly: true });
   }
 
@@ -179,6 +189,14 @@ class MapApp {
     } finally {
       file.detailPending = false;
     }
+  }
+
+  async #symbolNode(file, id) {
+    if (!file.detail && !file.detailPending) await this.#loadDetail(file);
+    for (let waited = 0; waited < SYMBOLS_WAIT_MILLIS && !file.symbolIndex; waited += SYMBOLS_POLL_MILLIS) {
+      await new Promise((resolve) => setTimeout(resolve, SYMBOLS_POLL_MILLIS));
+    }
+    return file.symbolIndex?.get(id) ?? null;
   }
 
   // Symbols take their place from the file's final position and size, which a running morph has not reached yet.

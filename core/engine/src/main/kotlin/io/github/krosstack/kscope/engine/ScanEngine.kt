@@ -19,6 +19,7 @@ import io.github.krosstack.kscope.store.IndexProbe
 import io.github.krosstack.kscope.store.SqliteGraphStore
 import io.github.krosstack.kscope.store.dataVersion
 import java.nio.file.Files
+import java.nio.file.Path
 
 /**
  * Builds and updates the index of one workspace. Every update compares the fingerprints of the units that should
@@ -58,6 +59,7 @@ public class ScanEngine internal constructor(
         indexDirectory = config.indexDirectory.toAbsolutePath().normalize(),
     )
     private val files = IndexFiles(this.config.indexDirectory)
+    internal val indexFile: Path get() = files.database
     private var openStore: SqliteGraphStore? = null
     private val carriedNotices = mutableListOf<Diagnostic>()
 

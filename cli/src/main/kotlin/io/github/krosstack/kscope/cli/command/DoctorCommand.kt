@@ -10,7 +10,7 @@ import io.github.krosstack.kscope.cli.guarded
 import io.github.krosstack.kscope.cli.help.FormatGuide
 import io.github.krosstack.kscope.cli.help.SharedOption
 import io.github.krosstack.kscope.cli.output.echoResult
-import io.github.krosstack.kscope.cli.requireNoDot
+import io.github.krosstack.kscope.cli.requireNoDiagramFormat
 import io.github.krosstack.kscope.cli.resolve
 import io.github.krosstack.kscope.cli.text.DoctorText
 import io.github.krosstack.kscope.cli.textContext
@@ -38,7 +38,7 @@ internal class DoctorCommand(
 
     override fun run() {
         val options = resolve(common)
-        requireNoDot(options.format)
+        requireNoDiagramFormat(options.format)
         val result = guarded { KrosScope.open(options.workspace).use { it.doctor(directory) } }
         val rendered = if (options.format == OutputFormat.JSON) {
             ServiceJson.encode(result)

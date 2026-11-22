@@ -23,6 +23,9 @@ internal class ServeServices(
     private var service: KrosScope = scanRunner.open(workspace, semantic.openOptions())
 
     @Volatile
+    var watched = false
+
+    @Volatile
     var loaded = false
         private set
 

@@ -7,6 +7,7 @@ import java.io.IOException
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
+import java.nio.file.Path
 
 internal object ServeClient {
     const val VERSION_NOTE = "A server of another version runs; stop it with `kscope serve --stop` for this workspace."
@@ -17,6 +18,8 @@ internal object ServeClient {
 
     fun alive(metadata: ServeMetadata): Boolean = metadata.pid > 0 &&
         ProcessHandle.of(metadata.pid).map { it.isAlive }.orElse(false) && portOpen(metadata.port)
+
+    fun serving(workspace: Path): Boolean = ServeMetadata.read(workspace)?.let(::alive) == true
 
     fun exchange(
         metadata: ServeMetadata,

@@ -25,6 +25,21 @@
                         "resolved",
                         "exact"
                     ]
+                },
+                "indexLocation": {
+                    "type": "string"
+                },
+                "narrowedTo": {
+                    "type": "string"
+                },
+                "outsideNarrowing": {
+                    "type": "string"
+                },
+                "widenedFrom": {
+                    "type": "string"
+                },
+                "incomplete": {
+                    "type": "boolean"
                 }
             },
             "required": [
