@@ -18,15 +18,21 @@ internal class PendingLink(val linker: BoundaryLinker, val unit: PlannedUnit)
  * checks that it answered each symbolic reference of its namespaces exactly once.
  */
 internal class LinkingStage(private val linkers: List<BoundaryLinker>, private val session: UpdateSession) {
-    /** Call after every non-linker unit has been claimed. */
+    /** Call before obsolete units are removed, so that the stored output of the linkers is kept until they run. */
+    fun reserve() {
+        linkers.forEach { session.ledger.keep(UnitKey(it.descriptor.producer, workspace)) }
+    }
+
+    /** Call after every non-linker unit has been claimed and produced, so that the fingerprints are the stored ones. */
     fun plan(): List<PendingLink> {
-        val base = FingerprintBuilder().addAll(session.ledger.wantedUnits().flatMap(::partsOf)).digestHex()
+        val parts = session.ledger.wantedUnits().flatMap(::partsOf)
+        val base = FingerprintBuilder().add(BASE_FORMAT).addAll(parts).digestHex()
         var previous = base
         return linkers.mapNotNull { linker ->
             val producer = linker.descriptor.producer
             val fingerprint = FingerprintBuilder().add(producer.id).add(producer.version).add(previous).build()
             previous = fingerprint.value
-            val unit = PlannedUnit(producer, OwnershipUnit(OwnershipKind.WORKSPACE, WORKSPACE_KEY), fingerprint)
+            val unit = PlannedUnit(producer, workspace, fingerprint)
             if (session.ledger.claimIfStale(unit)) PendingLink(linker, unit) else null
         }
     }
@@ -51,12 +57,20 @@ internal class LinkingStage(private val linkers: List<BoundaryLinker>, private v
         }
     }
 
-    private fun partsOf(unit: PlannedUnit): List<String> =
-        listOf(unit.producer.id, unit.producer.version, unit.owner.kind.name, unit.owner.key, unit.fingerprint.value)
+    private fun partsOf(unit: PlannedUnit): List<String> = listOf(
+        unit.producer.id,
+        unit.producer.version,
+        unit.owner.kind.name,
+        unit.owner.key,
+        session.ledger.effectiveFingerprint(unit).value,
+    )
+
+    private val workspace = OwnershipUnit(OwnershipKind.WORKSPACE, WORKSPACE_KEY)
 
     private class ReadOnlyGraph(graph: GraphReader) : GraphReader by graph
 
     private companion object {
         const val WORKSPACE_KEY = "workspace"
+        const val BASE_FORMAT = "linker-base:2"
     }
 }

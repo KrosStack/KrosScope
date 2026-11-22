@@ -9,6 +9,8 @@ internal class UnitLedger(private val store: GraphStore) {
     private val stored: Map<UnitKey, Fingerprint> =
         store.units().associate { UnitKey(it.producer, it.owner) to it.fingerprint }
     private val wanted = linkedMapOf<UnitKey, PlannedUnit>()
+    private val committed = mutableMapOf<UnitKey, Fingerprint>()
+    private val kept = mutableSetOf<UnitKey>()
 
     var produced = 0
         private set
@@ -29,13 +31,25 @@ internal class UnitLedger(private val store: GraphStore) {
 
     fun commit(batch: FactBatch) {
         store.replace(batch)
+        committed[UnitKey(batch.producer, batch.owner)] = batch.inputFingerprint
         produced++
+    }
+
+    /** What the unit was stored under in this update, or its planned fingerprint when it is current or not yet run. */
+    fun effectiveFingerprint(unit: PlannedUnit): Fingerprint = committed[unit.key] ?: unit.fingerprint
+
+    /** Keeps the stored unit through [removeUnwanted] although it is not claimed yet. */
+    fun keep(key: UnitKey) {
+        kept += key
     }
 
     fun wantedUnits(): List<PlannedUnit> = wanted.values.toList()
 
     fun removeUnwanted() {
-        val unwanted = store.units().filter { UnitKey(it.producer, it.owner) !in wanted }
+        val unwanted = store.units().filter {
+            val key = UnitKey(it.producer, it.owner)
+            key !in wanted && key !in kept
+        }
         store.transaction { unwanted.forEach { store.remove(it.producer, it.owner) } }
         removed += unwanted.size
     }
