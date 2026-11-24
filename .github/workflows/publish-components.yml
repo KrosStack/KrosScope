@@ -15,6 +15,11 @@ concurrency:
   group: publish-components-${{ inputs.version }}
   cancel-in-progress: false
 
+# The Gradle daemon heap on the runners. Detekt runs inside the daemon, and at the 1.5 GB that
+# gradle.properties sets for developer machines a full static check ran out of heap on a runner.
+env:
+  GRADLE_HEAP: -Dorg.gradle.jvmargs=-Xmx3g
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -54,7 +59,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Check and build the runtime
-        run: ./gradlew --console=plain :components:semantic-worker:check :components:semantic-worker:distZip
+        run: ./gradlew "$GRADLE_HEAP" --console=plain :components:semantic-worker:check :components:semantic-worker:distZip
 
       - name: Check the archive and prepare the assets and notes
         run: |

@@ -53,6 +53,12 @@ concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+# The Gradle daemon heap on the runners. Detekt runs inside the daemon, and at the 1.5 GB that
+# gradle.properties sets for developer machines a full static check ran out of heap here. The
+# runners have 16 GB of memory.
+env:
+  GRADLE_HEAP: -Dorg.gradle.jvmargs=-Xmx3g
+
 jobs:
   warm-cache:
     name: warm the cache
@@ -76,7 +82,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Compile and check without the tests
-        run: ./gradlew check -x test
+        run: ./gradlew "$GRADLE_HEAP" check -x test
 
   static-checks:
     name: static checks
@@ -99,7 +105,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Compile and check without the tests
-        run: ./gradlew check -x test
+        run: ./gradlew "$GRADLE_HEAP" check -x test
 
       - name: Keep the reports of a failed run
         if: failure()
@@ -114,7 +120,8 @@ jobs:
     name: tests (${{ matrix.os }})
     if: github.event_name != 'push'
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 60
+    # The tests took 59 minutes 30 seconds on the last green run, with a warm cache.
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
@@ -137,7 +144,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Test
-        run: ./gradlew test
+        run: ./gradlew "$GRADLE_HEAP" test
         shell: bash
 
       - name: Keep the reports of a failed run
