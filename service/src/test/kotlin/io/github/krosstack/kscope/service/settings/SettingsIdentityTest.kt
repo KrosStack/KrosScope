@@ -62,6 +62,6 @@ class SettingsIdentityTest {
     }
 
     private companion object {
-        const val PINNED_SHA256 = "3de48bae3cad23172bdcda7d347a7b8b4881c5e2e77c582fb838cc9cf4990afa"
+        const val PINNED_SHA256 = "4cda710ce19c7b217f6b04d9182a43e6d2b9c3aafd56daeaec9c27f3dbc248be"
     }
 }

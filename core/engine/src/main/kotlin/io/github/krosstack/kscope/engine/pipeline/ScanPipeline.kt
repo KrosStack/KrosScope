@@ -173,10 +173,10 @@ internal class CapabilityPipeline(
                 ApiDigestStage(apiDigestCache, handedOver, files).run(registry.producers)
             }
             val pendingProduction = timer.time(Stages.PRODUCTION) { production.plan(apiDigests) }
-            val links = timer.time(Stages.LINKING) { linking.plan() }
+            timer.time(Stages.LINKING) { linking.reserve() }
             timer.time(Stages.CLEANUP) { session.ledger.removeUnwanted() }
             timer.time(Stages.PRODUCTION) { production.execute(pendingProduction, synthetic) }
-            links
+            timer.time(Stages.LINKING) { linking.plan() }
         }
         session.stage(ScanStages.LINKING) { linking.execute(pendingLinks) }
         synthesisCache.save(registry.synthesizers.map { it.descriptor.producer })
